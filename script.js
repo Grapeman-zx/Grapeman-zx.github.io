@@ -1,11 +1,5 @@
 const likeButtons = [
   {
-    button: document.querySelector("#like-button"),
-    count: document.querySelector("#like-count"),
-    countKey: "grapeman_video_like_count",
-    likedKey: "grapeman_video_has_liked",
-  },
-  {
     button: document.querySelector("#support-like-button"),
     count: document.querySelector("#support-like-count"),
     countKey: "grapeman_support_like_count",
@@ -43,4 +37,41 @@ function toggleLike(item) {
 likeButtons.forEach((item) => {
   renderLike(item);
   item.button?.addEventListener("click", () => toggleLike(item));
+});
+
+const mailModal = document.querySelector("#mail-modal");
+const mailTriggers = document.querySelectorAll(".mail-trigger");
+const mailCloseButtons = document.querySelectorAll("[data-mail-close]");
+
+function openMailModal() {
+  if (!mailModal) {
+    return;
+  }
+
+  mailModal.hidden = false;
+  document.body.classList.add("modal-open");
+  mailModal.querySelector("[data-mail-close]")?.focus();
+}
+
+function closeMailModal() {
+  if (!mailModal) {
+    return;
+  }
+
+  mailModal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
+mailTriggers.forEach((trigger) => {
+  trigger.addEventListener("click", openMailModal);
+});
+
+mailCloseButtons.forEach((button) => {
+  button.addEventListener("click", closeMailModal);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeMailModal();
+  }
 });

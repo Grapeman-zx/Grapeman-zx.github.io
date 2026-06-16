@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grapeman_zx | 技术博客</title>
+    <meta name="description" content="Grapeman_zx 的技术博客分类页，目前文章为空。" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="pixel-noise" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="./index.html" aria-label="回到首页">
+        <span class="mini-avatar" aria-hidden="true"></span>
+        <span>Grapeman_zx | 游戏开发者</span>
+      </a>
+      <nav class="nav" aria-label="主导航">
+        <a href="./index.html#games">WORKS</a>
+        <a href="./index.html#profile">ABOUT</a>
+        <a href="./blog.html">BLOG</a>
+        <button class="nav-mail mail-trigger" type="button">MAIL</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="blog-hero">
+        <p class="eyebrow">> TECH BLOG ARCHIVE</p>
+        <h1>技术博客</h1>
+        <p>这里会整理游戏开发、玩法实验、工程复盘和工具记录。目前文章为空。</p>
+      </section>
+
+      <section class="section blog-shell">
+        <div class="blog-categories">
+          <a href="#engine">引擎与工具</a>
+          <a href="#gameplay">玩法系统</a>
+          <a href="#multiplayer">多人联机</a>
+          <a href="#devlog">开发复盘</a>
+        </div>
+
+        <div class="empty-blog">
+          <span aria-hidden="true">?</span>
+          <h2>暂无文章</h2>
+          <p>博客分类已经搭好，后续可以把 CSDN、B 站文稿或项目复盘整理进来。</p>
+          <a class="button primary" href="./index.html">返回主页</a>
+        </div>
+      </section>
+    </main>
+    <div class="mail-modal" id="mail-modal" hidden>
+      <button class="mail-modal__backdrop" type="button" data-mail-close aria-label="关闭邮件弹窗"></button>
+      <div class="mail-modal__panel" role="dialog" aria-modal="true" aria-labelledby="mail-modal-title">
+        <button class="mail-modal__close" type="button" data-mail-close aria-label="关闭">×</button>
+        <p class="eyebrow">// EMAIL</p>
+        <h2 id="mail-modal-title">联系邮箱</h2>
+        <p class="mail-address">zhouwatcher#gmail.com</p>
+        <p class="mail-note">发送邮件时请把 # 换成 @。</p>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

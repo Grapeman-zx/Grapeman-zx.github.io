@@ -3,237 +3,113 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Grapeman_zx | 游戏成果展示</title>
+    <title>Grapeman_zx | 游戏开发者</title>
     <meta
       name="description"
-      content="Grapeman_zx 的游戏成果展示主页，集中展示独立游戏作品、视频主页和公开作品入口。"
+      content="Grapeman_zx 的像素风游戏开发者主页，展示独立游戏作品、公开视频与技术博客入口。"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="scanline" aria-hidden="true"></div>
+    <div class="pixel-noise" aria-hidden="true"></div>
+
     <header class="site-header">
       <a class="brand" href="#top" aria-label="回到首页">
-        <span class="brand-mark">G</span>
-        <span>Grapeman_zx</span>
+        <span class="mini-avatar" aria-hidden="true"></span>
+        <span>Grapeman_zx | 游戏开发者</span>
       </a>
       <nav class="nav" aria-label="主导航">
-        <a href="#games">作品</a>
-        <a href="#profile">关于</a>
-        <a href="#achievements">成果</a>
-        <a href="#support">点赞</a>
+        <a href="#profile">ABOUT</a>
+        <a href="#games">WORKS</a>
+        <a href="./blog.html">BLOG</a>
+        <a href="#support">LIKE</a>
+        <button class="nav-mail mail-trigger" type="button">MAIL</button>
       </nav>
     </header>
 
     <main id="top">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow">GAME DEVELOPER / INDIE CREATOR</p>
-          <h1 id="hero-title">Grapeman_zx</h1>
+          <h1 id="hero-title">
+            <span class="role-line">独立游戏开发者</span>
+            <span class="name-line">Grapeman_zx</span>
+          </h1>
           <p class="hero-text">
-            游戏开发者，独立游戏创作者。这里不写长篇履历，只集中展示作品、公开入口和已经做出来的成果。
+            欢迎来到我的游戏开发空间。这里收集了一些我做过的作品、Demo 和开发记录；如果你喜欢这些内容，不妨给我点个赞。
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#games">看作品</a>
-            <a class="button ghost" href="#achievements">看成果</a>
+            <button class="like-button hero-like" type="button" id="support-like-button" aria-pressed="false">
+              <span>★ 点赞</span>
+              <strong id="support-like-count">0</strong>
+            </button>
+            <a class="button primary" href="#games">▶ 查看作品</a>
+            <button class="button ghost mail-trigger" type="button">发送邮件</button>
           </div>
-          <ul class="stats" aria-label="成果概览">
-            <li><strong>Steam</strong><span>作品上线</span></li>
-            <li><strong>TapTap</strong><span>作品页面</span></li>
-            <li><strong>Bilibili</strong><span>开发视频</span></li>
-          </ul>
         </div>
 
-        <aside class="result-board" aria-label="成果看板">
-          <p class="eyebrow">RESULT BOARD</p>
-          <h2>作品成果</h2>
-          <div class="result-list">
-            <a href="#games">
-              <strong>圆锥头</strong>
-              <span>独立游戏作品展示</span>
-            </a>
-            <a href="#games">
-              <strong>咸鱼搬运工</strong>
-              <span>Steam 上线 / 多人合作</span>
-            </a>
-            <a href="https://www.taptap.com/app/162328" target="_blank" rel="noreferrer">
-              <strong>载具狂欢</strong>
-              <span>TapTap 作品入口</span>
-            </a>
-            <a
-              href="https://space.bilibili.com/3546777498159370?spm_id_from=333.337.search-card.all.click"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <strong>十年饮冰</strong>
-              <span>B 站视频主页</span>
-            </a>
-          </div>
-        </aside>
+        <div class="pixel-hero" aria-label="像素游戏开发者角色">
+          <img src="./assets/star-avatar-transparent.png" alt="Grapeman_zx 星星头像角色" />
+        </div>
       </section>
 
-      <section class="ticker" aria-label="页面关键词">
+      <section class="ticker" aria-label="开发标签">
+        <span class="pac" aria-hidden="true"></span>
         <div class="ticker-track">
-          <span>成果展示</span>
-          <span>独立游戏</span>
-          <span>Steam</span>
-          <span>TapTap</span>
-          <span>Bilibili</span>
-          <span>玩法 Demo</span>
-          <span>成果展示</span>
-          <span>独立游戏</span>
-          <span>Steam</span>
-          <span>TapTap</span>
-          <span>Bilibili</span>
-          <span>玩法 Demo</span>
-        </div>
-      </section>
-
-      <section id="games" class="section">
-        <div class="section-heading">
-          <p class="eyebrow">SELECTED PROJECTS</p>
-          <h2>游戏作品</h2>
-        </div>
-        <div class="project-grid">
-          <article class="project-card">
-            <div class="project-art art-cone" aria-hidden="true">
-              <span class="pixel-cone"></span>
-            </div>
-            <div class="project-body">
-              <p class="tag">独立游戏 / 动作玩法 / Demo</p>
-              <h3>圆锥头</h3>
-              <p>
-                以“圆锥头”角色为核心的独立游戏作品，偏动作、关卡和角色表现方向。
-              </p>
-              <ul class="project-facts">
-                <li><strong>身份</strong><span>独立开发</span></li>
-                <li><strong>类型</strong><span>动作 / 关卡制 / 角色玩法</span></li>
-                <li><strong>状态</strong><span>作品展示中</span></li>
-              </ul>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="project-art art-runner" aria-hidden="true">
-              <span class="pixel-runner"></span>
-            </div>
-            <div class="project-body">
-              <p class="tag">多人合作 / 物理互动 / Steam</p>
-              <h3>咸鱼搬运工</h3>
-              <p>
-                多人联机物理合作游戏，围绕搬运货物、任务推进、角色成长和关卡挑战展开。
-              </p>
-              <ul class="project-facts">
-                <li><strong>身份</strong><span>负责人 / 主程</span></li>
-                <li><strong>成果</strong><span>Steam 上线</span></li>
-                <li><strong>展示</strong><span>多人合作玩法闭环</span></li>
-              </ul>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="project-art art-dungeon" aria-hidden="true">
-              <span class="pixel-door"></span>
-            </div>
-            <div class="project-body">
-              <p class="tag">多人联机 / FPS / 原型验证</p>
-              <h3>蝴蝶效应</h3>
-              <p>
-                多人联机 FPS 项目，完成角色、武器、战斗和联机对战体验的核心验证。
-              </p>
-              <ul class="project-facts">
-                <li><strong>身份</strong><span>负责人 / 主程</span></li>
-                <li><strong>成果</strong><span>核心玩法原型</span></li>
-                <li><strong>展示</strong><span>多人实时对战方向</span></li>
-              </ul>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="project-art art-garden" aria-hidden="true">
-              <span class="pixel-planet"></span>
-            </div>
-            <div class="project-body">
-              <p class="tag">多人竞技 / 手机游戏 / TapTap</p>
-              <h3>载具狂欢</h3>
-              <p>
-                多人在线手机竞技游戏，主打随机地图、职业变化和目标点争夺。
-              </p>
-              <ul class="project-facts">
-                <li><strong>身份</strong><span>策划 / 程序</span></li>
-                <li><strong>成果</strong><span>TapTap 公开作品页</span></li>
-                <li><strong>链接</strong><span><a href="https://www.taptap.com/app/162328">查看 TapTap</a></span></li>
-              </ul>
-            </div>
-          </article>
-        </div>
-
-        <div class="more-projects">
-          <article>
-            <h3>双人曲棍球</h3>
-            <p>2D 双人同屏竞技休闲游戏，负责程序和美术。</p>
-            <a href="https://pan.baidu.com/s/1JHYpHypidJEuLJ5bmhA_cQ">查看网盘作品</a>
-          </article>
-          <article>
-            <h3>RobotBrother2</h3>
-            <p>横版关卡制动作游戏，负责程序和关卡逻辑。</p>
-            <a href="https://cowlevel.net/article/1948371">查看作品记录</a>
-          </article>
+          <span>INDIE GAME DEV ZX</span>
+          <span>INDIE GAME DEV ZX</span>
+          <span>INDIE GAME DEV ZX</span>
+          <span>INDIE GAME DEV ZX</span>
+          <span>INDIE GAME DEV ZX</span>
+          <span>INDIE GAME DEV ZX</span>
+          <span>INDIE GAME DEV ZX</span>
+          <span>INDIE GAME DEV ZX</span>
         </div>
       </section>
 
       <section id="profile" class="section profile-section">
         <div class="section-heading">
-          <p class="eyebrow">PROFILE</p>
+          <p class="eyebrow">// PLAYER PROFILE</p>
           <h2>关于 Grapeman_zx</h2>
         </div>
         <div class="profile-layout">
-          <aside class="profile-card">
-            <div class="avatar" aria-hidden="true">G</div>
-            <h3>Grapeman_zx</h3>
-            <p>游戏开发者 / 独立游戏创作者</p>
-            <dl class="profile-meta">
-              <div>
-                <dt>展示重点</dt>
-                <dd>游戏作品与公开成果</dd>
-              </div>
-              <div>
-                <dt>作品方向</dt>
-                <dd>独立游戏、多人玩法、玩法实验</dd>
-              </div>
-              <div>
-                <dt>邮箱</dt>
-                <dd>13359131857@163.com</dd>
-              </div>
-            </dl>
-          </aside>
           <div class="intro-panel">
-            <p>
-              这个页面只保留最直接的内容：做过的游戏、能打开的作品入口、可以观看的视频主页，以及给作品点赞的互动。
-            </p>
+            <div class="about-copy">
+              <p>
+                嘿！我是 Grapeman_zx，一个在独立游戏荒野里狂奔了 10 年的“全能型”游戏开发者。
+              </p>
+              <p>
+                我喜欢和引擎底层“硬碰硬”：钻研虚幻引擎源码、优化大地图卡顿、编写 Shader 材质，
+                也会把 ALS 动画和 UMG 界面一点点调到顺手。我享受解决那些让人抓狂的内存泄漏和性能瓶颈。
+              </p>
+              <p>
+                脱离商业项目的框架后，我更享受独立游戏带来的绝对自由。我做过很多奇奇怪怪、
+                充满探索性的项目。对我来说，独立游戏是技术与创意最浪漫的碰撞。
+                如果你也喜欢硬核技术，或者单纯喜欢不落俗套的游戏创意，那我们一定能聊得来。
+              </p>
+            </div>
             <article class="video-feature">
-              <div class="video-thumb" aria-hidden="true">
-                <span class="play-mark"></span>
+              <div class="video-frame">
+                <iframe
+                  src="https://player.bilibili.com/player.html?bvid=BV131upzWEco&page=1&autoplay=0"
+                  title="十年饮冰视频"
+                  loading="lazy"
+                  allowfullscreen
+                ></iframe>
+                <img
+                  src="https://i0.hdslb.com/bfs/archive/77aec3935a5d2eab5ffdd76a641c83d71f9b37fa.jpg"
+                  alt="十年饮冰视频封面"
+                />
               </div>
               <div class="video-copy">
-                <p class="tag">Bilibili / 视频主页</p>
-                <h3>十年饮冰</h3>
-                <p>
-                  个人游戏开发相关视频展示。点击按钮可前往 B 站主页查看视频内容。
-                </p>
                 <div class="video-actions">
                   <a
                     class="button ghost"
-                    href="https://space.bilibili.com/3546777498159370?spm_id_from=333.337.search-card.all.click"
+                    href="https://www.bilibili.com/video/BV131upzWEco/"
                     target="_blank"
                     rel="noreferrer"
                   >
                     打开 B 站主页
                   </a>
-                  <button class="like-button" type="button" id="like-button" aria-pressed="false">
-                    <span>点赞</span>
-                    <strong id="like-count">0</strong>
-                  </button>
                 </div>
               </div>
             </article>
@@ -241,46 +117,201 @@
         </div>
       </section>
 
-      <section id="achievements" class="section">
+      <section id="games" class="section">
         <div class="section-heading">
-          <p class="eyebrow">PUBLIC RESULTS</p>
-          <h2>成果入口</h2>
+          <p class="eyebrow">// SELECTED WORKS</p>
+          <h2>游戏作品</h2>
         </div>
-        <div class="achievement-grid">
-          <article>
-            <span>01</span>
-            <h3>Steam 作品</h3>
-            <p>《咸鱼搬运工》作为多人合作物理游戏完成上线展示。</p>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="video-frame">
+              <iframe
+                src="https://player.bilibili.com/player.html?bvid=BV1J2E165EUM&page=1&autoplay=0"
+                title="咸鱼搬运工视频"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
+              <img
+                src="https://i1.hdslb.com/bfs/archive/bdb7eb2bb8e96e0c05b368c1608df0442bee3d4a.jpg"
+                alt="咸鱼搬运工视频封面"
+              />
+            </div>
+            <div class="project-body">
+              <p class="tag">CO-OP / PHYSICS / STEAM</p>
+              <p class="project-date">时间：2026-06-13</p>
+              <h3>咸鱼搬运工</h3>
+              <p>《咸鱼搬运工》Steam 6 月新品节 Demo，围绕搬运货物、驾驶载具和突发事件展开的多人合作物理游戏。</p>
+              <div class="project-link-row">
+                <a class="button ghost" href="https://store.steampowered.com/app/4740600/_/" target="_blank" rel="noreferrer">了解详情</a>
+                <a class="button ghost" href="https://www.bilibili.com/video/BV1J2E165EUM" target="_blank" rel="noreferrer">B 站视频</a>
+              </div>
+            </div>
           </article>
-          <article>
-            <span>02</span>
-            <h3>TapTap 作品</h3>
-            <p>《载具狂欢》保留公开作品页，方便直接查看早期完整项目。</p>
+
+          <article class="project-row">
+            <div class="video-frame">
+              <iframe
+                src="https://player.bilibili.com/player.html?bvid=BV1CR48z3Ett&page=1&autoplay=0"
+                title="蝴蝶效应视频"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
+              <img
+                src="https://i1.hdslb.com/bfs/archive/4de7463ce037f61ed85bf5aa568c965316662ba0.jpg"
+                alt="蝴蝶效应视频封面"
+              />
+            </div>
+            <div class="project-body">
+              <p class="tag">MULTIPLAYER / FPS / PROTOTYPE</p>
+              <p class="project-date">时间：2025-10-14</p>
+              <h3>蝴蝶效应</h3>
+              <p>国产独立游戏《蝴蝶效应》FPS 多人合作刷宝 Demo 预告，展示多人战斗和刷宝方向。</p>
+              <div class="project-link-row">
+                <span class="button disabled" aria-disabled="true">暂无资料</span>
+                <a class="button ghost" href="https://www.bilibili.com/video/BV1CR48z3Ett" target="_blank" rel="noreferrer">B 站视频</a>
+              </div>
+            </div>
           </article>
-          <article>
-            <span>03</span>
-            <h3>B 站主页</h3>
-            <p>以 Grapeman_zx 身份发布游戏开发、玩法实验和个人视频内容。</p>
+
+          <article class="project-row">
+            <div class="video-frame project-cover">
+              <a href="https://www.taptap.cn/app/186939?os=android" target="_blank" rel="noreferrer">
+                <img src="./assets/informant-cover.png" alt="告密者项目封面" />
+              </a>
+            </div>
+            <div class="project-body">
+              <p class="tag">MULTIPLAYER / ACTION / TAPTAP</p>
+              <p class="project-date">时间：2020年</p>
+              <h3>告密者</h3>
+              <p>多人联机动作游戏。一次失败的生化实验让区域被封存，两大势力围绕这片区域展开争夺。</p>
+              <div class="project-link-row">
+                <a class="button ghost" href="https://www.taptap.cn/app/186939?os=android" target="_blank" rel="noreferrer">了解详情</a>
+                <span class="button disabled" aria-disabled="true">暂无视频</span>
+              </div>
+            </div>
           </article>
-          <article>
-            <span>04</span>
-            <h3>作品记录</h3>
-            <p>保留 Cowlevel、网盘等公开入口，集中展示可访问的项目痕迹。</p>
+
+          <article class="project-row">
+            <div class="video-frame project-cover">
+              <a href="https://www.taptap.com/app/162328" target="_blank" rel="noreferrer">
+                <img src="./assets/arena-cover.png" alt="竞技场项目封面" />
+              </a>
+            </div>
+            <div class="project-body">
+              <p class="tag">MOBILE / MULTIPLAYER / TAPTAP</p>
+              <p class="project-date">时间：2019</p>
+              <h3>竞技场</h3>
+              <p>多人在线手机竞技游戏，主打随机地图、职业变化和目标点争夺。</p>
+              <div class="project-link-row">
+                <a class="button ghost" href="https://www.taptap.com/app/162328" target="_blank" rel="noreferrer">了解详情</a>
+                <span class="button disabled" aria-disabled="true">暂无视频</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-row">
+            <div class="video-frame">
+              <iframe
+                src="https://player.bilibili.com/player.html?bvid=BV1houQzBECp&page=1&autoplay=0"
+                title="圆锥头视频"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
+              <img
+                src="https://i0.hdslb.com/bfs/archive/c4d2d60db642b2699db059a1247bfe9d20d60749.jpg"
+                alt="圆锥头视频封面"
+              />
+            </div>
+            <div class="project-body">
+              <p class="tag">INDIE / FPS / ARCHIVE</p>
+              <p class="project-date">时间：2015</p>
+              <h3>圆锥头</h3>
+              <p>2015 年国产独立第一人称射击游戏《圆锥头》最终预告，免费登陆 PC 平台。</p>
+              <div class="project-link-row">
+                <a class="button ghost" href="https://down.gamersky.com/pc/201507/624263.shtml" target="_blank" rel="noreferrer">了解详情</a>
+                <a class="button ghost" href="https://www.bilibili.com/video/BV1houQzBECp" target="_blank" rel="noreferrer">B 站视频</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="project-list final-project">
+          <article class="project-row">
+            <div class="video-frame project-cover">
+              <a href="https://cowlevel.net/article/1948371" target="_blank" rel="noreferrer">
+                <img src="./assets/robotbrother2-menu.png" alt="RobotBrother2 项目封面" />
+              </a>
+            </div>
+            <div class="project-body">
+              <p class="tag">3D / SIDE-SCROLLER / PC</p>
+              <p class="project-date">时间：2018</p>
+              <h3>RobotBrother2</h3>
+              <p>第一次尝试制作的 3D 横版游戏，当前公开记录中提供 PC 版作品入口。</p>
+              <div class="project-link-row">
+                <a class="button ghost" href="https://cowlevel.net/article/1948371" target="_blank" rel="noreferrer">了解详情</a>
+                <span class="button disabled" aria-disabled="true">暂无视频</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-row">
+            <div class="video-frame project-cover">
+              <a href="https://pan.baidu.com/s/1JHYpHypidJEuLJ5bmhA_cQ?pwd=c9bd" target="_blank" rel="noreferrer">
+                <img src="./assets/hockey-cover.png" alt="双人曲棍球项目封面" />
+              </a>
+            </div>
+            <div class="project-body">
+              <p class="tag">2D / LOCAL VERSUS / CASUAL</p>
+              <p class="project-date">时间：早期作品</p>
+              <h3>双人曲棍球</h3>
+              <p>使用 C++ 与 OpenGL 操纵图形硬件，独立搭建 2D 渲染管线、精灵绘制系统与窗口上下文管理。</p>
+              <p>纯手工编写 2D 刚体碰撞检测与反弹物理算法，实现流畅、精准的曲棍球运动轨迹模拟。</p>
+              <div class="project-link-row">
+                <a class="button ghost" href="https://pan.baidu.com/s/1JHYpHypidJEuLJ5bmhA_cQ?pwd=c9bd" target="_blank" rel="noreferrer">了解详情</a>
+                <span class="button disabled" aria-disabled="true">暂无视频</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-row">
+            <div class="video-frame project-cover">
+              <a
+                href="http://pan.baidu.com/s/1hqpBQTI"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img src="./assets/robotbrother-cover.png" alt="RobotBrother 项目封面" />
+              </a>
+            </div>
+            <div class="project-body">
+              <p class="tag">PC / SINGLE PLAYER / ARCHIVE</p>
+              <p class="project-date">时间：2013</p>
+              <h3>RobotBrother</h3>
+              <p>早期 PC 单机游戏项目，收录在“自己制作过的小游戏”项目整理帖中，属于 RobotBrother 系列作品记录。</p>
+              <div class="project-link-row">
+                <a
+                  class="button ghost"
+                  href="http://pan.baidu.com/s/1hqpBQTI"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  了解详情
+                </a>
+                <span class="button disabled" aria-disabled="true">暂无视频</span>
+              </div>
+            </div>
           </article>
         </div>
       </section>
 
       <section id="support" class="contact">
-        <p class="eyebrow">SUPPORT</p>
+        <p class="eyebrow">// SUPPORT</p>
         <h2>给 Grapeman_zx 点个赞</h2>
-        <p>
-          喜欢这些作品的话，可以在这里留下一个本地点赞。这个计数保存在当前浏览器里，适合静态展示页使用。
-        </p>
+        <p>喜欢这些作品的话，可以在这里留下一个本地点赞。这个计数保存在当前浏览器里。</p>
         <div class="link-row">
-          <button class="like-button" type="button" id="support-like-button" aria-pressed="false">
-            <span>点赞</span>
-            <strong id="support-like-count">0</strong>
-          </button>
+          <a class="button primary" href="#top">回到顶部点赞</a>
+          <button class="button ghost mail-trigger" type="button">发送邮件</button>
+          <a class="button ghost" href="./blog.html">技术博客</a>
           <a
             class="button ghost"
             href="https://space.bilibili.com/3546777498159370?spm_id_from=333.337.search-card.all.click"
@@ -289,17 +320,25 @@
           >
             B 站主页
           </a>
-          <a class="button ghost" href="https://www.taptap.com/app/162328" target="_blank" rel="noreferrer">
-            TapTap 作品
-          </a>
         </div>
       </section>
     </main>
 
     <footer class="footer">
       <span>© 2026 Grapeman_zx</span>
-      <span>Focused on finished work, public links, and playable ideas.</span>
+      <span>INDIE GAME DEV ZX / GAME WORKS</span>
     </footer>
+
+    <div class="mail-modal" id="mail-modal" hidden>
+      <button class="mail-modal__backdrop" type="button" data-mail-close aria-label="关闭邮件弹窗"></button>
+      <div class="mail-modal__panel" role="dialog" aria-modal="true" aria-labelledby="mail-modal-title">
+        <button class="mail-modal__close" type="button" data-mail-close aria-label="关闭">×</button>
+        <p class="eyebrow">// EMAIL</p>
+        <h2 id="mail-modal-title">联系邮箱</h2>
+        <p class="mail-address">zhouwatcher#gmail.com</p>
+        <p class="mail-note">发送邮件时请把 # 换成 @。</p>
+      </div>
+    </div>
 
     <script src="./script.js"></script>
   </body>
