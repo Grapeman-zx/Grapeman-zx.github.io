@@ -27,7 +27,14 @@
       </nav>
     </header>
 
-    <main id="top">
+    <main id="top" class="home-main">
+      <svg class="site-ribbon" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points="25.4,0 25.4,71 9.4,83 -44,83" />
+        <polyline points="36.65,0 36.65,75 20.65,87 -38,87" />
+        <polyline points="47.9,0 47.9,79 31.9,91 -32,91" />
+        <polyline points="59.15,0 59.15,83 43.15,95 -26,95" />
+        <polyline points="70.4,0 70.4,87 54.4,99 -20,99" />
+      </svg>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <h1 id="hero-title">
@@ -47,8 +54,16 @@
           </div>
         </div>
 
-        <div class="pixel-hero" aria-label="像素游戏开发者角色">
-          <img src="./assets/star-avatar-transparent.png" alt="Grapeman_zx 星星头像角色" />
+        <div class="pixel-hero retro-computer" aria-label="复古电脑插画">
+          <div class="retro-monitor" aria-hidden="true">
+            <div class="retro-screen">
+              <span>READY.</span>
+              <span>LOAD "ZX",8,1</span>
+              <span>RUN</span>
+            </div>
+          </div>
+          <div class="retro-drive" aria-hidden="true"></div>
+          <div class="retro-keyboard" aria-hidden="true"></div>
         </div>
       </section>
 
@@ -120,7 +135,7 @@
         </div>
         <div class="project-list">
           <article class="project-row">
-            <div class="video-frame">
+            <div class="video-frame video-poster" data-title="咸鱼搬运工" data-meta="CO-OP / PHYSICS / STEAM">
               <iframe
                 src="https://player.bilibili.com/player.html?bvid=BV1J2E165EUM&page=1&autoplay=0"
                 title="咸鱼搬运工视频"
@@ -145,7 +160,7 @@
           </article>
 
           <article class="project-row">
-            <div class="video-frame">
+            <div class="video-frame video-poster" data-title="蝴蝶效应" data-meta="MULTIPLAYER / FPS">
               <iframe
                 src="https://player.bilibili.com/player.html?bvid=BV1CR48z3Ett&page=1&autoplay=0"
                 title="蝴蝶效应视频"
@@ -170,7 +185,7 @@
           </article>
 
           <article class="project-row">
-            <div class="video-frame project-cover">
+            <div class="video-frame project-cover" data-title="告密者" data-meta="MULTIPLAYER / ACTION / TAPTAP">
               <a href="https://www.taptap.cn/app/186939?os=android" target="_blank" rel="noreferrer">
                 <img src="./assets/informant-cover.png" alt="告密者项目封面" />
               </a>
@@ -188,7 +203,7 @@
           </article>
 
           <article class="project-row">
-            <div class="video-frame project-cover">
+            <div class="video-frame project-cover" data-title="竞技场" data-meta="MOBILE / MULTIPLAYER / TAPTAP">
               <a href="https://www.taptap.com/app/162328" target="_blank" rel="noreferrer">
                 <img src="./assets/arena-cover.png" alt="竞技场项目封面" />
               </a>
@@ -205,8 +220,48 @@
             </div>
           </article>
 
+        </div>
+
+        <div class="project-list final-project">
           <article class="project-row">
-            <div class="video-frame">
+            <div class="video-frame project-cover" data-title="RobotBrother2" data-meta="3D / SIDE-SCROLLER / PC">
+              <a href="https://cowlevel.net/article/1948371" target="_blank" rel="noreferrer">
+                <img src="./assets/robotbrother2-menu.png" alt="RobotBrother2 项目封面" />
+              </a>
+            </div>
+            <div class="project-body">
+              <p class="tag">3D / SIDE-SCROLLER / PC</p>
+              <p class="project-date">时间：2018</p>
+              <h3>RobotBrother2</h3>
+              <p>第一次尝试制作的 3D 横版游戏，当前公开记录中提供 PC 版作品入口。</p>
+              <div class="project-link-row">
+                <a class="button ghost" href="https://cowlevel.net/article/1948371" target="_blank" rel="noreferrer">了解详情</a>
+                <span class="button disabled" aria-disabled="true">暂无视频</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-row">
+            <div class="video-frame project-cover" data-title="双人曲棍球" data-meta="2D / LOCAL VERSUS / CASUAL">
+              <a href="https://pan.baidu.com/s/1JHYpHypidJEuLJ5bmhA_cQ?pwd=c9bd" target="_blank" rel="noreferrer">
+                <img src="./assets/hockey-cover.png" alt="双人曲棍球项目封面" />
+              </a>
+            </div>
+            <div class="project-body">
+              <p class="tag">2D / LOCAL VERSUS / CASUAL</p>
+              <p class="project-date">时间：2018</p>
+              <h3>双人曲棍球</h3>
+              <p>使用 C++ 与 OpenGL 操纵图形硬件，独立搭建 2D 渲染管线、精灵绘制系统与窗口上下文管理。</p>
+              <p>纯手工编写 2D 刚体碰撞检测与反弹物理算法，实现流畅、精准的曲棍球运动轨迹模拟。</p>
+              <div class="project-link-row">
+                <a class="button ghost" href="https://pan.baidu.com/s/1JHYpHypidJEuLJ5bmhA_cQ?pwd=c9bd" target="_blank" rel="noreferrer">了解详情</a>
+                <span class="button disabled" aria-disabled="true">暂无视频</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-row">
+            <div class="video-frame video-poster" data-title="圆锥头" data-meta="INDIE / FPS / ARCHIVE">
               <iframe
                 src="https://player.bilibili.com/player.html?bvid=BV1houQzBECp&page=1&autoplay=0"
                 title="圆锥头视频"
@@ -229,48 +284,9 @@
               </div>
             </div>
           </article>
-        </div>
-
-        <div class="project-list final-project">
-          <article class="project-row">
-            <div class="video-frame project-cover">
-              <a href="https://cowlevel.net/article/1948371" target="_blank" rel="noreferrer">
-                <img src="./assets/robotbrother2-menu.png" alt="RobotBrother2 项目封面" />
-              </a>
-            </div>
-            <div class="project-body">
-              <p class="tag">3D / SIDE-SCROLLER / PC</p>
-              <p class="project-date">时间：2018</p>
-              <h3>RobotBrother2</h3>
-              <p>第一次尝试制作的 3D 横版游戏，当前公开记录中提供 PC 版作品入口。</p>
-              <div class="project-link-row">
-                <a class="button ghost" href="https://cowlevel.net/article/1948371" target="_blank" rel="noreferrer">了解详情</a>
-                <span class="button disabled" aria-disabled="true">暂无视频</span>
-              </div>
-            </div>
-          </article>
 
           <article class="project-row">
-            <div class="video-frame project-cover">
-              <a href="https://pan.baidu.com/s/1JHYpHypidJEuLJ5bmhA_cQ?pwd=c9bd" target="_blank" rel="noreferrer">
-                <img src="./assets/hockey-cover.png" alt="双人曲棍球项目封面" />
-              </a>
-            </div>
-            <div class="project-body">
-              <p class="tag">2D / LOCAL VERSUS / CASUAL</p>
-              <p class="project-date">时间：早期作品</p>
-              <h3>双人曲棍球</h3>
-              <p>使用 C++ 与 OpenGL 操纵图形硬件，独立搭建 2D 渲染管线、精灵绘制系统与窗口上下文管理。</p>
-              <p>纯手工编写 2D 刚体碰撞检测与反弹物理算法，实现流畅、精准的曲棍球运动轨迹模拟。</p>
-              <div class="project-link-row">
-                <a class="button ghost" href="https://pan.baidu.com/s/1JHYpHypidJEuLJ5bmhA_cQ?pwd=c9bd" target="_blank" rel="noreferrer">了解详情</a>
-                <span class="button disabled" aria-disabled="true">暂无视频</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-row">
-            <div class="video-frame project-cover">
+            <div class="video-frame project-cover" data-title="RobotBrother" data-meta="PC / SINGLE PLAYER / ARCHIVE">
               <a
                 href="http://pan.baidu.com/s/1hqpBQTI"
                 target="_blank"
