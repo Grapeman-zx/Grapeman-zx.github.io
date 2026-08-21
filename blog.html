@@ -1,61 +1,2171 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Grapeman_zx | 技术博客</title>
-    <meta name="description" content="Grapeman_zx 的技术博客分类页，目前文章为空。" />
-    <link rel="stylesheet" href="./styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>技术博客 — Grapeman_zx</title>
+    <meta name="description" content="Grapeman_zx 的技术博客：UE / Slate / UMG 字体渲染、富文本与下划线等底层调研笔记。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html, body { background: #000000 !important; color: #ffffff; }
+
+      :root {
+        --bg: #000000;
+        --text: #ffffff;
+        --muted: #9a9a9a;
+        --border: rgba(255, 255, 255, 0.16);
+        --border-soft: rgba(255, 255, 255, 0.12);
+        --card: rgba(255, 255, 255, 0.03);
+        --card-hover: rgba(255, 255, 255, 0.05);
+
+        --logo: 15.5px;
+        --logo-mark: 22px;
+        --nav: 14px;
+        --nav-h: 40px;
+        --btn: 13.5px;
+        --btn-h: 40px;
+        --h1: 48px;
+        --lede: 15.5px;
+        --badge: 12.5px;
+        --stat-size: 13.5px;
+        --header-y: 18px;
+        --header-x: 40px;
+        --hero-gap: 85px;
+        --section-x: 40px;
+
+        --ui-font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        --serif-font: "Instrument Serif", "Times New Roman", Times, serif;
+        --mono-font: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; background: #000000; }
+      body {
+        background: #000;
+        color: #fff;
+        font-family: var(--ui-font);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+        position: relative;
+      }
+      a { color: inherit; text-decoration: none; }
+      button { font-family: inherit; }
+
+      /* ---------- Grain ---------- */
+      .grain {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      /* ---------- Header (sticky) ---------- */
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 8px;
+        padding: var(--header-y) var(--header-x) 10px;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border-soft);
+      }
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        justify-self: start;
+        font-size: var(--logo);
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        color: #fff;
+      }
+      .logo svg { width: var(--logo-mark); height: var(--logo-mark); display: block; }
+      .logo-suffix { font-weight: 400; }
+
+      #site-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-self: center;
+      }
+      .nav-link {
+        height: var(--nav-h);
+        padding: 0 18px;
+        border-radius: 7px;
+        overflow: hidden;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid rgba(198, 198, 198, 0.55);
+        background: linear-gradient(105deg, #050505 0%, #2a2a2a 48%, #4a4a4a 100%);
+        color: #f3f3f3;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+      }
+      .nav-link::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.16) 50%, transparent 70%);
+        transform: translateX(-120%);
+        transition: transform 0.6s ease;
+      }
+      .nav-link:hover {
+        border-color: rgba(235, 235, 235, 0.9);
+        background: linear-gradient(105deg, #111 0%, #3a3a3a 45%, #6a6a6a 100%);
+        box-shadow: 0 0 18px rgba(200, 210, 230, 0.18);
+      }
+      .nav-link:hover::before { transform: translateX(120%); }
+
+      .btn {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: var(--btn-h);
+        padding: 0 16px;
+        border-radius: 6px;
+        font-size: var(--btn);
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease, filter 0.35s ease;
+      }
+      .btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.45) 48%, transparent 76%);
+        transform: translateX(-130%);
+        transition: transform 0.65s ease;
+      }
+      .btn:hover::after { transform: translateX(130%); }
+      .btn-solid {
+        background: linear-gradient(180deg, #ffffff 0%, #e7e7e7 48%, #cfcfcf 100%);
+        color: #111;
+        border: 1px solid #fff;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      }
+      .btn-solid:hover {
+        background: linear-gradient(180deg, #fff 0%, #f3f6ff 42%, #d5def2 100%);
+        border-color: #f2f6ff;
+        box-shadow: inset 0 1px 0 #fff, 0 0 22px rgba(186, 208, 255, 0.35), 0 8px 18px rgba(255, 255, 255, 0.12);
+      }
+      .btn-ghost {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.45) 50%, rgba(160, 175, 200, 0.08));
+        color: #fff;
+        border: 1px solid rgba(198, 198, 198, 0.45);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      }
+      .btn-ghost:hover {
+        background: linear-gradient(135deg, rgba(210, 225, 255, 0.18), rgba(0, 0, 0, 0.35) 48%, rgba(180, 195, 220, 0.16));
+        border-color: rgba(220, 230, 255, 0.75);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 0 20px rgba(170, 200, 255, 0.22);
+      }
+      .header-cta { justify-self: end; }
+
+      .burger {
+        display: none;
+        width: 42px;
+        height: 42px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: rgba(8, 8, 8, 0.55);
+        z-index: 60;
+        justify-items: center;
+        align-content: center;
+        gap: 5px;
+        cursor: pointer;
+        padding: 0;
+      }
+      .burger .bar { width: 16px; height: 1.5px; border-radius: 1px; background: #fff; transition: transform 0.25s ease, opacity 0.2s ease; }
+      .burger:hover { border-color: rgba(255, 255, 255, 0.32); background: rgba(255, 255, 255, 0.05); }
+      body.menu-open .burger .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+      body.menu-open .burger .bar:nth-child(2) { opacity: 0; }
+      body.menu-open .burger .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+      /* ---------- Blog hero ---------- */
+      .blog-hero {
+        position: relative;
+        padding: clamp(48px, 9vw, 96px) var(--section-x) clamp(28px, 5vw, 48px);
+        border-bottom: 1px solid var(--border-soft);
+        overflow: hidden;
+      }
+      .blog-hero::after {
+        content: "";
+        position: absolute;
+        top: -40%;
+        right: -10%;
+        width: 60%;
+        height: 180%;
+        background: radial-gradient(ellipse at center, rgba(120, 150, 220, 0.10), transparent 60%);
+        pointer-events: none;
+      }
+      .blog-hero-inner { max-width: 820px; margin: 0 auto; position: relative; z-index: 1; }
+      .blog-kicker { display: inline-block; font-size: 12px; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 16px; }
+      .blog-title { font-size: clamp(34px, 6vw, 60px); font-weight: 500; letter-spacing: -0.045em; line-height: 1.04; color: #fff; }
+      .blog-title em { font-family: var(--serif-font); font-style: italic; font-weight: 400; color: #9a9a9a; }
+      .blog-sub { margin-top: 18px; max-width: 620px; color: #c9c9c9; font-size: var(--lede); line-height: 1.65; }
+
+      /* Category filters */
+      .blog-cats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 24px;
+      }
+      .cat-btn {
+        height: 34px;
+        padding: 0 16px;
+        border-radius: 999px;
+        border: 1px solid var(--border-soft);
+        background: transparent;
+        color: #b0b0b0;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        cursor: pointer;
+        transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+      }
+      .cat-btn:hover {
+        border-color: rgba(200, 210, 230, 0.55);
+        color: #e8e8e8;
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .cat-btn.active {
+        border-color: #8ab4ff;
+        color: #fff;
+        background: rgba(138, 180, 255, 0.12);
+        box-shadow: 0 0 12px rgba(138, 180, 255, 0.2);
+      }
+
+      /* Card hidden by category filter */
+      .post-card.hidden { display: none; }
+
+      /* ---------- Feed (Zhihu-style single column) ---------- */
+      .blog-feed {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: clamp(28px, 5vw, 52px) var(--section-x) clamp(40px, 7vw, 80px);
+        display: flex;
+        flex-direction: column;
+        gap: clamp(28px, 4vw, 44px);
+      }
+
+      .post-card {
+        position: relative;
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+        padding: clamp(22px, 4vw, 40px);
+        overflow: hidden;
+        transition: border-color 0.35s ease, background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+      }
+      .post-card:hover {
+        border-color: rgba(255, 255, 255, 0.26);
+        background: var(--card-hover);
+        transform: translateY(-3px);
+        box-shadow: 0 0 30px rgba(170, 200, 255, 0.10);
+      }
+
+      .post-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 11.5px;
+        letter-spacing: 0.06em;
+        color: #cfcfcf;
+        padding: 5px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border-soft);
+        background: rgba(255, 255, 255, 0.04);
+        margin-bottom: 18px;
+      }
+      .post-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: #8ab4ff; box-shadow: 0 0 7px #8ab4ff; }
+      .post-title { font-size: clamp(24px, 3.6vw, 34px); font-weight: 500; letter-spacing: -0.035em; line-height: 1.18; color: #fff; }
+      .post-title em { font-family: var(--serif-font); font-style: italic; font-weight: 400; color: #9a9a9a; }
+      .post-meta { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 13px; color: var(--muted); }
+      .post-avatar {
+        width: 30px; height: 30px; border-radius: 50%;
+        background: linear-gradient(135deg, #2a2a2a, #0a0a0a);
+        border: 1px solid var(--border-soft);
+        display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      }
+      .post-avatar svg { width: 17px; height: 17px; color: #fff; }
+      .post-meta .name { color: #e8e8e8; font-weight: 500; }
+      .post-meta .sep { opacity: 0.5; }
+      .post-excerpt { margin-top: 16px; color: #b6b6b6; font-size: 15px; line-height: 1.7; }
+
+      /* In feed: body is always hidden; click card to open article view */
+      .post-card { cursor: pointer; }
+      .post-card .post-divider,
+      .post-card .post-body,
+      .post-card .post-foot { display: none; }
+
+      .post-divider { margin: 22px 0 4px; border: 0; border-top: 1px dashed var(--border-soft); }
+
+      /* ---------- Article Reader (full-screen overlay) ---------- */
+      .article-view {
+        position: fixed;
+        inset: 0;
+        z-index: 150;
+        background: #000;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .article-view.open { display: block; opacity: 1; }
+
+      .article-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 24px;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-bottom: 1px solid var(--border-soft);
+      }
+      .article-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13.5px;
+        color: #cfcfcf;
+        border: 1px solid var(--border-soft);
+        border-radius: 8px;
+        padding: 6px 14px;
+        background: transparent;
+        cursor: pointer;
+        transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+      }
+      .article-back:hover { border-color: rgba(200, 210, 230, 0.6); color: #fff; background: rgba(255, 255, 255, 0.06); }
+      .article-back svg { width: 15px; height: 15px; flex-shrink: 0; }
+      .article-close {
+        width: 34px; height: 34px;
+        border: 1px solid var(--border-soft); border-radius: 8px;
+        background: transparent; color: #cfcfcf;
+        font-size: 20px; line-height: 1; cursor: pointer;
+        transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+      }
+      .article-close:hover { border-color: rgba(200, 210, 230, 0.6); color: #fff; background: rgba(255, 255, 255, 0.06); }
+
+      .article-content {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: clamp(32px, 5vw, 56px) 24px clamp(60px, 10vw, 100px);
+      }
+      .article-content .post-tag { margin-bottom: 14px; }
+      .article-content .post-title { font-size: clamp(28px, 4.2vw, 40px); line-height: 1.12; }
+      .article-content .post-meta { margin-top: 12px; }
+      .article-content .post-excerpt { margin-top: 14px; font-size: 15.5px; line-height: 1.72; color: #bfbfbf; }
+      .article-content .post-divider { display: block; }
+      .article-content .post-body { display: block; margin-top: 28px; }
+      .article-content .post-foot { display: flex; }
+
+      @media (max-width: 600px) {
+        .article-content { padding-left: 18px; padding-right: 18px; }
+        .article-header { padding: 12px 18px; }
+      }
+
+      /* ---------- Article body typography ---------- */
+      .post-body { margin-top: 16px; }
+      .post-body h2 {
+        display: flex; align-items: baseline; gap: 10px;
+        font-size: clamp(19px, 2.6vw, 23px); font-weight: 600; letter-spacing: -0.02em;
+        color: #fff; margin: 30px 0 12px;
+      }
+      .post-body h2:first-child { margin-top: 8px; }
+      .sec-num {
+        font-family: var(--mono-font); font-size: 0.72em; font-weight: 500;
+        color: #8ab4ff; background: rgba(138, 180, 255, 0.1);
+        border: 1px solid rgba(138, 180, 255, 0.25); border-radius: 6px;
+        padding: 2px 8px; flex-shrink: 0; letter-spacing: 0.02em;
+      }
+      .post-body h3 { font-size: 16.5px; font-weight: 600; color: #eaeaea; margin: 22px 0 10px; letter-spacing: -0.01em; }
+      .post-body p { color: #b4b4b4; font-size: 15px; line-height: 1.85; margin-bottom: 14px; }
+      .post-body code {
+        font-family: var(--mono-font); font-size: 0.86em; color: #d8e2f5;
+        background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 5px; padding: 1.5px 6px; white-space: nowrap;
+      }
+      .post-body ul { list-style: none; margin: 8px 0 16px; padding: 0; }
+      .post-body ul li {
+        position: relative; padding-left: 22px; color: #b4b4b4;
+        font-size: 15px; line-height: 1.8; margin-bottom: 9px;
+      }
+      .post-body ul li::before {
+        content: ""; position: absolute; left: 6px; top: 11px;
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #8ab4ff; box-shadow: 0 0 6px rgba(138, 180, 255, 0.6);
+      }
+      .post-body .note {
+        border-left: 2px solid #8ab4ff;
+        background: rgba(138, 180, 255, 0.06);
+        border-radius: 0 10px 10px 0;
+        padding: 14px 18px; margin: 14px 0 18px;
+        color: #cfd9ec; font-size: 14px; line-height: 1.75;
+      }
+      .post-body .note strong { color: #eaf1ff; font-weight: 600; }
+      .step-label {
+        display: inline-block; font-family: var(--mono-font); font-size: 12px; font-weight: 500;
+        color: #111; background: #e7e7e7; border-radius: 5px; padding: 1px 7px; margin-right: 6px;
+      }
+
+      /* Figures */
+      .post-figure { margin: 18px 0; }
+      .post-figure img {
+        width: 100%; height: auto; display: block;
+        border-radius: 12px; border: 1px solid var(--border-soft);
+        background: #0a0a0a;
+      }
+      .post-figure figcaption { margin-top: 9px; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+      .post-foot {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+        margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--border-soft);
+      }
+      .post-foot .tag { font-size: 12px; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border-soft); background: rgba(255, 255, 255, 0.04); color: #cfcfcf; }
+      .post-foot .read { margin-left: auto; font-size: 13px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+
+      /* ---------- Footer / contact ---------- */
+      .blog-footer { border-top: 1px solid var(--border-soft); padding: clamp(36px, 6vw, 64px) var(--section-x); text-align: center; }
+      .blog-footer .section-title { font-size: clamp(24px, 4vw, 38px); font-weight: 500; letter-spacing: -0.04em; color: #fff; margin-bottom: 14px; }
+      .blog-footer .section-title em { font-family: var(--serif-font); font-style: italic; font-weight: 400; color: #9a9a9a; }
+      .blog-footer .lede { color: #b8b8b8; font-size: 15px; line-height: 1.7; max-width: 520px; margin: 0 auto 24px; }
+      .contact-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+      .footer-base { border-top: 1px solid var(--border-soft); padding: 28px var(--section-x); text-align: center; color: var(--muted); font-size: 12.5px; letter-spacing: 0.02em; }
+
+      /* ---------- Email modal ---------- */
+      .modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+      .modal.open { display: flex; }
+      .modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+      .modal-box {
+        position: relative; z-index: 1; width: 100%; max-width: 420px;
+        border: 1px solid var(--border); border-radius: 16px;
+        background: linear-gradient(180deg, #161616, #0c0c0c); padding: 32px 28px; text-align: center;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+        animation: modal-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      @keyframes modal-in { from { opacity: 0; transform: translateY(16px) scale(0.96); } to { opacity: 1; transform: none; } }
+      .modal-close { position: absolute; top: 12px; right: 14px; width: 30px; height: 30px; border: none; background: transparent; color: var(--muted); font-size: 22px; line-height: 1; cursor: pointer; border-radius: 6px; }
+      .modal-close:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+      .modal-label { font-size: 12px; letter-spacing: 0.16em; color: var(--muted); margin-bottom: 12px; }
+      .modal-email { font-size: clamp(18px, 4vw, 24px); font-weight: 500; color: #fff; letter-spacing: -0.01em; margin-bottom: 22px; word-break: break-all; }
+
+      /* ---------- Entrance motion ---------- */
+      .appear { opacity: 1; animation-duration: var(--dur, 1.05s); animation-fill-mode: both; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); animation-delay: var(--d, 0.08s); }
+      .appear--scale { animation-name: in-scale; }
+      .appear--soft { animation-name: in-soft; }
+      .is-in { animation: none !important; opacity: 1 !important; transform: none !important; clip-path: none !important; filter: none !important; }
+      @keyframes in-scale { from { opacity: 0; transform: scale(0.84); } to { opacity: 1; transform: scale(1); } }
+      @keyframes in-soft { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+      .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+      .reveal.is-visible { opacity: 1; transform: none; }
+
+      /* ---------- Responsive ---------- */
+      @media (min-width: 1600px) {
+        :root { --logo: 17px; --logo-mark: 24px; --nav: 15px; --nav-h: 44px; --btn: 15px; --btn-h: 44px; --h1: 64px; --lede: 18px; --header-x: 64px; --section-x: 96px; }
+      }
+      @media (min-width: 901px) and (max-width: 1279px) {
+        :root { --logo: 15px; --nav: 13px; --nav-h: 36px; --btn: 13px; --btn-h: 38px; --h1: 42px; --lede: 15px; --header-x: 28px; --section-x: 28px; }
+      }
+      @media (max-width: 900px) {
+        .header { grid-template-columns: 1fr auto auto; gap: 8px; padding: 14px 18px 10px; padding-left: max(18px, env(safe-area-inset-left)); padding-right: max(18px, env(safe-area-inset-right)); }
+        .burger { display: grid; }
+        .header-cta, .burger { z-index: 80; }
+        #site-nav {
+          position: fixed; inset: 0; z-index: 45; flex-direction: column; align-items: stretch;
+          justify-content: center; gap: 12px; padding: 96px 22px 32px;
+          padding-top: max(96px, calc(env(safe-area-inset-top) + 88px));
+          background: rgba(8, 8, 8, 0.6); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+          opacity: 0; visibility: hidden; transition: opacity 0.28s ease, visibility 0.28s ease;
+        }
+        body.menu-open #site-nav { opacity: 1; visibility: visible; }
+        .nav-link { justify-content: center; height: 56px; font-size: 19px; border-radius: 10px; width: 100%; }
+        :root { --section-x: 20px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; }
+        .appear, .reveal { opacity: 1 !important; transform: none !important; clip-path: none !important; filter: none !important; }
+      }
+    
+
+
+
+      /* Code block + table inside article body */
+      .post-body pre.post-code {
+        font-family: var(--mono-font); font-size: 12.5px; line-height: 1.6;
+        color: #cfe0f5; background: rgba(255,255,255,0.05);
+        border: 1px solid var(--border-soft); border-radius: 10px;
+        padding: 14px 16px; margin: 14px 0 18px; overflow-x: auto; white-space: pre;
+      }
+      .post-body table.post-table {
+        width: 100%; border-collapse: collapse; margin: 14px 0 18px;
+        font-size: 13.5px; color: #cfcfcf;
+      }
+      .post-body table.post-table th, .post-body table.post-table td {
+        border: 1px solid var(--border-soft); padding: 8px 12px; text-align: left;
+      }
+      .post-body table.post-table th { background: rgba(255,255,255,0.06); color: #eaeaea; }
+</style>
   </head>
-  <body>
-    <div class="pixel-noise" aria-hidden="true"></div>
-    <header class="site-header">
-      <a class="brand" href="./index.html" aria-label="回到首页">
-        <span class="mini-avatar" aria-hidden="true"></span>
-        <span>Grapeman_zx | 游戏开发者</span>
+  <body style="background:#000;color:#fff">
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="header">
+      <a class="logo appear appear--scale" href="index.html" aria-label="Grapeman_zx" style="--d: 0.08s">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <g transform="rotate(-30 12 12)">
+            <circle cx="7.3" cy="3.2" r="1.45" />
+            <rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8" />
+            <rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8" />
+            <circle cx="16.7" cy="20.8" r="1.45" />
+          </g>
+        </svg>
+        <span>Grapeman<span class="logo-suffix">_zx</span></span>
       </a>
-      <nav class="nav" aria-label="主导航">
-        <a href="./index.html#games">WORKS</a>
-        <a href="./index.html#profile">ABOUT</a>
-        <a href="./blog.html">BLOG</a>
-        <button class="nav-mail mail-trigger" type="button">MAIL</button>
+
+      <nav id="site-nav" aria-label="Primary">
+        <a class="nav-link appear appear--scale" href="index.html#about" style="--d: 0.16s">关于</a>
+        <a class="nav-link appear appear--soft" href="index.html#works" style="--d: 0.28s">作品</a>
+        <a class="nav-link appear appear--scale" href="index.html#tech" style="--d: 0.40s">技术</a>
+        <a class="nav-link appear appear--soft" href="index.html#contact" style="--d: 0.52s">联系</a>
       </nav>
+
+      <a class="btn btn-solid header-cta appear appear--scale" href="index.html" style="--d: 0.34s">返回主页</a>
+
+      <button class="burger appear appear--scale" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="打开菜单" style="--d: 0.34s">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
     </header>
 
-    <main>
+    <main id="top">
       <section class="blog-hero">
-        <p class="eyebrow">> TECH BLOG ARCHIVE</p>
-        <h1>技术博客</h1>
-        <p>这里会整理游戏开发、玩法实验、工程复盘和工具记录。目前文章为空。</p>
+        <div class="blog-hero-inner reveal">
+          <span class="blog-kicker">// TECH BLOG</span>
+          <h1 class="blog-title">技术<em>博客</em></h1>
+
+          <!-- Category filters -->
+          <div class="blog-cats">
+            <button class="cat-btn active" data-cat="all">全部</button>
+            <button class="cat-btn" data-cat="ui">UI</button>
+            <button class="cat-btn" data-cat="render">渲染</button>
+            <button class="cat-btn" data-cat="engine">引擎</button>
+            <button class="cat-btn" data-cat="cpp">C++</button>
+            <button class="cat-btn" data-cat="math">数学</button>
+            <button class="cat-btn" data-cat="physics">物理</button>
+            <button class="cat-btn" data-cat="anim">动画</button>
+            <button class="cat-btn" data-cat="platform">平台</button>
+          </div>
+        </div>
       </section>
 
-      <section class="section blog-shell">
-        <div class="blog-categories">
-          <a href="#engine">引擎与工具</a>
-          <a href="#gameplay">玩法系统</a>
-          <a href="#multiplayer">多人联机</a>
-          <a href="#devlog">开发复盘</a>
-        </div>
+      <section class="blog-feed" id="feed">
+        <!-- POST 1 -->
+        <article class="post-card reveal" data-post="1" data-cat="ui">
+          <span class="post-tag"><span class="dot"></span>UE · Slate · 字体渲染</span>
+          <h2 class="post-title">字体加粗和字体下划线<em>问题调研</em></h2>
+          <div class="post-meta">
+            <span class="post-avatar">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg>
+            </span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>底层渲染</span>
+          </div>
 
-        <div class="empty-blog">
-          <span aria-hidden="true">?</span>
-          <h2>暂无文章</h2>
-          <p>博客分类已经搭好，后续可以把 CSDN、B 站文稿或项目复盘整理进来。</p>
-          <a class="button primary" href="./index.html">返回主页</a>
-        </div>
+          <p class="post-excerpt">
+            围绕 Slate/FreeType 字体渲染链路，在不改字形资源的前提下实现「加粗」与「可控制的下划线」，
+            并记录描边偏移、点阵尺寸计算顺序等几个容易踩的坑。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <h2><span class="sec-num">[1]</span> 加粗功能</h2>
+            <p>
+              <strong>核心实现：</strong>加粗的功能，可以利用 FreeType 的
+              <code>FT_Outline_EmboldenXY</code> 接口。此接口可以加粗轮廓，基本效果和加粗一样。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/font_image1.png" loading="lazy" alt="FT_Outline_EmboldenXY 加粗轮廓示意" />
+              <figcaption>图：FreeType 的 FT_Outline_EmboldenXY 用来加粗字体轮廓。</figcaption>
+            </figure>
+
+            <p>
+              <strong>基本思路：</strong>在算完字体的点阵以后，调用一次
+              <code>FT_Outline_EmboldenXY</code>，来让点阵数据变得粗一点。
+            </p>
+
+            <h3>实现步骤</h3>
+            <ul>
+              <li>
+                <span class="step-label">1</span>
+                在 <code>SlateFontRenderer.cpp</code> 的
+                <code>FSlateFontRenderer::GetRenderDataInternal</code> 里计算字体的点阵数据。
+                其中 <code>RenderOutlineRows</code> 是计算字体描边的接口，描边也会加粗，
+                所以去 <code>RenderOutlineRows</code> 加入 <code>FT_Outline_EmboldenXY</code>。
+                参数：<code>64</code> 代表加粗一像素，<code>128</code> 代表两个像素。
+                <div class="note">
+                  <strong>注意：</strong>一定要在 <code>FT_Outline_Get_CBox</code> <em>之前</em>调用，
+                  不然算字体点阵尺寸会漏掉加粗效果。
+                </div>
+                <figure class="post-figure">
+                  <img src="assets/blog/font_image2.png" loading="lazy" alt="在 FT_Outline_Get_CBox 之前调用加粗接口" />
+                  <figcaption>图：务必在 FT_Outline_Get_CBox 之前调用加粗接口。</figcaption>
+                </figure>
+              </li>
+              <li>
+                <span class="step-label">2</span>
+                上述步骤实现完带描边的字体，我们还要在<strong>不描边</strong>的时候也实现加粗。
+                回到 <code>GetRenderDataInternal</code> 方法，这里的判断用来区分是不是描边，
+                所以接下来要去条件的 <code>ELSE</code> 分支里，加入 <code>FT_Outline_EmboldenXY</code>。
+                <figure class="post-figure">
+                  <img src="assets/blog/font_image3.png" loading="lazy" alt="GetRenderDataInternal 的 ELSE 分支加入加粗" />
+                  <figcaption>图：在 GetRenderDataInternal 的 ELSE 分支中调用加粗接口。</figcaption>
+                </figure>
+                <figure class="post-figure">
+                  <img src="assets/blog/font_image4.png" loading="lazy" alt="加粗后的点阵对比" />
+                  <figcaption>图：加粗前后的点阵效果对比。</figcaption>
+                </figure>
+              </li>
+              <li>
+                <span class="step-label">3</span>
+                现在字体的加粗功能就出现了。如果使用描边，会出现一个问题：在 1:1 的缩放下，
+                可能会发现字体描边和字体有一个偏移情况。所以，我们根据是否加粗把位置再偏移回去，
+                加入对应的偏移代码即可。
+                <figure class="post-figure">
+                  <img src="assets/blog/font_image5.png" loading="lazy" alt="1:1 缩放下描边偏移问题及修正" />
+                  <figcaption>图：1:1 缩放下描边偏移问题及修正代码。</figcaption>
+                </figure>
+              </li>
+            </ul>
+
+            <h2><span class="sec-num">[2]</span> 下划线功能</h2>
+            <p>
+              UE4 自带下划线的绘制功能，只是 UMG 层接口并没有启用。
+              我们可以找到 <code>SlateType.h</code> 里定义了 <code>UnderlineBrush</code>；
+              同时，在 <code>ISlateTextLineHighlighter::OnPaint</code> 中有 UnderLine 的绘制。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/font_image6.png" loading="lazy" alt="SlateType.h 中定义的 UnderlineBrush" />
+              <figcaption>图：SlateType.h 中定义的 UnderlineBrush。</figcaption>
+            </figure>
+            <p>
+              同时，在 <code>ISlateTextLineHighlighter::OnPaint</code> 中有 UnderLine 的绘制。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/font_image7.png" loading="lazy" alt="ISlateTextLineHighlighter::OnPaint 中的 UnderLine 绘制" />
+              <figcaption>图：ISlateTextLineHighlighter::OnPaint 中的 UnderLine 绘制逻辑。</figcaption>
+            </figure>
+
+            <h3>实现步骤</h3>
+            <ul>
+              <li>
+                <span class="step-label">1</span>
+                在 <code>TextBlock</code> 和 <code>STextBlock</code> 中分别定义一个
+                <code>Brush</code>，用来绘制 UnderLine。并且，实现将
+                <code>TextBlock</code> 传递给 <code>STextBlock</code>。
+                <figure class="post-figure">
+                  <img src="assets/blog/font_image8.png" loading="lazy" alt="TextBlock / STextBlock 中定义 UnderLine Brush" />
+                  <figcaption>图：在 TextBlock / STextBlock 中定义绘制下划线的 Brush。</figcaption>
+                </figure>
+                <figure class="post-figure">
+                  <img src="assets/blog/font_image9.png" loading="lazy" alt="将 TextBlock 的 UnderLine 参数传递给 STextBlock" />
+                  <figcaption>图：将 TextBlock 的 UnderLine 参数传递给 STextBlock。</figcaption>
+                </figure>
+              </li>
+              <li>
+                <span class="step-label">2</span>
+                在 <code>STextBlock</code> 中，获取 <code>TextStyle</code> 的时候，
+                传递一下 <code>UnderLine</code> 即可设置下划线。
+                <figure class="post-figure">
+                  <img src="assets/blog/font_image10.png" loading="lazy" alt="在 STextBlock 获取 TextStyle 时设置 UnderLine" />
+                  <figcaption>图：获取 TextStyle 时传递 UnderLine 以设置下划线。</figcaption>
+                </figure>
+              </li>
+              <li>
+                <span class="step-label">3</span>
+                现在虽然有了下划线，但是下划线的位置和大小无法控制。如果想控制，
+                就要去绘制 UnderLine 的地方加入相应的参数。
+              </li>
+            </ul>
+            <p>
+              <code>FontUnderLineWidth</code> 控制下划线的宽度【这个是自己定义的】；<br />
+              <code>FontUnderLinePos</code> 用来控制下划线的位置【这个是自己定义的】。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/font_image11.png" loading="lazy" alt="FontUnderLineWidth 控制下划线宽度" />
+              <figcaption>图：FontUnderLineWidth 控制下划线宽度。</figcaption>
+            </figure>
+            <figure class="post-figure">
+              <img src="assets/blog/font_image12.png" loading="lazy" alt="FontUnderLinePos 控制下划线位置" />
+              <figcaption>图：FontUnderLinePos 控制下划线位置。</figcaption>
+            </figure>
+            <p>然后，基本思路就是从 <code>TextBlock</code> 把值传递过来就行。</p>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">FreeType</span><span class="tag">Slate</span><span class="tag">UMG</span>
+            <span class="read">阅读约 4 分钟</span>
+          </div>
+        </article>
+
+        <!-- POST 2 -->
+        <article class="post-card reveal" data-post="2" data-cat="ui">
+          <span class="post-tag"><span class="dot"></span>UMG · 富文本 · UE</span>
+          <h2 class="post-title">UMG 富文本实现<em>可以换行的超链接</em></h2>
+          <div class="post-meta">
+            <span class="post-avatar">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg>
+            </span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>UI 框架</span>
+          </div>
+
+          <p class="post-excerpt">
+            UE 原生对富文本实现过超链接，但 UMG 层没有对应接口。本文记录 LordGame 旧实现的两个坑
+            （不换行 / 下划线不显示），以及最终改用 <code>FSlateHyperlinkRun</code> 的方案。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <h2><span class="sec-num">[1]</span> 前言</h2>
+            <p>UE 原生对富文本是实现过超链接的，只是 UMG 层并没有对应的接口。</p>
+
+            <h2><span class="sec-num">[2]</span> LordGame 之前实现的问题</h2>
+            <p>
+              之前的富文本实现是用了 <code>CreateDecoratorWidget</code> 方法，
+              直接创建了一个 <code>SRichTextHyperlink</code>。这种思路没问题，
+              但是由于 <code>SRichTextHyperlink</code> 是一个 <code>Button</code>，
+              它是不会换行的。所以要想按照字符换行这种思路就不太行了。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/umg_image1.png" loading="lazy" alt="旧实现通过 CreateDecoratorWidget 创建 SRichTextHyperlink" />
+              <figcaption>图：旧实现通过 CreateDecoratorWidget 创建 SRichTextHyperlink（本质是个 Button，不换行）。</figcaption>
+            </figure>
+
+            <h2><span class="sec-num">[3]</span> 第一个问题 — 下划线不显示</h2>
+            <p>
+              代码也走不到 LordGame 定制的按字符换行的逻辑里。因为超链接是有
+              <code>Decorator</code>，Decorator 创建就不会走到 <code>else</code> 里的设置下划线的方法。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/umg_image2.png" loading="lazy" alt="Decorator 创建导致走不到设置下划线的逻辑" />
+              <figcaption>图：Decorator 创建后走不到设置下划线的逻辑分支。</figcaption>
+            </figure>
+
+            <h2><span class="sec-num">[4]</span> 第二个问题 — 无法换行</h2>
+            <p>
+              换行按照字符换行。UE 本身其实是有按字符换行的，但是底层还是会判断是不是同一个语种，
+              不是一个语种还是会优先放到一起。
+            </p>
+            <p>
+              看代码，按字符换行的逻辑已经生效，之所以换不下来，是因为之前的富文本实现超链接的
+              <code>Decorator</code> 继承了 <code>FRichTextDecorator</code>，
+              <code>FRichTextDecorator</code> 会返回一个 <code>FSlateWidgetRun</code>。
+            </p>
+            <p>
+              <code>FSlateWidgetRun</code> 在换行计算当前尺寸的时候，没有办法按照字符计算，
+              因为 <code>Widget</code> 会计算当前资源的尺寸：
+            </p>
+            <p><code>FSlateWidgetRun::Measure</code></p>
+            <figure class="post-figure">
+              <img src="assets/blog/umg_image3.png" loading="lazy" alt="FSlateWidgetRun::Measure 按 Widget 尺寸计算" />
+              <figcaption>图：FSlateWidgetRun::Measure 按 Widget 资源尺寸计算，无法按字符换行。</figcaption>
+            </figure>
+            <p><code>FSlateTextRun::Measure</code></p>
+            <figure class="post-figure">
+              <img src="assets/blog/umg_image4.png" loading="lazy" alt="FSlateTextRun::Measure 文本 Run 的换行尺寸计算" />
+              <figcaption>图：FSlateTextRun::Measure 可以按字符计算文本换行尺寸。</figcaption>
+            </figure>
+
+            <h2><span class="sec-num">[5]</span> 解决办法</h2>
+            <p>
+              根据 <code>&lt;&gt;</code> 规则创建专属于超链接的 <code>Run</code>，
+              <code>Run</code> 里去创建超链接的 Slate 部分。由于 UE 本身其实提供了一个超链接的
+              <code>Run</code>（只是给编辑器用），我们可以直接用他就可以：
+              <code>FSlateHyperlinkRun</code>，需要几个参数，最重要的就是点击事件参数。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/umg_image5.png" loading="lazy" alt="使用 FSlateHyperlinkRun 创建超链接 Slate 部分" />
+              <figcaption>图：使用 FSlateHyperlinkRun 创建超链接的 Slate 部分。</figcaption>
+            </figure>
+            <p>
+              <code>Run</code> 这个东西在文本控件里是非常重要的。举个例子：
+              如果我有一个富文本是 <code>&lt;a&gt;你好&lt;/&gt;&lt;TextSyle&gt;你好1&lt;/&gt;hello</code>，
+              富文本底层处理的时候会根据标签处理；如果没有标签会走默认的字符显示。
+              分成三块：<code>你好</code> 为一个 Run，<code>你好1</code> 为一个 Run，
+              <code>hello</code> 为一个 Run。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/umg_image6.png" loading="lazy" alt="富文本按标签拆分为多个 Run" />
+              <figcaption>图：富文本按标签拆分为多个 Run。</figcaption>
+            </figure>
+            <p>这里的 Run 具体用哪一个，取决于 RichText 的 <code>Decorator</code>。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/umg_image7.png" loading="lazy" alt="RichText 的 Decorator 决定使用哪个 Run" />
+              <figcaption>图：RichText 的 Decorator 决定使用哪个 Run。</figcaption>
+            </figure>
+            <ul>
+              <li>
+                我们实现一个 <code>Decorator</code> 继承 <code>FHyperlinkDecorator</code>，
+                <code>FHyperlinkDecorator</code> 会帮我们创建一个 <code>FSlateHyperlinkRun</code>。
+                <figure class="post-figure">
+                  <img src="assets/blog/umg_image8.png" loading="lazy" alt="实现继承 FHyperlinkDecorator 的 Decorator" />
+                  <figcaption>图：实现继承 FHyperlinkDecorator 的 Decorator。</figcaption>
+                </figure>
+              </li>
+              <li>
+                <code>FSlateHyperlinkRun</code> 里会根据目前的换行情况创建
+                <code>SRichTextHyperlink</code>，<code>SRichTextHyperlink</code> 是引擎实现的超链接样式。
+                <figure class="post-figure">
+                  <img src="assets/blog/umg_image9.png" loading="lazy" alt="FSlateHyperlinkRun 按换行创建 SRichTextHyperlink" />
+                  <figcaption>图：FSlateHyperlinkRun 按当前换行情况创建 SRichTextHyperlink。</figcaption>
+                </figure>
+              </li>
+              <li>
+                <code>SRichTextHyperlink</code> 继承了 <code>SHyperlink</code>，
+                <code>SHyperlink</code> 继承了 <code>SButton</code>。也就是说
+                <code>SRichTextHyperlink</code> 其实是一个带字的 <code>SButton</code>。
+              </li>
+              <li>
+                同时，我们还要提供一个 <code>UObject</code> 的 <code>Decorator</code>，
+                用来监听点击事件和处理超链接的样式。
+                <figure class="post-figure">
+                  <img src="assets/blog/umg_image10.png" loading="lazy" alt="提供 UObject Decorator 监听点击与样式" />
+                  <figcaption>图：提供 UObject Decorator 监听点击事件与样式。</figcaption>
+                </figure>
+                <figure class="post-figure">
+                  <img src="assets/blog/umg_image11.png" loading="lazy" alt="超链接 Decorator 配置与样式" />
+                  <figcaption>图：超链接 Decorator 的配置与样式设置。</figcaption>
+                </figure>
+              </li>
+              <li>
+                <code>UHyperLinkRichTextBlockDecorator</code> 最终会配置到富文本控件的
+                <code>Decorators</code>。
+                <figure class="post-figure">
+                  <img src="assets/blog/umg_image12.png" loading="lazy" alt="UHyperLinkRichTextBlockDecorator 配置到 Decorators" />
+                  <figcaption>图：UHyperLinkRichTextBlockDecorator 配置到富文本控件的 Decorators。</figcaption>
+                </figure>
+              </li>
+              <li>
+                在底层会根据时机触发 <code>CreateDecorator</code> 方法，在 <code>CreateDecorator</code> 里我们就能创建
+                <code>FHyperLinkRichTextBlockDecorator</code>，它最终返回一个 <code>FSlateHyperlinkRun</code>。
+              </li>
+            </ul>
+            <h2><span class="sec-num">[6]</span> 最终实现效果</h2>
+            <p>超链接既能按字符正常换行，又保留了点击交互与下划线样式。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/umg_image13.gif" loading="lazy" alt="最终实现效果动图" />
+              <figcaption>图：最终实现效果（可换行的超链接，动图）。</figcaption>
+            </figure>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">RichText</span><span class="tag">Decorator</span><span class="tag">FSlateHyperlinkRun</span>
+            <span class="read">阅读约 6 分钟</span>
+          </div>
+        </article>
+
+        <!-- POST 3 -->
+        <article class="post-card reveal" data-post="3" data-cat="ui">
+          <span class="post-tag"><span class="dot"></span>UI · List Item · 半透</span>
+          <h2 class="post-title">List Item 遮挡半透<em>方案总结</em></h2>
+          <div class="post-meta">
+            <span class="post-avatar">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg>
+            </span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>UI 方案</span>
+          </div>
+
+          <p class="post-excerpt">
+            List Item 被遮挡时绘制半透过渡状态的方案总结：历史 RetainerBox 方案的色彩偏差问题，
+            以及基于 Material 的新方案（无需改引擎）与注意事项。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <p>下面是文档的版本记录：</p>
+            <figure class="post-figure">
+              <img src="assets/blog/listitem_image1.png" loading="lazy" alt="版本记录表格" />
+              <figcaption>图：版本 / 时间 / 描述 记录（v0.1 2023.10.31 初始方案文档）。</figcaption>
+            </figure>
+
+            <h2><span class="sec-num">[1]</span> 需求情况</h2>
+            <p>美术需要 List Item 或者使用其他滚动容器时，被遮挡的 Item 绘制一个半透过渡的状态，参考如下：</p>
+            <figure class="post-figure">
+              <img src="assets/blog/listitem_image2.png" loading="lazy" alt="需求参考效果" />
+              <figcaption>图：被遮挡 Item 的半透过渡参考效果。</figcaption>
+            </figure>
+
+            <h2><span class="sec-num">[2]</span> 历史方案情况（可以继续使用）</h2>
+            <p>之前基于 RetainerBox 扩展过一版实现，但是问题如下：</p>
+            <p>之前在使用 Retainer Box 的方案的问题在于，如果 Item 的底图是半透的就会发生色彩偏差。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/listitem_image3.png" loading="lazy" alt="RetainerBox 半透色彩偏差" />
+              <figcaption>图：RetainerBox 方案下半透底图出现色彩偏差。</figcaption>
+            </figure>
+            <p>
+              原因是 AdvanceMaterial 未能正确的设置 Blend，使用 Translucent Blend 会使混合的结果显得更深，
+              需要使用 Alpha…（如下）。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/listitem_image4.png" loading="lazy" alt="AdvanceMaterial Blend 设置" />
+              <figcaption>图：AdvanceMaterial 的 Blend 设置。</figcaption>
+            </figure>
+            <figure class="post-figure">
+              <img src="assets/blog/listitem_image5.png" loading="lazy" alt="Material 设置" />
+              <figcaption>图：对应的 Material 设置。</figcaption>
+            </figure>
+            <p>
+              AdvanceMaterial 的设置逻辑不需要修改引擎，去掉之前对引擎的修改。
+              通过自定义 UserWidget 在 Widget Blueprint 中实现即可。
+            </p>
+
+            <h2><span class="sec-num">[3]</span> 新方案（可选）</h2>
+            <p>
+              使用自定义的 ListItem，在上层逻辑实现，引擎组给出实现的示例和 demo，附件；
+              如有需要，可由客户端同学根据策划需求实现即可。
+            </p>
+            <p>
+              核心的思路是 ListItem 内部的 Element 都使用 Material 控制渲染，
+              在 ListItem 的 Tick 逻辑中根据 ListItem 与当前…（遮挡位置）计算半透过渡。
+            </p>
+
+            <h2><span class="sec-num">[4]</span> 注意和限制</h2>
+            <ul>
+              <li>
+                使用此效果，不支持复杂的文本效果：描边、下划线、阴影、外发光；
+                事实上美术提供的此类参考需求文本都没有复杂效果。例如：
+              </li>
+            </ul>
+            <figure class="post-figure">
+              <img src="assets/blog/listitem_image6.png" loading="lazy" alt="复杂文本效果不支持示例" />
+              <figcaption>图：不支持的复杂文本效果示例。</figcaption>
+            </figure>
+            <ul>
+              <li>尽量使用在 Item 数量不多的情况下。使用 Material 绘制 UI 时，不会合并 UI 的 DC，可能导致 UI 性能瓶颈。</li>
+              <li>
+                如果是 Item 数量比较多的需求，尽量使用 Bottom 阴影效果模拟此效果，
+                尽量使用 ScrollBox 本身的功能实现（ScrollBox Style…）。
+              </li>
+            </ul>
+            <figure class="post-figure">
+              <img src="assets/blog/listitem_image7.png" loading="lazy" alt="ScrollBox 阴影模拟方案" />
+              <figcaption>图：用 ScrollBox 阴影效果模拟半透过渡。</figcaption>
+            </figure>
+            <p>相关测试和示例附件：原路径在 <code>Content\Test</code>（FadeItem.rar）。</p>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">UMG</span><span class="tag">Material</span><span class="tag">半透明</span>
+            <span class="read">阅读约 5 分钟</span>
+          </div>
+        </article>
+
+        <!-- POST 4 -->
+        <article class="post-card reveal" data-post="4" data-cat="ui">
+          <span class="post-tag"><span class="dot"></span>UI · TextBlock · 换行</span>
+          <h2 class="post-title">TextBlock 异常<em>换行问题</em></h2>
+          <div class="post-meta">
+            <span class="post-avatar">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg>
+            </span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>UI 文本</span>
+          </div>
+
+          <p class="post-excerpt">
+            UE4 TextBlock 在启用换行和「大小到内容」后出现两类问题：编辑器缩放尺寸越来越小、
+            游戏内位置随机换行。最终方案是加一个可选开关直接用 WrappingWidth。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <p>UE4 TextBlock 设置 <code>Auto Wrap Text</code> 为 True，<code>Wrap Text At</code> 400（数字随便），<code>Wrapping Policy</code> … 后出现一些问题。</p>
+
+            <h2><span class="sec-num">[1]</span> 在编辑器下</h2>
+            <p>在 UMG 编辑器下不停的缩放 Zoom，就会发现 TextBlock 的尺寸越来越小。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/tbwrap_image1.gif" loading="lazy" alt="编辑器缩放尺寸越来越小" />
+              <figcaption>图：UMG 编辑器下不停缩放，TextBlock 尺寸越来越小（动图）。</figcaption>
+            </figure>
+
+            <h2><span class="sec-num">[2]</span> 游戏中</h2>
+            <p>TextBlock 会在不正确的位置上换行，这个位置感觉像是随机的。</p>
+            <p>我们简单的查了一下 Slate 层的代码，发现可能是这里的逻辑造成了换行不对的结果。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/tbwrap_image2.jpeg" loading="lazy" alt="Slate 层换行逻辑代码" />
+              <figcaption>图：怀疑造成换行异常的 Slate 层代码逻辑。</figcaption>
+            </figure>
+            <p>同时，为了确保思路和消除隐患，请教了 Epic 官方的人员，得到了回复。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/tbwrap_image3.png" loading="lazy" alt="Epic 官方回复" />
+              <figcaption>图：Epic 官方人员的回复。</figcaption>
+            </figure>
+
+            <h2><span class="sec-num">[3]</span> 最终解决方案</h2>
+            <p>
+              所以，最终的解决方案是：加入一个可选的开关，如果开关开，
+              直接利用 <code>WrappingWidth</code> 而不是求 <code>WrappingWidth</code> 和 <code>CacheSize</code>…（的较小值）。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/tbwrap_image4.png" loading="lazy" alt="可选开关解决方案代码" />
+              <figcaption>图：加入可选开关，直接用 WrappingWidth 的方案代码。</figcaption>
+            </figure>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">TextBlock</span><span class="tag">Slate</span><span class="tag">Wrapping</span>
+            <span class="read">阅读约 3 分钟</span>
+          </div>
+        </article>
+
+        <!-- POST 5 -->
+        <article class="post-card reveal" data-post="5" data-cat="ui">
+          <span class="post-tag"><span class="dot"></span>UI · TextBlock · Overlay</span>
+          <h2 class="post-title">TextBlock 勾选 AdjustFontSize 被 Overlay 包裹<em>尺寸异常</em></h2>
+          <div class="post-meta">
+            <span class="post-avatar">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg>
+            </span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>UI 文本</span>
+          </div>
+
+          <p class="post-excerpt">
+            TextBlock 勾选 AdjustFontSize 后被 SOverlay 包裹时尺寸异常：根因是 AdjustFontSize 逻辑在 OnPaint 里，
+            而 SOverlay 先走 ArrangeChildren 拿不到正确尺寸。解决方法是中间加一个 SizeBox 包裹。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <h2><span class="sec-num">[1]</span> 现象</h2>
+            <p>TextBlock 勾选 AdjustFontSize 后，被 <code>SOverlay</code> 包裹时出现尺寸异常（效果见原始文档录屏 飞书20241118-153325.mp4）。</p>
+
+            <h2><span class="sec-num">[2]</span> 原因</h2>
+            <p>TextBlock 之前的 AdjustFontSize 的逻辑在 <code>OnPaint</code> 里。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/adjustfont_image1.png" loading="lazy" alt="AdjustFontSize 在 OnPaint 里" />
+              <figcaption>图：AdjustFontSize 的逻辑位于 OnPaint 内。</figcaption>
+            </figure>
+            <p>如果 <code>SOverlay</code> 包裹 TextBlock，那么会先走 <code>SOverlay</code> 的 <code>OnPaint</code> 方法。</p>
+            <p>
+              麻烦的就是：SOverlay 先调用的是一个 <code>ArrangeChildren</code> 方法，用来计算子控件的布局大小。
+              这个时候是调不到 TextBlock 的…
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/adjustfont_image2.png" loading="lazy" alt="SOverlay ArrangeChildren" />
+              <figcaption>图：SOverlay 先调用 ArrangeChildren 计算子控件布局大小。</figcaption>
+            </figure>
+            <p>这里会调用 <code>GetDesiredSize</code> 获取尺寸，这块就会有问题。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/adjustfont_image3.png" loading="lazy" alt="GetDesiredSize 尺寸问题" />
+              <figcaption>图：GetDesiredSize 处获取尺寸出现问题。</figcaption>
+            </figure>
+
+            <h2><span class="sec-num">[3]</span> 修改方法</h2>
+            <p>
+              给 TextBlock 和 Overlay 中间加一个 <code>SizeBox</code>（也就是用一个 SizeBox 包裹一个 TextBlock），
+              这样 SizeBox 用来…（固定/承接尺寸）。
+            </p>
+            <figure class="post-figure">
+              <img src="assets/blog/adjustfont_image4.png" loading="lazy" alt="SizeBox 包裹 TextBlock 方案" />
+              <figcaption>图：用 SizeBox 包裹 TextBlock 的修改方案。</figcaption>
+            </figure>
+            <p>修改以后效果正常（见修改后录屏）。</p>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">TextBlock</span><span class="tag">SOverlay</span><span class="tag">SizeBox</span>
+            <span class="read">阅读约 3 分钟</span>
+          </div>
+        </article>
+        <!-- POST 6 -->
+        <article class="post-card reveal" data-post="6" data-cat="platform">
+          <span class="post-tag"><span class="dot"></span>iOS · Xcode · Metal 调试</span>
+          <h2 class="post-title">Xcode Capture GPU 使用指导</h2>
+          <div class="post-meta">
+            <span class="post-avatar"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg></span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>平台 / Metal</span>
+          </div>
+
+          <p class="post-excerpt">
+            本文主要内容来源于Mac官方文档，基于xcode中的capture gpu workload功能ios设备上的渲染性能分析，并总结相关使用经验和关键的性能调优方法。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <p class="note">版本 | 时间 | 描述 | v0.1 | 2023.11.16 | 初始方案文档</p>
+            <h3>摘要</h3>
+            <p>本文主要内容来源于Mac官方文档，基于xcode中的capture gpu workload功能ios设备上的渲染性能分析，并总结相关使用经验和关键的性能调优方法。</p>
+            <h3>关键字</h3>
+            <p>xcode， capture gpu workload</p>
+            <h2><span class="sec-num">[1]</span> 工具简介</h2>
+            <p>Metal调试器包含一套用于调试和性能分析Metal应用程序的工具。与在运行时在断点处暂停不同，你可以捕获Metal工作负载(Metal Workload)的多个帧，然后在时间轴上前后跳跃，以探索捕获的工作。Metal调试器使你能够探索通道(Pass)之间的依赖关系，并提供改进应用程序性能的见解。你还可以调试绘制命令和计算调度中的着色器，以修复视觉bug的来源。此外，Metal调试器在性能时间轴上显示你的Metal工作负载，并提供详细的统计数据，如性能计数器和每行着色器分析数据。这些工具可以帮助你识别和消除应用程序中的性能瓶颈（请参阅优化GPU性能）。Metal调试器是ios性能调优的不二之选。</p>
+            <p>目前的主要功能有：</p>
+            <p>Summary：会总结各个方面的大概情况，包括OverView（Metal层各个Comand和DrawCall相关指标），Performance，Memory，以及可能的Insights</p>
+            <p>Dependencies：总结各个pass的绘制过程，及依赖顺序。能完整的反应所有的渲染过程</p>
+            <p>Performance：分析各帧各个方面的开销，比如ALU， BandWidth，Opacity</p>
+            <p>Memory：分析显存使用的情况，及可能存在的显存空间浪费</p>
+            <h2><span class="sec-num">[2]</span> capture捕获阶段</h2>
+            <p>首先，确保在运行时诊断选项中启用了GPU帧捕获选项。然后，在应用程序运行时，点击调试栏中的Metal捕获按钮，选择一个范围，然后点击捕获</p>
+            <h3>配置GPU Frame Capture选项</h3>
+            <p>Xcode会在你的目标链接到Metal框架或使用Metal API的任何其他框架时，自动启用GPU帧捕获选项。如果你在协作项目中，有可能其他人已经禁用了GPU帧捕获。为确保它已启用，请按照以下步骤进行：</p>
+            <p>在Xcode 工具栏, 从“Scheme”菜单中选择 Edit Scheme from.</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image1.png" loading="lazy" alt="图 1：在Xcode 工具栏, 从“Scheme”菜单中选择 Edit Sc…" />
+              <figcaption>图 1：在Xcode 工具栏, 从“Scheme”菜单中选择 Edit Sc…</figcaption>
+            </figure>
+            <p>左侧选择 “Run ”，然后右侧点击“Options”.</p>
+            <p>选择一个 GPU Frame Capture option 然后点击 Close.</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image2.png" loading="lazy" alt="图 2：选择一个 GPU Frame Capture option 然后点击…" />
+              <figcaption>图 2：选择一个 GPU Frame Capture option 然后点击…</figcaption>
+            </figure>
+            <p>GPU帧捕获选项包括以下内容：</p>
+            <p>自动  捕获你的应用程序中Metal或OpenGL ES API的使用情况。如果你的目标未链接到Metal框架或OpenGL ES框架，调试栏中将不会出现Metal捕获按钮。如果你的应用程序同时使用Metal API和OpenGL ES API，你可以点击并按住捕获GPU帧图标，选择要捕获的API使用情况。</p>
+            <p>Metal  仅捕获你的应用程序中Metal API的使用情况。如果你的应用程序不使用Metal API，Xcode将在调试栏中禁用Metal捕获按钮。</p>
+            <p>禁用  不捕获应用程序中Metal的使用情况。GPU帧捕获对应用程序的CPU处理时间有微小但可测量的影响，因此在想要测试应用程序的最大性能水平时，请选择此选项。</p>
+            <h3>捕获Workload</h3>
+            <p>当调试app的时候可以通过以下几步捕获GPU trace：</p>
+            <p>点击调试条上面的Capture GPU Workload功能.</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image3.png" loading="lazy" alt="图 3：点击调试条上面的Capture GPU Workload功能." />
+              <figcaption>图 3：点击调试条上面的Capture GPU Workload功能.</figcaption>
+            </figure>
+            <p>选择你要捕获的范围。这可以是帧（frame）、Metal层、命令队列、设备，或者你之前设置过的任何自定义范围。</p>
+            <p>选择捕获范围。根据范围的不同，这可能包括帧数或命令缓冲区的数量。</p>
+            <p>可以选择在重放后进行性能分析，以便Xcode在捕获后自动进行性能分析。性能分析对Metal调试器有初始的性能影响，因此只在调试应用程序性能时启用此选项。你随时可以根据需要稍后进行性能分析。</p>
+            <p>点击“捕获”按钮。Xcode会在触发范围时自动开始捕获GPU跟踪，并根据你选择的范围结束捕获。你也可以随时点击“完成”按钮手动停止捕获</p>
+            <p>如下图，捕获后，会自动跳转到Summary，</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image4.png" loading="lazy" alt="图 4：如下图，捕获后，会自动跳转到Summary，" />
+              <figcaption>图 4：如下图，捕获后，会自动跳转到Summary，</figcaption>
+            </figure>
+            <h2><span class="sec-num">[3]</span> 通过Summary分析Mesh Workload</h2>
+            <p>Metal调试器提供了有用的工具，用于分析你的应用程序如何使用GPU的多个方面。</p>
+            <p>在捕获Metal Workload（参见Xcode中的捕获Metal工作负载）或回放GPU trace文件（参见回放GPU跟踪文件）后，Metal调试器将呈现Summary。摘要查看器在左侧包括你的应用程序中上一个呈现的可绘制对象的预览，在右侧有一些统计数据，并在底部列出了自动生成的建议，称为洞察（Insights）。</p>
+            <p>在摘要查看器的左侧是调试导航器，它可以快速访问关于你的Metal工作负载的顶级信息。你可以探索捕获中的所有GPU命令，以及它使用的所有管道状态</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image5.png" loading="lazy" alt="图 5：在摘要查看器的左侧是调试导航器，它可以快速访问关于你的Metal工作…" />
+              <figcaption>图 5：在摘要查看器的左侧是调试导航器，它可以快速访问关于你的Metal工作…</figcaption>
+            </figure>
+            <h3>查看Metal Workload的统计信息</h3>
+            <p>Metal调试器会自动计算多项统计数据并将其显示在摘要查看器的右侧。</p>
+            <p>概览部分包括Command Buffer、Render Encoders，Blit Encoders， Compute Encoders， DrawCallsDispatch Calls数量。编码命令需要CPU时间，而执行命令则需要GPU时间。如果你的应用程序创建了过多的命令缓冲区或命令编码器，开始对性能产生显著影响，考虑减少工作负载。你可以点击“ShowDependencies”按钮打开依赖性查看器，了解命令编码器之间的连接方式。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image6.png" loading="lazy" alt="图 6：概览部分包括Command Buffer、Render Encode…" />
+              <figcaption>图 6：概览部分包括Command Buffer、Render Encode…</figcaption>
+            </figure>
+            <p>Performance部分包括总GPU时间和顶点数量。如果你的工作负载具有较高的GPU时间。你还可以点击“显示性能”按钮以显示性能时间轴，并发现你的Metal工作负载中哪些方面花费了最多的时间（参见使用可视时间轴分析Apple GPU性能）。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image7.png" loading="lazy" alt="图 7：Performance部分包括总GPU时间和顶点数量。如果你的工作负…" />
+              <figcaption>图 7：Performance部分包括总GPU时间和顶点数量。如果你的工作负…</figcaption>
+            </figure>
+            <p>提示：</p>
+            <p>如果你在Metal捕获弹出窗口（参见在Xcode中捕获Metal工作负载）中没有选择“重放后进行性能分析”复选框，或者在重放窗口（参见回放GPU跟踪文件）中没有选择“性能分析GPU跟踪”复选框，性能部分将不显示任何统计信息。要查看统计信息，请点击“性能分析”按钮并等待性能分析完成</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image8.png" loading="lazy" alt="图 8：如果你在Metal捕获弹出窗口（参见在Xcode中捕获Metal工作…" />
+              <figcaption>图 8：如果你在Metal捕获弹出窗口（参见在Xcode中捕获Metal工作…</figcaption>
+            </figure>
+            <p>内存部分包括对各种资源类型（如纹理和缓冲区）的GPU内存的简要概述。如果你的Metal工作负载使用了大量内存，请考虑优化内存使用。你还可以点击“显示内存”按钮打开内存查看器，并发现你的Metal工作负载中哪些方面使用了最多的内存。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image9.png" loading="lazy" alt="图 9：内存部分包括对各种资源类型（如纹理和缓冲区）的GPU内存的简要概述。…" />
+              <figcaption>图 9：内存部分包括对各种资源类型（如纹理和缓冲区）的GPU内存的简要概述。…</figcaption>
+            </figure>
+            <h3>浏览 API 调用</h3>
+            <p>默认情况下，Metal调试器在调试导航器中显示捕获的Metal命令的大纲，按照命令缓冲区、通道和调试组进行分组。此外，对于渲染通道，大纲还包括渲染附件缩略图图像的列表。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image10.png" loading="lazy" alt="图 10：默认情况下，Metal调试器在调试导航器中显示捕获的Metal命令的…" />
+              <figcaption>图 10：默认情况下，Metal调试器在调试导航器中显示捕获的Metal命令的…</figcaption>
+            </figure>
+            <p>渲染通道通常会发出大量的绘制命令。你可以通过将指针移动到行上，快速定位感兴趣的绘制命令。Metal调试器在弹出窗口中显示了第一个attachment的预览。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image11.png" loading="lazy" alt="图 11：渲染通道通常会发出大量的绘制命令。你可以通过将指针移动到行上，快速定…" />
+              <figcaption>图 11：渲染通道通常会发出大量的绘制命令。你可以通过将指针移动到行上，快速定…</figcaption>
+            </figure>
+            <h3>浏览pipeline states</h3>
+            <p>与查看Metal命令的层次结构不同，你可以从管道状态开始探索捕获的Metal工作负载。点击Outline弹出菜单，然后选择按照管道状态进行分组</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image12.png" loading="lazy" alt="图 12：与查看Metal命令的层次结构不同，你可以从管道状态开始探索捕获的M…" />
+              <figcaption>图 12：与查看Metal命令的层次结构不同，你可以从管道状态开始探索捕获的M…</figcaption>
+            </figure>
+            <p>Metal调试器显示了一系列管道状态（PipelineState）。展开一个管道状态可以看到它的着色器。进一步展开显示使用该管道状态的所有绘制命令和计算调度。</p>
+            <p>在性能分析数据中，调试导航器显示了在有重叠运行负载时来自每个管道状态着色器的样本百分比。在Shader Bound的负载中，这个排序的管道状态列表有助于识别最昂贵的管道状态</p>
+            <h3>使用Insights改进Metal的Workload</h3>
+            <p>Metal调试器会自动生成一些建议，称为Insights，并将它们包含在Summary查看器底部，以帮助你改进Metal工作负载。Insights信息包括以下类别：</p>
+            <p>内存内存建议提供了减少工作负载使用的GPU内存量的建议。默认情况下，Xcode按照节省的内存量对建议进行排序，因此你可以首先关注潜在的最大收益。在以下示例中，设置错误的存储模式导致额外使用了10.2 MB的GPU内存。该应用程序的开发者可以通过遵循建议并切换到无内存模式来节省该内存</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image13.png" loading="lazy" alt="图 13：内存内存建议提供了减少工作负载使用的GPU内存量的建议。默认情况下，…" />
+              <figcaption>图 13：内存内存建议提供了减少工作负载使用的GPU内存量的建议。默认情况下，…</figcaption>
+            </figure>
+            <p>带宽</p>
+            <p>带宽建议提供了减少内存带宽使用的建议，这在Apple GPU上尤其重要。与外部内存的传输通常导致功耗效率降低和性能变慢。要了解更多信息，请参阅《Tailor Your Apps for Apple GPUs》和《Tile-Based Deferred Rendering》。</p>
+            <p>性能</p>
+            <p>性能建议提供了通过避免渲染管线中昂贵和冗余操作来提高应用程序性能的建议</p>
+            <p>API Usage</p>
+            <p>API使用建议提供了改进Metal API使用的建议。更少的API调用可以导致更少的CPU时间。在以下示例中，你可以看到每个绘制命令都会冗余地绑定顶点和片段缓冲区</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image14.png" loading="lazy" alt="图 14：API使用建议提供了改进Metal API使用的建议。更少的API调…" />
+              <figcaption>图 14：API使用建议提供了改进Metal API使用的建议。更少的API调…</figcaption>
+            </figure>
+            <p>点击调试导航器中命令旁边的Insights按钮，以查看详细的信息和可能改进命令的建议</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image15.png" loading="lazy" alt="图 15：点击调试导航器中命令旁边的Insights按钮，以查看详细的信息和可…" />
+              <figcaption>图 15：点击调试导航器中命令旁边的Insights按钮，以查看详细的信息和可…</figcaption>
+            </figure>
+            <h3>使用Filters控制范围</h3>
+            <p>使用调试导航器底部的过滤条来调整过滤标准。你可以在过滤条的文本字段中输入过滤条件，调试导航器中的大纲将只显示与这些过滤条件匹配的标签的行。</p>
+            <p>当存在两个或更多过滤条件时，你可以点击过滤按钮选择是匹配任何还是所有条件。对于任何过滤条件，你可以点击它以选择包括或排除与该条件匹配的资源。</p>
+            <p>右侧还显示了以下额外的过滤工具：</p>
+            <p>仅显示相关的堆栈帧在捕获新的GPU Trace后，你可以检查每个Metal命令的调用堆栈。这允许在你的项目中筛选堆栈帧。</p>
+            <p>仅显示存在问题的调用这允许仅筛选来自Metal调试器的洞察的Metal命令。</p>
+            <p>仅显示标记和命令这允许仅筛选像绘制命令、计算调度和位块操作等Metal命令</p>
+            <h2><span class="sec-num">[4]</span> 分析Resource和Pass的Dependency</h2>
+            <p>The Dependencies viewer提供了GPU跟踪结构的图形表示，并允许你查看资源与访问它们的编码器之间的关系。它还突出显示你在编码器之间使用的手动同步，并通过显示帧中所有未使用的资源来指示任何不必要的工作</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image16.png" loading="lazy" alt="图 16：The Dependencies viewer提供了GPU跟踪结构的…" />
+              <figcaption>图 16：The Dependencies viewer提供了GPU跟踪结构的…</figcaption>
+            </figure>
+            <h3>按照不同的的Detail等级查看Graph</h3>
+            <p>在最高级别，依赖性查看器（Dependency Viewer）显示了帧的整体结构。在这个级别，你可以看到命令缓冲区内的命令编码器的图形。你还可以看到帧中的所有pass。每个pass包括其工作的缩略图预览，以及它消耗或产生的资源数量。在这个级别，你可以看到数据是否流动以及通道之间是否有同步</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image17.png" loading="lazy" alt="图 17：在最高级别，依赖性查看器（Dependency Viewer）显示了…" />
+              <figcaption>图 17：在最高级别，依赖性查看器（Dependency Viewer）显示了…</figcaption>
+            </figure>
+            <p>当你放大到下一个级别时，依赖性查看器（Dependency Viewer）展开了每个通道的资源。此外，每个资源上下可以有指示消耗和产生操作的图标。对于渲染通道中的附件，图标指的是加载和存储操作。否则，它们指的是一般的资源读写操作。在这个级别，你还可以查看哪些资源引入了通道之间的数据流或同步</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image18.png" loading="lazy" alt="图 18：当你放大到下一个级别时，依赖性查看器（Dependency View…" />
+              <figcaption>图 18：当你放大到下一个级别时，依赖性查看器（Dependency View…</figcaption>
+            </figure>
+            <p>随着进一步放大，依赖性查看器（Dependency Viewer）显示了资源的更大缩略图和元数据</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image19.png" loading="lazy" alt="图 19：随着进一步放大，依赖性查看器（Dependency Viewer）显…" />
+              <figcaption>图 19：随着进一步放大，依赖性查看器（Dependency Viewer）显…</figcaption>
+            </figure>
+            <h3>查看资源的消耗和产生</h3>
+            <p>资源上方和下方的consuming and producing actions帮助你在快速浏览时了解给定通道中的资源访问。对于渲染通道中的Texture，这些操作指的是每个Attachment的加载和存储操作。对于多采样渲染通道，存储操作可能会影响多采样和解析纹理的存储。使用 <code>MTLStoreAction.storeAndMultisampleResolve</code>, the multisample texture shows a store action and the resolve texture shows a store action. With <code>MTLStoreAction.multisampleResolve</code>, the multisample texture shows a don’t-care action and the resolve texture shows a store action否则，依赖性查看器使用通用的读写操作注释这些操作</p>
+            <h3>分析数据流，pass间的同步依赖关系</h3>
+            <p>依赖性查看器显示pass之间的两类依赖关系：</p>
+            <p>实线表示数据流。先前的通道生成了数据，后续的通道消耗它。</p>
+            <p>虚线表示同步。没有数据流，但两个通道之间存在关系。例如，一个计算通道从先前的渲染编码器写入的纹理中读取，这两个通道之间存在数据流。此外，一个在加载时清除Attachment的渲染pass与先前修改过纹理的任何pass都没有数据依赖性。然而，该渲染通道需要等到先前的pass完成对纹理的修改，这是一种同步。</p>
+            <h3>选择一个分析Dependencies的模式</h3>
+            <p>你可以使用依赖性查看器选择不同的可视化模式，每个模式具有不同的边子集：</p>
+            <p>All（全部）：显示来自同步原语、被跟踪和未被跟踪资源的所有边。</p>
+            <p>Synchronization（同步）：显示来自同步原语和被跟踪资源的虚线同步边。</p>
+            <p>Data Flow（数据流）：显示来自被跟踪或未被跟踪资源的实线数据流边</p>
+            <h3>Pin 和UnPin Resource堆</h3>
+            <p>为了保持一个紧凑的图形，依赖性查看器尝试保持图上可见的一些有趣的资源，并将其余资源隐藏在每个通道下面的一堆中。点击这堆会打开一个资源的弹出窗口</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image20.png" loading="lazy" alt="图 20：为了保持一个紧凑的图形，依赖性查看器尝试保持图上可见的一些有趣的资源…" />
+              <figcaption>图 20：为了保持一个紧凑的图形，依赖性查看器尝试保持图上可见的一些有趣的资源…</figcaption>
+            </figure>
+            <p>可以点击右侧的Pin Resource 按钮，来Pin和Unpin</p>
+            <h3>获取一个Pass的更多信息</h3>
+            <p>点击依赖性查看器中的任何通道会选择它并在侧边栏中显示有关该通道的附加信息。你还可以确定通道消耗或生成的资源：</p>
+            <p>对于通道消耗的资源，依赖性查看器建议最近修改该资源的通道。</p>
+            <p>对于通道生成的资源，依赖性查看器建议稍后消耗该资源中的数据的通道</p>
+            <h3>获取一个resource的更多信息</h3>
+            <p>点击依赖性查看器中的任何资源会选择它并在侧边栏中显示有关该资源的附加信息。你还可以查看最后生成或稍后消耗资源中数据的通道。当你选择一个资源时，依赖性查看器会突出显示任何相关的资源。例如，当你选择一个纹理视图时，它会突出显示父纹理。当你选择一个堆时，它会突出显示来自该堆的资源。</p>
+            <h3>使用Insights改进Metal Workload</h3>
+            <p>点击依赖性查看器右下角的Insights按钮，以打开一个包含建议的弹出窗口</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image21.png" loading="lazy" alt="图 21：点击依赖性查看器右下角的Insights按钮，以打开一个包含建议的弹…" />
+              <figcaption>图 21：点击依赖性查看器右下角的Insights按钮，以打开一个包含建议的弹…</figcaption>
+            </figure>
+            <h3>使用Filters控制显示范围</h3>
+            <p>使用依赖性查看器底部的过滤字段来调整图形的过滤标准。在字段中输入过滤条件，依赖性查看器会显示与过滤条件匹配的任何相关通道。此外，当通过资源进行过滤时，你可以找到消耗或生成该资源的通道</p>
+            <h3>查找特定的Element</h3>
+            <p>Dependencies viewer的上面，选择 Find &gt; Find to display .</p>
+            <p>你可以在搜索栏的文本字段中输入搜索词来查找匹配的通道和资源。对于任何搜索词，你可以点击它并选择包括或排除与该词匹配的元素。文本字段右侧的两个箭头按钮允许你移动到依赖性查看器中的前一个或下一个匹配元素</p>
+            <h2><span class="sec-num">[5]</span> 分析内存使用</h2>
+            <p>内存查看器提供了关于你的Metal应用程序内存使用的详细信息。内存查看器的顶部部分显示了内存按类别的细分，底部部分显示了资源的表格。在表格中，你可以查看资源的内存大小、配置和其他特征</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image22.png" loading="lazy" alt="图 22：内存查看器提供了关于你的Metal应用程序内存使用的详细信息。内存查…" />
+              <figcaption>图 22：内存查看器提供了关于你的Metal应用程序内存使用的详细信息。内存查…</figcaption>
+            </figure>
+            <p>Metal应用程序创建许多资源，而这些资源占用大量内存。例如，为了使用基于物理的渲染器渲染一个动画角色，你可能需要缓冲区来保存顶点和动画数据，以及多个纹理来提供材质属性。当你将这些要求扩展到多个角色和更大的场景时，你的应用程序的内存占用显著增加。</p>
+            <p>此外，当你创建Metal资源时，精确指定它们的配置对性能有很大影响。Metal调试器分析你提供的配置，并使用它来创建资源的底层GPU表示。例如，如果你使用私有存储模式创建资源，Metal可以优化该资源以便GPU访问，而不需要在CPU直接可访问的位置或格式中存储数据</p>
+            <h3>了解Memory下的Bar图</h3>
+            <p>内存查看器顶部部分的分类根据以下标准组织内存使用数据，并提供基于以下几个方面的内存总计：</p>
+            <p>Volatility（易变的）</p>
+            <p>此类别列出了volatile 和 nonvolatile资源。非不稳定内存总量是你的Metal应用程序的跟踪内存使用的良好指标。当你将资源标记volatile 时，你允许Metal在内存不足时处理其内容。操作系统不会在你的应用程序总内存占用中计算Volatile内存。例如，在iOS中，较低的内存占用减少了超出jetsam限制并导致操作系统终止应用程序的风险。如果你认为将来可能会使用当前未使用的资源，请将其标记为nonvolatile，而不是简单地释放它。这样，只有在Metal丢弃资源内容时才需要重新创建资源的内容。有关更多信息，请参阅。 setPurgeableState(_:).</p>
+            <p>Type</p>
+            <p>这些资产分类，以类型分列 — textures纹理, buffers, 其他。 检查各个分类以确定你的应用程序在某些分类上是否比其他资源更多地使用了资源</p>
+            <p>Storage mode</p>
+            <p>这个类别展示存储Mode， <code>MTLStorageMode</code>. 需要检查是不是大量的Resource被标记为<code>MTLStorageMode.shared</code> 或者 <code>MTLStorageMode.managed</code>.</p>
+            <p>Use</p>
+            <p>此类别跟踪在捕获的帧中命令是否访问了资源。检查此类别以查看未使用资源的大量总数，这可能表明你需要释放一些资源或将其标记为Volatile。</p>
+            <p>每个条形图由代表其跟踪的最大资源的段组成。每个条形图的最后一个段显示其较小资源的汇总总数。将鼠标指针悬停在一个段上，以查看一个包含资源名称、大小和其他信息的弹出窗口。单击一个段以获取有关该特定资源的更多信息</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image23.png" loading="lazy" alt="图 23：每个条形图由代表其跟踪的最大资源的段组成。每个条形图的最后一个段显示…" />
+              <figcaption>图 23：每个条形图由代表其跟踪的最大资源的段组成。每个条形图的最后一个段显示…</figcaption>
+            </figure>
+            <h3>查看Resource表</h3>
+            <p>要改进应用程序如何创建和管理资源，你需要了解一些数据的作用，以便指导怎么使用。内存查看器提供了在捕获期间在你的Metal应用程序中存活的资源的信息</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image24.png" loading="lazy" alt="图 24：要改进应用程序如何创建和管理资源，你需要了解一些数据的作用，以便指导…" />
+              <figcaption>图 24：要改进应用程序如何创建和管理资源，你需要了解一些数据的作用，以便指导…</figcaption>
+            </figure>
+            <p>资源表为所有资源类型提供以下信息</p>
+            <p class="note">提示：完整表格见上方截图，可点击查看。</p>
+            <p>For textures, you can add the following columns:</p>
+            <p class="note">提示：完整表格见上方截图，可点击查看。</p>
+            <p>For buffers, you can add the following column:</p>
+            <p class="note">提示：完整表格见上方截图，可点击查看。</p>
+            <p>For heaps, you can add the following columns:</p>
+            <p class="note">提示：完整表格见上方截图，可点击查看。</p>
+            <p>For indirect command buffers, you can add the following column:</p>
+            <p class="note">提示：完整表格见上方截图，可点击查看。</p>
+            <p>For acceleration structures, you can add the following column:</p>
+            <p class="note">提示：完整表格见上方截图，可点击查看。</p>
+            <h3>使用Insights改进Metal Workload</h3>
+            <p>点击右下角的Insights按钮以打开一个包含资源建议的弹出窗口</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image25.png" loading="lazy" alt="图 25：点击右下角的Insights按钮以打开一个包含资源建议的弹出窗口" />
+              <figcaption>图 25：点击右下角的Insights按钮以打开一个包含资源建议的弹出窗口</figcaption>
+            </figure>
+            <h3>使用Filters控制显示范围</h3>
+            <p>使用内存查看器底部的过滤字段来调整过滤标准。在字段中输入过滤条件，资源表会显示任何具有与这些过滤条件匹配的标签的资源。你还可以点击过滤按钮，为特定类型的资源添加过滤器，将表限制为捕获帧使用的资源，并将表限制为只有不稳定资源。当存在两个或更多过滤条件时，你可以点击过滤按钮选择是匹配任何还是所有条件。对于任何过滤条件，你可以点击它以选择包括或排除与该条件匹配的资源</p>
+            <h3>对Resources进行分组和排序以便发现某些问题模式</h3>
+            <p>默认情况下，资源表以单一列表显示所有资源。你可以点击列标题以按该列升序或降序排序表。你还可以根据某些标准对资源进行分组。</p>
+            <p>在表中Control-click一个条目，可以按以下任何标准对资源进行分组：</p>
+            <p>None（无）恢复到默认行为，即显示表中所有资源而不对它们进行分组。</p>
+            <p>Type（类型）将资源分组为缓冲区、纹理、堆或间接命令缓冲区。</p>
+            <p>Allocated Size（分配大小）根据资源的实际大小对资源进行分组。分组基于对数刻度。使用此标准查找应用程序中最大的资源。</p>
+            <p>Storage Mode（存储模式）根据创建每个资源时选择的存储模式对资源进行分组。</p>
+            <p>Command Buffer（命令缓冲区）根据引用它们的命令缓冲区对资源进行分组。使用此标准可以确定哪些命令引用哪些资源。</p>
+            <p>Command Encoder（命令编码器）根据使用特定命令编码器的命令对资源进行分组。使用此标准可以了解特定计算和渲染通道的行为。从同一上下文菜单中，你还可以选择按特定标准进行排序，这相当于点击列标题进行排序。</p>
+            <h2><span class="sec-num">[6]</span> Optimizing GPU performance</h2>
+            <p>苹果GPU在可能的情况下并行运行 vertex, fragment, 和 compute 计算任务。Metal调试器提供了检查重叠运行的通道的方法，你可以使用它来查找GPU负载工作中的瓶颈任务。此外，分析器通过对你的着色器进行采样来测量性能统计信息，以显示热点。</p>
+            <p>如果在运行应用程序时注意到任何性能问题，可以使用Metal调试器找到并调查瓶颈。首先，配置你的构建以包含着色器源代码（ Building your project with embedded shader sources）。然后，在注意到要调试的问题时，捕获你的应用程序的一帧</p>
+            <h3>搜集性能数据</h3>
+            <p>启用“Profile after Replay ”选项后，Metal调试器会在重播工作负载后自动开始收集性能数据。或者，你可以点击摘要查看器上的“配置文件”按钮来收集性能数据。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image26.png" loading="lazy" alt="图 26：启用“Profile after Replay ”选项后，Metal…" />
+              <figcaption>图 26：启用“Profile after Replay ”选项后，Metal…</figcaption>
+            </figure>
+            <p>在进行性能分析时，GPU的性能状态很重要，因为它影响系统执行工作负载的速度。影响性能状态的因素包括热量和系统设置。</p>
+            <p>默认情况下，Metal调试器在捕获时以相同的GPU性能状态分析工作负载，因此性能通常与你在设备上观察到的类似。然而，你可以通过在调试栏中点击GPU Profiler按钮，在Metal调试器中制定特定的GPU性能状态来进行性能分析</p>
+            <p>For more information on GPU performance state, see Discover Metal debugging, profiling, and asset creation tools.</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image27.png" loading="lazy" alt="图 27：For more information on GPU perfor…" />
+              <figcaption>图 27：For more information on GPU perfor…</figcaption>
+            </figure>
+            <p>你可以通过在调试栏中点击GPU Profiler按钮来在不同的GPU执行模式之间切换，包括并发和串行。默认情况下，Metal调试器在并发模式下分析工作负载。这允许GPU重叠顶点、片元和计算任务，以便尽快完成。在串行模式下，Metal调试器强制每个通道只能在前一个通道完成后运行，这增加了每个通道的数据报告的精度，但不代表运行时性能</p>
+            <h3>使用Performance Timeline发现性能瓶颈</h3>
+            <p>Metal调试器中的性能时间轴（Performance timeline）可以帮助你在捕获的工作负载中找到昂贵的任务和性能瓶颈。通过在调试导航器中点击性能按钮来打开性能时间轴（Performance timeline）</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image28.png" loading="lazy" alt="图 28：Metal调试器中的性能时间轴（Performance timeli…" />
+              <figcaption>图 28：Metal调试器中的性能时间轴（Performance timeli…</figcaption>
+            </figure>
+            <p>窗口左侧的时间轴导航器列出了所有已分析的通道、管线状态和GPU命令及其着色器时间成本。顶部部分有 Vertex, Fragment, 和 Compute GPU轨道，显示了具有重叠运行的单个通道的开始时间和持续时间。在GPU轨道下方是合并的着色器轨道，它们结合了单个着色器的信息。你可以通过展开合并的着色器轨道以瀑布式的方式查看单个着色器的时间轴。底部部分有一个单独的计数器时间轴，其中包括GPU计数器，如占用率、限制器和带宽。这些计数器可以帮助你诊断性能瓶颈。你可以通过在不同的计数器选项卡之间切换来专注于计数器子集。有关更多信息，see Analyzing Apple GPU performance using a visual timeline.</p>
+            <h3>获取Pass和Draw的详细性能指标</h3>
+            <p>你可以在GPU跟踪中查看应用程序通道（pass）或命令（Commands）的性能计数器统计信息。通过点击性能Performance timeline上方的Counters 标签页来打开性能计数器。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image29.png" loading="lazy" alt="图 29：你可以在GPU跟踪中查看应用程序通道（pass）或命令（Comman…" />
+              <figcaption>图 29：你可以在GPU跟踪中查看应用程序通道（pass）或命令（Comman…</figcaption>
+            </figure>
+            <p>Metal调试器通过在具有重叠运行的工作负载中采样着色器来得出着色器分析器时间。在Shader Bound的工作负载中，按照着色器分析器时间对表进行排序可以指示整体上最耗时的通道（pass）或绘图（Draw）。此外，Metal调试器从每个通道或命令中独立测量详细的计数器。你还可以在顶部栏中选择不同的计数器集，以获得更集中的视图 For more information, see Analyzing Apple GPU performance using counter statistics.</p>
+            <h3>在Debug导航器中为Command使用Pipeline States分组</h3>
+            <p>为了以不同的视角查看Metal命令，点击调试导航器中的outline弹出菜单，然后选择“按管线状态分组”以查看管线状态的列表</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image30.png" loading="lazy" alt="图 30：为了以不同的视角查看Metal命令，点击调试导航器中的outline…" />
+              <figcaption>图 30：为了以不同的视角查看Metal命令，点击调试导航器中的outline…</figcaption>
+            </figure>
+            <p>在进行性能分析时，调试导航器显示在具有重叠运行的工作负载中从每个管线状态的着色器中采样的样本百分比。在shader bound的工作负载中，这个排序的管线状态列表有助于识别最昂贵的管线状态。展开一个管线状态可以找到使用该状态的命令列表。</p>
+            <p>你还可以通过从列表中选择一个管线状态中的着色器来快速查看着色器源代码和每行的分析统计数据</p>
+            <p>For more information on the Debug navigator, see Analyzing your Metal workload.</p>
+            <h3>使用逐行的Shader Profiling数据进行shader优化</h3>
+            <p>在打开着色器后，你可以查找该管线状态中着色器的时间分解情况</p>
+            <figure class="post-figure">
+              <img src="assets/blog/xcode_image31.png" loading="lazy" alt="图 31：在打开着色器后，你可以查找该管线状态中着色器的时间分解情况" />
+              <figcaption>图 31：在打开着色器后，你可以查找该管线状态中着色器的时间分解情况</figcaption>
+            </figure>
+            <p>左侧边栏允许你查看着色器源文件和性能分析调用树。通过调用树，你可以通过每个帧的权重找到性能热点。</p>
+            <p>在着色器源代码的装订线上，你可以找到代码行旁边的权重。每个权重旁边的饼图包含性能统计信息，帮助你改进着色器代码。</p>
+            <p>例如，当你观察到一行耗时的代码，其内存采样的百分比很高时，这可能是花费时间读取纹理数据。为了减少着色器时间，如果从计算值比从纹理中读取值更便宜，你可以修改代码以在着色器中计算它。</p>
+            <p>在对着色器源代码进行更改后，点击调试栏中的“Reload Shaders”按钮以刷新性能分析统计信息。通过观察新的总GPU时间和性能时间轴中的轨迹，你可以验证这些更改是否有助于整体性能。</p>
+            <p>重要提示</p>
+            <p>对着色器源代码的更改仅存在于Metal调试器中。你的原始着色器源代码不会更改。确保将更改复制到你的原始着色器源代码中</p>
+            <p>For more information on interpreting the per-line shader profiling statistics, see Inspecting shaders.</p>
+            <h2><span class="sec-num">[7]</span> 使用可视的Timeline分析Apple GPU的性能</h2>
+            <p>顶部有 Vertex, Fragment, 和 Compute GPU tracks，显示具有重叠运行的各个通Pass的开始时间和持续时间。在GPU Track下面是汇总的着色器Trace，将各个着色器合并在一起。你可以通过展开汇总的着色器轨道，以瀑布式的方式查看各个着色器的时间轴。</p>
+            <p>底部部分有一个单独的计数器时间轴，其中包括GPU计数器，如占用率、限制器和带宽。这些计数器可以帮助你诊断性能瓶颈。你可以通过在不同的计数器选项卡之间切换，集中在计数器子集上</p>
+            <h3>Occupancy（GPU占用率）</h3>
+            <p>GPU具有同时执行的最大线程数。占用率是GPU使用这一容量的度量。当GPU有更多线程要分派且有足够的内部资源时，它会创建新的线程。通常情况下，在应用程序有效利用GPU时，占用率较高更好。</p>
+            <p>Compute occupancy</p>
+            <p>衡量GPU用于执行计算命令的总线程容量的百分比。</p>
+            <p>Vertex occupancy</p>
+            <p>衡量GPU用于执行顶点线程的总线程容量的百分比。</p>
+            <p>Fragment occupancy</p>
+            <p>衡量GPU用于执行片段线程的总线程容量的百分比。</p>
+            <p>这些百分比的总和是GPU容量使用的总百分比。你可以在Instruments和Metal调试器的性能时间轴中获得着色器占用率计数器</p>
+            <h3>分析你的App是否GPU占用率低</h3>
+            <p>当整体占用率测量未接近100%时，你的应用程序可能具有较低的占用率。每个着色器的最大理论占用率取决于它在设备上消耗的内部资源的数量。你可以在性能时间轴中获取每个着色器的这些信息。</p>
+            <p>高占用率和低占用率都不自动表示存在问题。例如，如果你的fragment shaders占用率高，那么vertex shader低占用率可能是可以接受的。最终，你需要将占用率测量与其他计数器或其他Metal工具的测量相关联，以确定问题。</p>
+            <p>当整体占用率较低时，可能是以下情况之一：</p>
+            <p>你的着色器已经耗尽了一些内部资源，比如线程、线程组或图像块内存，阻止了GPU创建更多线程。</p>
+            <p>你的着色器可能太简单，以至于线程的执行速度比GPU创建新线程的速度更快。</p>
+            <p>你的应用程序可能在渲染目标的内部小区域进行渲染，或者分发非常小的Compute Grids，以至于GPU耗尽了创建线程的资源。</p>
+            <h3>确定对你的应用程序的影响</h3>
+            <p>如果你发现整体占用率较低，下一步是确定它是否对你的应用程序产生了负面影响。如果对limiter counters的检查还显示较低的值，那么GPU执行的工作量可能非常小。</p>
+            <p>当整体占用率较高时，GPU正在执行许多线程以隐藏指令延迟。高占用率通常是好的，因为你希望充分利用GPU的潜力。然而，也有可能是你的着色器没有有效地利用GPU。优化它们可以使GPU的容量更多地用于其他GPU命令。</p>
+            <p>在罕见的情况下，当整体占用率非常高时，GPU可能执行其工作负载较差，因为线程争夺GPU内存缓存的空间（也称为缓存抖动cache thrashing）。在这种情况下，你可能需要减少发送到GPU的工作量或更改其访问（读取或写入）内存的方式。例如，你可以尝试以下操作：</p>
+            <p>减少内存访问次数。</p>
+            <p>减少访问内存的量。</p>
+            <p>在访问内存时更改你使用的时间或空间访问模式。内存读取或写入，limiter counters可能会更详细地说明你的应用程序是否存在问题。</p>
+            <h3>Limiter and utilization</h3>
+            <p>GPU在并行处理许多不同类型的操作，包括算术、内存访问和光栅化。Limiter Counter包括GPU执行工作的时间以及任何子系统中的等待时间（这些等待时间会阻止GPU启动新工作）。utilization Counter包括GPU在没有等待的情况下在子系统中执行工作的时间。</p>
+            <p>GPU通常可以通过将它们分派到专门处理不同操作的各种子系统来同时运行子任务，例如内存访问、数学和逻辑操作以及像素光栅化。然而，应用程序的GPU函数（着色器函数和计算内核）中的代码可能会强制其中一些子系统停顿，或等待自身完成操作或等待另一个子系统准备就绪。</p>
+            <p>GPU驱动程序通过计数器发布其子系统的工作时间和停顿时间，你可以监视这些计数器，了解这些子系统在工作和停顿方面花费了多少时间</p>
+            <p>A utilization counter 这显示了GPU子系统在没有停顿的情况下执行工作的时间。</p>
+            <p>A limiter counter 这显示了GPU在执行工作时花费的时间，包括停顿时间。</p>
+            <p>使用以下计数器作为线索，帮助您识别运行时可能成为瓶颈的GPU子系统:</p>
+            <p class="note">提示：完整表格见上方截图，可点击查看。</p>
+            <p>为了减轻特定GPU子系统的压力并帮助GPU更快地运行命令，您可以调整GPU函数的操作方式和资源使用方式。大多数代码调整通常属于几种策略，包括以下几种：</p>
+            <p>减少操作数量</p>
+            <p>将工作移至另一个工作较少的子系统</p>
+            <p>降低图像质量或数学精度</p>
+            <p>以改善GPU内存缓存命中的方式访问内存某些调整存在权衡，例如降低图像质量或数学精度，由您决定哪些调整对您的应用程序更有价值。提示通过尝试应用程序，发现哪些调整能够提供更好的性能。</p>
+            <h3>减少数字逻辑单元的工作负载</h3>
+            <p>算术逻辑单元（ALU）处理您的代码的算术、逻辑和位运算。如果计数器表明ALU可能是瓶颈，您可以尝试以下每种调整并评估任何更改：</p>
+            <p>用近似值替换公式。</p>
+            <p>如果半浮点具有足够的范围和精度，可以将浮点值替换为半浮点。</p>
+            <p>将GPU函数编译为使用-ffast-math Metal编译器标志，该标志启用运行更快的优化，但可能引入精度错误（请参阅《Metal Shading Language Specification》中的第1.5节）。</p>
+            <p>用查找表或纹理替换复杂的计算。这些调整通过使工作变得更简单或将工作转移到另一个子系统，比如纹理采样器，来减轻ALU的工作负担。例如，您可以通过创建一个噪声纹理并在代码每次需要值时从中采样，来消除噪声计算函数</p>
+            <h3>减少Texture操作的负载</h3>
+            <p>当您将渲染通道的loadAction属性设置为<code>MTLLoadAction.load</code>时，GPU会为每个颜色附件读取纹理数据，每当GPU函数读取、收集或采样纹理时也会发生这种情况。具有较大尺寸或使用较大像素格式的纹理占用更多内存，通常会增加GPU用于采样纹理的数据量。</p>
+            <p>如果计数器表明纹理采样操作可能是瓶颈，您可以尝试以下调整并评估应用性能的任何更改：</p>
+            <p>对于应用了缩小滤镜（ minification filter）的任何纹理，从mipmap中采样。</p>
+            <p>选择双线性过滤而不是三线性过滤。</p>
+            <p>计算在GPU函数内开销更小的计算值，而不是从纹理中读取。</p>
+            <p>使用较小的尺寸或使用较小像素格式的纹理。</p>
+            <p>将单通道纹理的读取或采样替换为更有效地使用GPU的gather操作。</p>
+            <p>类似地，当您将渲染通道的storeAction属性设置为<code>MTLStoreAction.store</code>时，GPU会为每个颜色附件保存纹理数据，每当GPU函数显式写入纹理时也会发生这种情况。</p>
+            <p>如果计数器表明纹理写入操作可能是瓶颈，您可以尝试以下调整并评估应用性能的任何更改：</p>
+            <p>使用较小尺寸或使用较小像素格式的纹理。</p>
+            <p>减少多采样抗锯齿（MSAA）的采样数量。</p>
+            <p>渲染更少的非常小的三角形，特别是如果您还应用了MSAA。</p>
+            <p>修改在空间或时间上聚集写入的纹理，GPU可以将其合并成较少的内存写入事务</p>
+            <h3>减少Buffer操作的负载</h3>
+            <p>写操作计数器（write operation counters）测量 GPU 函数将数据存储到 GPU 设备地址空间中的内存所花费的时间。读操作计数器（read operation counters）测量 GPU 函数从内存中提取数据的时间，包括设备地址空间和常量地址空间。</p>
+            <p>当 GPU 函数使用大量线程内存或通过动态索引访问线程内存时，它们可能会增加读写活动。当函数需要存储的数据量超过 GPU 寄存器的容量时，GPU 不得不将数据存储到设备内存中，然后在稍后的时间内读取它。</p>
+            <p>如果计数器表明缓冲区读取或写入操作可能是瓶颈，您可以尝试以下调整并评估应用性能的任何更改：</p>
+            <p>将数据更紧密地打包到缓冲区中。</p>
+            <p>使用 <code>SIMD</code> 类型（例如 float4 <code>SIMD</code> 类型）将标量值打包，而不是使用四个独立的 float 值。</p>
+            <p>使用较小的数据类型，例如用于位置数据的 packed_half3 类型，而不是 float4。</p>
+            <p>避免随机索引到线程范围数组的实现，这可能会使编译器能够更好地优化 GPU 函数。</p>
+            <p>对于缓冲区读取操作，您还可以尝试从纹理中读取数据，而不是从缓冲区中读取数据，以便与另一个子系统共享一些工作负载。对于缓冲区写入操作，请尝试减少 GPU 函数对设备内存进行的原子写入的次数。</p>
+            <h3>减少threadgroup 和 imageblock 内存操作的负载</h3>
+            <p>Apple Silicon GPU 使用线程组内存和图块内存（在 GPU 中称为图块内存），它由 GPU 本身内部的本地、统一的高性能存储集合组成。</p>
+            <p>当您在compute shade中写入线程组内存、写入图块内的像素、在渲染通道中使用混合或从片段着色器中向颜色附件写入数据时，您可以访问这种高速内存。</p>
+            <p>你的App在app应用Blend的渲染通道期间，以及当如下情况可以访问这种高速内存：</p>
+            <p>GPU 函数读取或写入图块数据</p>
+            <p>片段着色器从或向颜色附件读取或写入数据</p>
+            <p>计算内核从或向线程组内存读取或写入数据</p>
+            <p>如果计数器表明线程组和图块的读取或写入操作可能是瓶颈，您可以尝试在您的计算内核中进行以下调整，并评估应用性能的任何更改：</p>
+            <p>将线程组内存分配对齐到 16 字节边界。</p>
+            <p>减少内核对线程组内存的原子读取或写入。</p>
+            <p>重新排列内存访问模式，使得四边形组中的相邻线程写入（或读取）线程组内存中的相邻元素。</p>
+            <p>对于线程组和图块的读取操作，您还可以尝试从同一线程组中的多个线程中删除对相同内存位置的访问。</p>
+            <h3>减少Fragment shader输入插值的负载</h3>
+            <p>在渲染通道期间，GPU 在将输出数据从顶点阶段发送到片段阶段之前进行插值。如果计数器表明片段输入插值可能是瓶颈，您可以尝试减少片段着色器使用的顶点属性的数量。</p>
+            <h3>减少Last Level Cache的负载</h3>
+            <p>last level cache测量 GPU 在最高级别 GPU 缓存中处理请求的时间。这里的较高值可能表明您的着色器正在请求许多在缓存中不存在的数据。</p>
+            <p>提示</p>
+            <p>在尝试下面的调整之前，请检查和改进纹理和缓冲区操作中的任何瓶颈。</p>
+            <p>如果计数器表明最后一级缓存可能是一个瓶颈，您可以尝试以下调整并评估应用性能的任何更改：</p>
+            <p>减小 GPU 函数处理的数据集的大小。</p>
+            <p>对 GPU 函数仅从中读取或采样的纹理使用压缩的像素格式。</p>
+            <p>通过将中间结果存储在线程组内存中并在那里使用原子操作，减少对设备内存的原子读取和写入的次数。</p>
+            <p>访问在空间或时间上聚类读取的内存（更高的空间或时间局部性），这可以减少缓存未命中和子系统的工作量。</p>
+            <h3>Bandwidth</h3>
+            <p>GPU读取带宽和GPU写入带宽计数器测量GPU访问系统内存的频率和数量。GPU带宽计数器测量GPU读取、写入或访问内存的速度，以每秒GB节为单位。</p>
+            <p>您可能希望您的应用程序对某些活动使用较高的带宽，例如快速复制数据以节省时间，而对其他活动使用较低的带宽以节省能量或让CPU和其他进程访问内存。如果GPU在您不希望其使用内存带宽的情况下使用了很高的内存带宽，这可能会妨碍CPU的内存访问。</p>
+            <p>您可以通过在您的渲染通道中采取以下策略来减少GPU的内存带宽：</p>
+            <p>仅读取通道需要的数据。</p>
+            <p>仅写入后续通道需要的数据。</p>
+            <p>仅Load and store渲染通道需要的附件。</p>
+            <p>创建仅使用适当<code>MTLTextureUsage</code>属性的纹理。Metal可以通过优化对具有正确使用属性的纹理的内存访问来降低应用程序的内存带宽。要适当设置纹理的用法，请配置<code>MTLTextureDescriptor</code>实例的用法属性并使用它创建纹理。</p>
+            <p>缓冲区和纹理操作也可能增加应用程序的内存带宽。要检查缓冲区或纹理操作的限制器计数是否过高，并了解您可以采取什么措施来减少其影响，请参阅减少着色器瓶颈</p>
+            <h2><span class="sec-num">[8]</span> Reference：</h2>
+            <p>Metal debugger | Apple Developer Documentation</p>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">Xcode</span><span class="tag">Metal</span><span class="tag">GPU Frame Capture</span>
+            <span class="read">阅读全文</span>
+          </div>
+        </article>
+        <!-- POST 7 -->
+        <article class="post-card reveal" data-post="7" data-cat="render">
+          <span class="post-tag"><span class="dot"></span>渲染 · 资产 · 缩略图</span>
+          <h2 class="post-title">资产缩略图渲染整理</h2>
+          <div class="post-meta">
+            <span class="post-avatar"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg></span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>渲染 / 资产</span>
+          </div>
+
+          <p class="post-excerpt">
+            利用控件反射器来看，资产缩略图的Widget是SAssetThumbnail。SAssetThumbnail里创建了FAssetThumbnail。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <h3>资产缩略图</h3>
+            <h3>创建</h3>
+            <p>利用控件反射器来看，资产缩略图的Widget是<code>SAssetThumbnail</code>。<code>SAssetThumbnail</code>里创建了<code>FAssetThumbnail</code>。</p>
+            <h3>资产缩略图保存/加载机制</h3>
+            <h3>保存</h3>
+            <p>缩略图的保存在保存Package的时候，代码在SavePackage2</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image1.png" loading="lazy" alt="图 1：缩略图的保存在保存Package的时候，代码在SavePackage…" />
+              <figcaption>图 1：缩略图的保存在保存Package的时候，代码在SavePackage…</figcaption>
+            </figure>
+            <p>然后回调用<code>FObjectThumbnail</code>::Serialize方法来实现保存</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image2.png" loading="lazy" alt="图 2：然后回调用FObjectThumbnail::Serialize方法…" />
+              <figcaption>图 2：然后回调用FObjectThumbnail::Serialize方法…</figcaption>
+            </figure>
+            <p>默认情况下，UE启用的JPEG压缩。保存图片的时候会存CompressedImageData。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image3.png" loading="lazy" alt="图 3：默认情况下，UE启用的JPEG压缩。保存图片的时候会存Compres…" />
+              <figcaption>图 3：默认情况下，UE启用的JPEG压缩。保存图片的时候会存Compres…</figcaption>
+            </figure>
+            <h3>加载</h3>
+            <h3>加载的入口是LoadThumbnail</h3>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image4.png" loading="lazy" alt="图 4：加载的入口是LoadThumbnail" />
+              <figcaption>图 4：加载的入口是LoadThumbnail</figcaption>
+            </figure>
+            <p>在此之前还会根据资源状态处理，例如：如果还在编译Shadering得放到等待栈。每一帧检测，编译完成会弹出开始LoadThumbanil。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image5.png" loading="lazy" alt="图 5：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…" />
+              <figcaption>图 5：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…</figcaption>
+            </figure>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image6.png" loading="lazy" alt="图 6：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…" />
+              <figcaption>图 6：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…</figcaption>
+            </figure>
+            <p>还会根据缩略图渲染模式选择不同渲染方式，属性变化还是实时渲染。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image7.png" loading="lazy" alt="图 7：还会根据缩略图渲染模式选择不同渲染方式，属性变化还是实时渲染。" />
+              <figcaption>图 7：还会根据缩略图渲染模式选择不同渲染方式，属性变化还是实时渲染。</figcaption>
+            </figure>
+            <p>往下走，就会正式的开始处理Loading。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image8.png" loading="lazy" alt="图 8：往下走，就会正式的开始处理Loading。" />
+              <figcaption>图 8：往下走，就会正式的开始处理Loading。</figcaption>
+            </figure>
+            <p>LoadingThumbnail会分为两部分，一个是缓存是否有，没有就读包。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image9.png" loading="lazy" alt="图 9：LoadingThumbnail会分为两部分，一个是缓存是否有，没有…" />
+              <figcaption>图 9：LoadingThumbnail会分为两部分，一个是缓存是否有，没有…</figcaption>
+            </figure>
+            <p>读包的内容和上面的save一样会，调用LoadedThumbnail.Serialize方法。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image10.png" loading="lazy" alt="图 10：读包的内容和上面的save一样会，调用LoadedThumbnail…" />
+              <figcaption>图 10：读包的内容和上面的save一样会，调用LoadedThumbnail…</figcaption>
+            </figure>
+            <p>读取完成就会推给RHI进行渲染</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image11.png" loading="lazy" alt="图 11：读取完成就会推给RHI进行渲染" />
+              <figcaption>图 11：读取完成就会推给RHI进行渲染</figcaption>
+            </figure>
+            <h3>绘制</h3>
+            <p>由于UE5渲染资产的时候会以3D场景的形式拍快照，我们有时候需要定制里面的画面就需要对这里进行观察。</p>
+            <p>我们以RenderThumbnail为入口观察发现。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image12.png" loading="lazy" alt="图 12：我们以RenderThumbnail为入口观察发现。" />
+              <figcaption>图 12：我们以RenderThumbnail为入口观察发现。</figcaption>
+            </figure>
+            <p>这里会根据不同Object选择不同的Render。例如：动画序列的缩略图渲染，<code>UAnimSequenceThumbnailRenderer</code>等。</p>
+            <p>不同类型的缩略图渲染器会创建对应类型的缩略图场景，以构建各自的资源缩略图预览场景，以<code>UStaticMeshThumbnailRenderer</code>为例</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image13.png" loading="lazy" alt="图 13：不同类型的缩略图渲染器会创建对应类型的缩略图场景，以构建各自的资源缩…" />
+              <figcaption>图 13：不同类型的缩略图渲染器会创建对应类型的缩略图场景，以构建各自的资源缩…</figcaption>
+            </figure>
+            <p>Draw方法每帧都会调用，这个会设置要看的模型资产。并且使用最大LOD，同时 关掉了所有高级效果。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image14.png" loading="lazy" alt="图 14：Draw方法每帧都会调用，这个会设置要看的模型资产。并且使用最大LO…" />
+              <figcaption>图 14：Draw方法每帧都会调用，这个会设置要看的模型资产。并且使用最大LO…</figcaption>
+            </figure>
+            <p>缩略图预览场景类负责构建各自类型的场景，<code>FStaticMeshThumbnailScene</code>派生自<code>FThumbnailPreviewScene</code>，<code>FThumbnailPreviewScene</code>派生自<code>FPreviewScene</code>；<code>FPreviewScene</code>类封装了一个用于预览或缩略图渲染的简单场景设置，比如摄像机的默认位置。有一个灯光，一个地面，一个附加灯，一个天空盒子。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image15.png" loading="lazy" alt="图 15：缩略图预览场景类负责构建各自类型的场景，FStaticMeshThu…" />
+              <figcaption>图 15：缩略图预览场景类负责构建各自类型的场景，FStaticMeshThu…</figcaption>
+            </figure>
+            <p><code>FPreviewScene</code>类继承了<code>FPreviewScene</code>，<code>FPreviewScene</code>会做一些更底层的初始化。类似于<code>UWorld</code>,WorldContext等。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image16.png" loading="lazy" alt="图 16：FPreviewScene类继承了FPreviewScene，FPr…" />
+              <figcaption>图 16：FPreviewScene类继承了FPreviewScene，FPr…</figcaption>
+            </figure>
+            <h3>问题</h3>
+            <p>由于LordGame定制了ES_31下的卡渲，而<code>FPreviewScene</code>使用的是SM5的渲染。这就会导致有自定义卡渲的角色的缩略图都是黑色的。</p>
+            <p>要解决这个问题也比较简单：就是让<code>FPreviewScene</code>使用ES_31渲染。但是这么改会让引擎非常的不通用。所以，最终选择当前选什么管线预览，缩略图就用什么管线预览。</p>
+            <p>基本思路：在<code>FPreviewScene</code>构造的时候，并且在PreviewWorld-&gt;<code>InitializeNewWorld()</code>之前初始化当前的FeatureLevel即可。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/thumb_image17.png" loading="lazy" alt="图 17：基本思路：在FPreviewScene构造的时候，并且在Previe…" />
+              <figcaption>图 17：基本思路：在FPreviewScene构造的时候，并且在Previe…</figcaption>
+            </figure>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">缩略图</span><span class="tag">SAssetThumbnail</span><span class="tag">FPreviewScene</span>
+            <span class="read">阅读全文</span>
+          </div>
+        </article>
+        <!-- POST 8 -->
+        <article class="post-card reveal" data-post="8" data-cat="render">
+          <span class="post-tag"><span class="dot"></span>渲染 · RDG · 渲染图</span>
+          <h2 class="post-title">UE5 使用 RDG 使用总结</h2>
+          <div class="post-meta">
+            <span class="post-avatar"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg></span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>渲染 / RDG</span>
+          </div>
+
+          <p class="post-excerpt">
+            由于UE5已经全面转成RDG了，自带的功能都已经用RDG实现。所以，为了更好的兼容UE5接口和思想。迁移UE4的自定义Pass和ComputeShader也是用RDG进行重写。此文档简单的介绍RDG使用。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <h3>前言</h3>
+            <p>由于UE5已经全面转成RDG了，自带的功能都已经用RDG实现。所以，为了更好的兼容UE5接口和思想。迁移UE4的自定义Pass和ComputeShader也是用RDG进行重写。此文档简单的介绍RDG使用。</p>
+            <h3>渲染依赖图</h3>
+            <p>渲染依赖图（Render Dependency Graph），也称为渲染图或 RDG，是一种即时模式应用程序编程接口（API），它将要编译和执行的渲染命令记录到图数据结构中。</p>
+            <p>RDG通过自动化易出错的操作来简化高级渲染代码，并遍历依赖图以优化内存使用并在CPU和GPU上并行渲染通道。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image1.jpeg" loading="lazy" alt="图 1：RDG通过自动化易出错的操作来简化高级渲染代码，并遍历依赖图以优化内…" />
+              <figcaption>图 1：RDG通过自动化易出错的操作来简化高级渲染代码，并遍历依赖图以优化内…</figcaption>
+            </figure>
+            <p>RDG在引擎渲染模块RHI层的上方，作为RHI和Render Pass调用的中间层，搜集所有Pass及其依赖资源的信息，通过将资源描述和资源分配解耦，RDG作为Pass管理器在搜集资源描述信息后，对Pass和资源进行分析，并结合硬件特性以最优的性能对Pass进行执行。</p>
+            <p>核心原理主要分为三个阶段，分别为Setup、Compile、Execute。</p>
+            <p>Setup阶段主要负责Pass信息的搜集（主要是该Pass使用到的资源）</p>
+            <p>Compile阶段负责Render Graph的生成以及分析（包括Pass裁剪，资源状态的最终生成、Async Compute优化等等）</p>
+            <p>Execute阶段负责将Command提交到CommandList（包括Barrier设置、并行提交优化等）。</p>
+            <h3>RDG资源</h3>
+            <h3>RHI资源</h3>
+            <p>一个RDG资源包含RHI Resource的描述符, 关联的RHI资源仅在(将此资源当作Pass参数传入的)Pass的Lambda函数体内有效。</p>
+            <p>也就是Shader里的Texture2D&lt;XX&gt;和C++定义Shader的<code>SHADER</code>_PARAMETER_TEXTURE(Texture2D&lt;XX&gt; Name)这种资源。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image2.png" loading="lazy" alt="图 2：也就是Shader里的Texture2D&lt;XX&gt;和C++定义Shad…" />
+              <figcaption>图 2：也就是Shader里的Texture2D&lt;XX&gt;和C++定义Shad…</figcaption>
+            </figure>
+            <p>所有RDG资源类型都提供一个<code>FRDGResource</code>::<code>GetRHI()</code>函数override，用于获取相应类型的RHI资源。 此函数严格限定在Pass的Lambda函数中执行。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image3.png" loading="lazy" alt="图 3：所有RDG资源类型都提供一个FRDGResource::GetRHI…" />
+              <figcaption>图 3：所有RDG资源类型都提供一个FRDGResource::GetRHI…</figcaption>
+            </figure>
+            <p>下面是特定于Buffer和Texture的性质：</p>
+            <p>资源可以是Transient(临时的), 因此它的生命周期被限制在图上，并且可以与其他生命周期不相交的临时资源以别名方式共存。</p>
+            <p>资源可以是External(外部的), 其生命周期延伸到图外。如果用户将现有RHI资源注册到图中，或者在执行完成后从图中提取资源，就会发生这种情况。</p>
+            <p>RDG Buffer和 Texture可以通过RDG UAV 或 SRV 进行处理。和其他资源一样，底层RHI资源在执行期间将按需分配，仅允许声明为Pass参数的Pass访问。</p>
+            <h3>外部资源</h3>
+            <p>如果资源的生命周期延伸到图外，则资源被视为External，这可能在两种情况下发生：</p>
+            <p>外部资源被注册到图中</p>
+            <p>如果我们已经有非RDG创建的资源，可以通过“注册外部资源”将资源注册到RDG系统中。</p>
+            <p>注册外部纹理要用到<code>RegisterExternalTexture()</code>函数， 注册外部Buffer要用到 <code>RegisterExternalBuffer()</code>函数。</p>
+            <p>PassParameters-&gt;SkylightPdf = <code>GraphBuilder</code>.RegisterExternalTexture(GSystemTextures.BlackDummy);</p>
+            <p>从图中提取资源出来</p>
+            <p>例如：<code>TRefCountPtr</code>&lt;IPooledRenderTarget&gt;这种资源。</p>
+            <p>注册外部资源会将资源的生命周期延长到图的前面。资源分配是发生在图的Setup阶段的。</p>
+            <p>提取资源则是相反的作用，它将资源的生命周期延长到图的末尾，因为用户现在持有了一个引用。</p>
+            <pre class="post-code">// 提取池化渲染目标。调用Execute()后，指针被填充。 TRefCountPtr&lt;IPooledRenderTarget&gt; ExtractedTexture; // 第一个图生成纹理并提取该纹理。 {     FRDGBuilder GraphBuilder(RHICmdList);     FRDGTexture* Texture = GraphBuilder.CreateTexture(...);     // ...     GraphBuilder.QueueTextureExtraction(Texture, &amp;ExtractedTexture);     GraphBuilder.Execute();     check(ExtractedTexture); // Valid } // 第二个图注册池化纹理。 {     FRDGBuilder GraphBuilder(RHICmdList);     // 注册池化渲染目标以获取RDG纹理。     FRDGTexture* Texture = GraphBuilder.RegisterExternalTexture(ExtractedTexture);     // ...     GraphBuilder.Execute(); }</pre>
+            <p>注册得到的对象是<code>FRDGTextureRef</code>或<code>FRDGBuffer</code>。需要注意的是，外部注册的资源，RDG无法控制和管理其生命周期，需要保证RDG使用期间外部资源的生命周期处于正常状态，否则将引发异常甚至程序崩溃。</p>
+            <h3>Raster Pass</h3>
+            <p>Raster Pass走光栅化的pass，一般只要有片元着色器就是。常用接口<code>FPixelShaderUtils</code>::DrawFullscreenPixelShader。</p>
+            <p>UE5 官方对封装了个AddFullscreenPass</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image4.png" loading="lazy" alt="图 4：UE5 官方对封装了个AddFullscreenPass" />
+              <figcaption>图 4：UE5 官方对封装了个AddFullscreenPass</figcaption>
+            </figure>
+            <p>使用 <code>FRDGBuilder</code>::AddPass 函数添加通道，指定通道参数结构体和执行Lambda作为参数。</p>
+            <p>通道参数结构体使用包含RDG资源的参数扩展着色器参数结构体。</p>
+            <p>RDG使用这些参数来推导出图中的通道和临时资源的生命周期之间的依赖关系。</p>
+            <p>使用 <code>GraphBuilder</code>::AllocParameters 分配通道参数，并分配执行Lambda中使用的所有相关RDG资源。</p>
+            <p>通道执行Lambda记录在图的执行期间提交到RHI命令列表的工作。</p>
+            <p>使用 <code>FRHIComputeCommandList</code> 进行计算通道（异步和图计算之间的共享接口），或用于 <code>FRHICommandList</code> 的栅格通道。</p>
+            <p>除非绝对必要，否则避免使用 <code>FRHICommandListImmediate</code>，因为它会使通道无法并行执行。</p>
+            <p>理想情况下，所有通道Lambda都是线程安全的，但实际上一些通道仍然需要在执行期间创建或锁定RHI资源，这必须在渲染线程上完成。对于这些情况，请使用即时命令列表。</p>
+            <p>以<code>FVirtualShadowMapProjectionCompositePS</code>为例，定义如下</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image5.png" loading="lazy" alt="图 5：以FVirtualShadowMapProjectionCompos…" />
+              <figcaption>图 5：以FVirtualShadowMapProjectionCompos…</figcaption>
+            </figure>
+            <p>注意代码中红框部分，资源的声明、申请、Pass的添加一定要用RDG专用的宏以及<code>FRDGBuilder</code>的接口，这样才能保证整个Pass被RDG管理。</p>
+            <p>在使用的时候，也得使用<code>FRDGBuilder</code>的接口去创建<code>FParamaters</code>。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image6.png" loading="lazy" alt="图 6：在使用的时候，也得使用FRDGBuilder的接口去创建FParam…" />
+              <figcaption>图 6：在使用的时候，也得使用FRDGBuilder的接口去创建FParam…</figcaption>
+            </figure>
+            <p>这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出Pass走完的结果。可以用下图的方式传，这个RT[0]其实是定义<code>FParamters</code>的时候定义的槽位。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image7.png" loading="lazy" alt="图 7：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…" />
+              <figcaption>图 7：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…</figcaption>
+            </figure>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image8.png" loading="lazy" alt="图 8：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…" />
+              <figcaption>图 8：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…</figcaption>
+            </figure>
+            <p>我们会发现我们并没有执行  <code>GraphBuilder</code>.<code>Execute()</code>，Pass依然绘制成功了。那是因为SceneRenderer完成以后会执行一遍<code>GraphBuilder</code>.<code>Execute()</code>。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image9.png" loading="lazy" alt="图 9：我们会发现我们并没有执行  GraphBuilder.Execute…" />
+              <figcaption>图 9：我们会发现我们并没有执行  GraphBuilder.Execute…</figcaption>
+            </figure>
+            <h3>Compute Pass</h3>
+            <p>计算着色器Pass,一般用来处理并发计算。常用接口<code>FComputeShaderUtils</code>::AddPass。</p>
+            <p>以<code>FClearVolumeCS</code>为例，定义如下：</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image10.png" loading="lazy" alt="图 10：以FClearVolumeCS为例，定义如下：" />
+              <figcaption>图 10：以FClearVolumeCS为例，定义如下：</figcaption>
+            </figure>
+            <p>使用如下：</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image11.png" loading="lazy" alt="图 11：使用如下：" />
+              <figcaption>图 11：使用如下：</figcaption>
+            </figure>
+            <h3>怎么回读Buffer</h3>
+            <h3>使用同步</h3>
+            <p>使用ComputeShader 绝大部分情况下我们是需要返回一个Buffer来保存结果。</p>
+            <p>由于<code>FComputeShaderUtils</code>::AddPass只是添加一个计算通道，稍后在<code>GraphBuilder</code>.<code>Execute()</code>期间执行。如果我就想在<code>GraphBuilder</code>.<code>Execute()</code>之前立即拿到结果。我们就需要打破异步，执行同步代码。</p>
+            <p>如果你在上面的调用<code>FPixelShaderUtils</code>::AddFullscreenPass 或者 <code>GraphBuilder</code>.AddPass 之后调用<code>GraphBuilder</code>.<code>Execute()</code>，会触发报错。因为图构建器API是单线程的，一次只能实例化一个实例，不含层级图或并列图。对每个场景渲染调用，延迟渲染器和移动渲染器都使用单个构建器实例。</p>
+            <p>如果有些操作就是依赖<code>GraphBuilder</code>.<code>Execute()</code>，例如：</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image12.png" loading="lazy" alt="图 12：如果有些操作就是依赖GraphBuilder.Execute()，例…" />
+              <figcaption>图 12：如果有些操作就是依赖GraphBuilder.Execute()，例…</figcaption>
+            </figure>
+            <p>AppendBuffer 依赖上面<code>QueueBufferExtraction()</code>查询的结果，这个时候就必须执行<code>GraphBuilder</code>.<code>Execute()</code>。</p>
+            <p>但是执行如果报错，你又没办法立即创建一个新的<code>GraphBuilder</code>。那么可以去在<code>GraphBuilder</code>.AddPass 传<code>FRHICommandListImmediate</code> 打破异步。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image13.png" loading="lazy" alt="图 13：但是执行如果报错，你又没办法立即创建一个新的GraphBuilder…" />
+              <figcaption>图 13：但是执行如果报错，你又没办法立即创建一个新的GraphBuilder…</figcaption>
+            </figure>
+            <h3>使用异步</h3>
+            <p>UE提供了<code>FRHIGPUBufferReadback</code>用来实现RDG的回读。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image14.png" loading="lazy" alt="图 14：UE提供了FRHIGPUBufferReadback用来实现RDG的…" />
+              <figcaption>图 14：UE提供了FRHIGPUBufferReadback用来实现RDG的…</figcaption>
+            </figure>
+            <h3>使用<code>GraphBuilder</code>.AddPass 增加多个Pass</h3>
+            <p>可以使用<code>GraphBuilder</code>.AddPass 增加多个Pass，其实就是UE4的老办法，使用RHICmdList来处理Pass和资源。例如：使用Raster Pass计算完RT，把RT传递给CS从而获取结果。这种需求我们就可以使用这个方法。</p>
+            <p>我们只需要在<code>GraphBuilder</code>.AddPass 加入多个Flag。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image15.png" loading="lazy" alt="图 15：我们只需要在GraphBuilder.AddPass 加入多个Fla…" />
+              <figcaption>图 15：我们只需要在GraphBuilder.AddPass 加入多个Fla…</figcaption>
+            </figure>
+            <p>这样就可以和UE4一样使用RHICmdList来操作Pass和资源。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/rdg_image16.png" loading="lazy" alt="图 16：这样就可以和UE4一样使用RHICmdList来操作Pass和资源。" />
+              <figcaption>图 16：这样就可以和UE4一样使用RHICmdList来操作Pass和资源。</figcaption>
+            </figure>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">RDG</span><span class="tag">RHI</span><span class="tag">ComputeShader</span>
+            <span class="read">阅读全文</span>
+          </div>
+        </article>
+        <!-- POST 9 -->
+        <article class="post-card reveal" data-post="9" data-cat="platform">
+          <span class="post-tag"><span class="dot"></span>iOS · Plist · 打包</span>
+          <h2 class="post-title">iOS Plist 调研</h2>
+          <div class="post-meta">
+            <span class="post-avatar"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg></span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>平台 / iOS</span>
+          </div>
+
+          <p class="post-excerpt">
+            主要流程集中在UEDeployIOS.cs 的 GeneratePList 函数中。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <h3>plist 的生成流程</h3>
+            <p>主要流程集中在<code>UEDeployIOS</code>.cs 的 GeneratePList 函数中。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/iosplist_image1.png" loading="lazy" alt="图 1：主要流程集中在UEDeployIOS.cs 的 GeneratePL…" />
+              <figcaption>图 1：主要流程集中在UEDeployIOS.cs 的 GeneratePL…</figcaption>
+            </figure>
+            <h3>修改Plist文件</h3>
+            <p>最终进包的plist文件的是这个文件：Info.Template.plist</p>
+            <figure class="post-figure">
+              <img src="assets/blog/iosplist_image2.png" loading="lazy" alt="图 2：最终进包的plist文件的是这个文件：Info.Template.p…" />
+              <figcaption>图 2：最终进包的plist文件的是这个文件：Info.Template.p…</figcaption>
+            </figure>
+            <p>在XCode上可以从这里看到此文件，注意这里有两个一个是Mac用的，一个是IOS用的。注意区分。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/iosplist_image3.jpeg" loading="lazy" alt="图 3：在XCode上可以从这里看到此文件，注意这里有两个一个是Mac用的，…" />
+              <figcaption>图 3：在XCode上可以从这里看到此文件，注意这里有两个一个是Mac用的，…</figcaption>
+            </figure>
+            <p>最终进包的Info.Template.plist根据上面的代码也能看出来是根据这个路径的plist生成的。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/iosplist_image4.png" loading="lazy" alt="图 4：最终进包的Info.Template.plist根据上面的代码也能看…" />
+              <figcaption>图 4：最终进包的Info.Template.plist根据上面的代码也能看…</figcaption>
+            </figure>
+            <p>这个文件的内容是在WritePlistFile方法里完成的。，这里可以根据UE提供的配置动态的更改plist内容。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/iosplist_image5.png" loading="lazy" alt="图 5：这个文件的内容是在WritePlistFile方法里完成的。，这里可…" />
+              <figcaption>图 5：这个文件的内容是在WritePlistFile方法里完成的。，这里可…</figcaption>
+            </figure>
+            <p>如果我们想添加自定义的plist内容，我们就需要利用UE的一个可配置参数。</p>
+            <p>在 UE 的项目设置中，可以给 plist 添加元素，在 Project Settings-Platform-iOS-Additional Plist data 中可以填入一个字符串，它会被插入到 plist 文件中：</p>
+            <figure class="post-figure">
+              <img src="assets/blog/iosplist_image6.png" loading="lazy" alt="图 6：在 UE 的项目设置中，可以给 plist 添加元素，在 Proje…" />
+              <figcaption>图 6：在 UE 的项目设置中，可以给 plist 添加元素，在 Proje…</figcaption>
+            </figure>
+            <p>此处的实现是在GeneratePList 里，GeneratePList 参数里有一个<code>UPLScripts</code> 参数。在通过传入进来的 <code>UPLScripts</code> 来构造出 UPL 对象：</p>
+            <figure class="post-figure">
+              <img src="assets/blog/iosplist_image7.png" loading="lazy" alt="图 7：此处的实现是在GeneratePList 里，GeneratePLi…" />
+              <figcaption>图 7：此处的实现是在GeneratePList 里，GeneratePLi…</figcaption>
+            </figure>
+            <p>在最后调用的 GeneratedIOSList 中，构造出默认的 pliat 内容、从 Additional Plist Data 中读取的内容、以及调用 UPL 来处理 plist 的内容，UPL 的过程是最后处理的。</p>
+            <p>而且需要注意的是，在 GeneratedPList 函数中，通过 GeneratedIOSList 获取所有模块中添加的 UPL.xml 文件，然后把这些 xml 文件合并成一个，注意合并的顺序是 AdditionalProperties 的顺序，最后添加的 UPL 会放在最后执行，在一个项目中如果有多个使用 UPL 的操作要注意顺序问题。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/iosplist_image8.png" loading="lazy" alt="图 8：而且需要注意的是，在 GeneratedPList 函数中，通过 G…" />
+              <figcaption>图 8：而且需要注意的是，在 GeneratedPList 函数中，通过 G…</figcaption>
+            </figure>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">Plist</span><span class="tag">UPL</span><span class="tag">iOS 打包</span>
+            <span class="read">阅读全文</span>
+          </div>
+        </article>
+        <!-- POST 10 -->
+        <article class="post-card reveal" data-post="10" data-cat="anim">
+          <span class="post-tag"><span class="dot"></span>动画 · 并行计算 · 性能</span>
+          <h2 class="post-title">UE5 动画并行计算的调研</h2>
+          <div class="post-meta">
+            <span class="post-avatar"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg></span>
+            <span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>动画 / 并行</span>
+          </div>
+
+          <p class="post-excerpt">
+            此阶段始于USkeletalMeshComponent::TickComponent，会在里面调用USkeletalMeshComponent::TickPose，再在SkeletalMeshComponent::TickAnimation()函数里，针对里面个每个AnimInstance调用UAnimInstance::UpdateAnimation函数。
+          </p>
+
+          <hr class="post-divider" />
+
+          <div class="post-body">
+            <h3>动画系统的更新机制</h3>
+            <p>此阶段始于<code>USkeletalMeshComponent</code>::TickComponent，会在里面调用<code>USkeletalMeshComponent</code>::TickPose，再在SkeletalMeshComponent::<code>TickAnimation()</code>函数里，针对里面个每个AnimInstance调用<code>UAnimInstance</code>::UpdateAnimation函数。</p>
+            <p>整体流程是：</p>
+            <p>重新计算所需的动画通知列表</p>
+            <p>更新LinkedAnimInstance</p>
+            <p>更新AnimScriptInstance</p>
+            <p>更新后处理动画蓝图PostProcessAnimInstance</p>
+            <p>根据需要收集分发动画通知</p>
+            <p>首先从引擎Tick调到<code>USkeletalMeshComponent</code>::TickComponent</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image1.png" loading="lazy" alt="图 1：首先从引擎Tick调到USkeletalMeshComponent:…" />
+              <figcaption>图 1：首先从引擎Tick调到USkeletalMeshComponent:…</figcaption>
+            </figure>
+            <p><code>USkeletalMeshComponent</code>::TickComponent最重要是调用了父类的TickComponent。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image2.png" loading="lazy" alt="图 2：USkeletalMeshComponent::TickCompon…" />
+              <figcaption>图 2：USkeletalMeshComponent::TickCompon…</figcaption>
+            </figure>
+            <p>这样会走到<code>USkinnedMeshComponent</code>::TickComponent，在这里会调用两个非常重要的方法，TickPos和RefreshBoneTransforms。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image3.png" loading="lazy" alt="图 3：这样会走到USkinnedMeshComponent::TickCo…" />
+              <figcaption>图 3：这样会走到USkinnedMeshComponent::TickCo…</figcaption>
+            </figure>
+            <p>TickPos会调用子类的TickPose方法，也就是<code>USkeletalMeshComponent</code>::TickPose。这里会根据URO还是预算系统算出一个DeltalTime来限制帧率。同时，会走进刷新动画蓝图的TickAnimation。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image4.png" loading="lazy" alt="图 4：TickPos会调用子类的TickPose方法，也就是USkelet…" />
+              <figcaption>图 4：TickPos会调用子类的TickPose方法，也就是USkelet…</figcaption>
+            </figure>
+            <p>再TickAnimation里，会调用TickAnimInstances。从而执行动画蓝图的Tick方法</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image5.png" loading="lazy" alt="图 5：再TickAnimation里，会调用TickAnimInstanc…" />
+              <figcaption>图 5：再TickAnimation里，会调用TickAnimInstanc…</figcaption>
+            </figure>
+            <p>这里UE5新加了一个LinkAnimGraph功能，可以共享动画蓝图。所以，我们还得调用共享蓝图的Tick。</p>
+            <p>LinkedAnimInstance是我们通过LinkAnimGraph动画节点链接上去的动画蓝图，可以作为独立的动画功能模块，根据需要使用，可动态插拔，在实际使用中更具灵活性，如下图所示：</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image6.png" loading="lazy" alt="图 6：LinkedAnimInstance是我们通过LinkAnimGra…" />
+              <figcaption>图 6：LinkedAnimInstance是我们通过LinkAnimGra…</figcaption>
+            </figure>
+            <p>而AnimScriptInstance其实就是常规的动画蓝图，每个SkeletalMeshComponent都只有一个动画蓝图，所以代码里只存了一个，正常的动画，比如Locomotion、动画分层、混合、Montage插槽都是在这个Instance里完成的，会装载在SkeletalMesh组件的插槽上：</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image7.png" loading="lazy" alt="图 7：而AnimScriptInstance其实就是常规的动画蓝图，每个S…" />
+              <figcaption>图 7：而AnimScriptInstance其实就是常规的动画蓝图，每个S…</figcaption>
+            </figure>
+            <p>具体顺序是：</p>
+            <p>调用自己的动画蓝图PerUpdate(防止需要在LinkAnimInstance动画蓝图之前执行某些东西)</p>
+            <p>调用自己的LinkAnimInstance动画蓝图的UpdateAnimation</p>
+            <p>调用自己的动画蓝图UpdateAnimation</p>
+            <p>调用Mesh的后期动画蓝图UpdateAnimation</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image8.png" loading="lazy" alt="图 8：调用Mesh的后期动画蓝图UpdateAnimation" />
+              <figcaption>图 8：调用Mesh的后期动画蓝图UpdateAnimation</figcaption>
+            </figure>
+            <p>在UpdateAnimation中，会更新蒙太奇并且调用蓝图和C++Update的回调。这里需要注意C++的Update会提前与蓝图执行。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image9.png" loading="lazy" alt="图 9：在UpdateAnimation中，会更新蒙太奇并且调用蓝图和C++…" />
+              <figcaption>图 9：在UpdateAnimation中，会更新蒙太奇并且调用蓝图和C++…</figcaption>
+            </figure>
+            <h3>动画系统的异步机制</h3>
+            <h3>GameThread</h3>
+            <p class="note">Plain TextUSkinnedMeshComponent::TickComponent()    USkinnedMeshComponent::RefreshBoneTransforms()        USkinnedMeshComponent::DispatchParallelEvaluationTasks()    USkinnedMeshComponent::DispatchParallelTickPose()        USkinnedMeshComponent::DispatchParallelEvaluationTasks()</p>
+            <p>在SkinnedMeshComponent的TickComponent里会执行RefreshBoneTransforms或者DispatchParallelTickPose（根据选择的动画更新模式），这个两个方法都会调用HandleExistingParallelEvaluationTask。HandleExistingParallelEvaluationTask这个里面会处理正在异步更新AnimGraph的Task，等到它完成</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image10.png" loading="lazy" alt="图 10：在SkinnedMeshComponent的TickComponen…" />
+              <figcaption>图 10：在SkinnedMeshComponent的TickComponen…</figcaption>
+            </figure>
+            <p>如果完成那么调用DispatchParallelEvaluationTasks，这里会根据一个TickFunction创建一个Task。</p>
+            <h3>这里需要注意</h3>
+            <p>接下来会准备正常的处理异步机制，首先判断当前Update能不能真正异步UpdateAnimation，这里还做了一次条件判断。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image11.png" loading="lazy" alt="图 11：接下来会准备正常的处理异步机制，首先判断当前Update能不能真正异…" />
+              <figcaption>图 11：接下来会准备正常的处理异步机制，首先判断当前Update能不能真正异…</figcaption>
+            </figure>
+            <p>基本上就是看动画蓝图有没有设置异步，同时,判断当前是不是RootMotion的更新之类的。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image12.png" loading="lazy" alt="图 12：基本上就是看动画蓝图有没有设置异步，同时,判断当前是不是RootMo…" />
+              <figcaption>图 12：基本上就是看动画蓝图有没有设置异步，同时,判断当前是不是RootMo…</figcaption>
+            </figure>
+            <p>如果条件都满足，那么会调用ParallelUpdateAnimation。</p>
+            <p>ParallelUpdateAnimation会调用<code>FAnimInstanceProxy</code>::UpdateAnimation。接下来的逻辑都会在WorkThread上执行。</p>
+            <h3>WorkdThread</h3>
+            <pre class="post-code">Plain TextFAnimInstanceProxy::UpdateAnimation()  FAnimInstanceProxy::UpdateAnimation_WithRoot    GetAnimInstanceObject()-&gt;NativeThreadSafeUpdateAnimation()    GetAnimInstanceObject()-&gt;BlueprintThreadSafeUpdateAnimation()</pre>
+            <p><code>NativeThreadSafeUpdateAnimation()</code>和<code>BlueprintThreadSafeUpdateAnimation()</code>这两个方法，它们与前面提到的在更新机制中的动画数据的方法相对应。我们可以将复杂的计算逻辑放在这两个方法中，把更新动画需要的数据计算也并行化。</p>
+            <p>目前项目上并没有使用这个两个方法，将复杂的Tick运算放到WorkThread上。</p>
+            <p>根据实际数据来看，GameThread上有很多动画蓝图的方法。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image13.png" loading="lazy" alt="图 13：根据实际数据来看，GameThread上有很多动画蓝图的方法。" />
+              <figcaption>图 13：根据实际数据来看，GameThread上有很多动画蓝图的方法。</figcaption>
+            </figure>
+            <p>同时因为是多线程，为了保证线程安全，这两个方法中要访问和写的变量都必须是线程安全的，要确保在异步执行<code>FAnimInstanceProxy</code>::<code>UpdateAnimation()</code>时，GameThread不会修改这些变量。</p>
+            <p>UE提供了PropertyAccess节点，用来在<code>BlueprintThreadSafeUpdateAnimation()</code>函数中使用到的GameThread数据。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image14.png" loading="lazy" alt="图 14：UE提供了PropertyAccess节点，用来在Blueprint…" />
+              <figcaption>图 14：UE提供了PropertyAccess节点，用来在Blueprint…</figcaption>
+            </figure>
+            <p>通过PropertyAccess访问的属性或者方法，都会在GameThread中UpdateAnimation时将这些数据缓存到<code>UAnimInstance</code>中，随后在多线程执行BlueprintThreadSafeUpdateAnimation时，PropertyAccess Node会直接访问这些缓存的值，而不是实际指向的函数或变量，以保证线程安全。</p>
+            <p>PropertyAccess使用AnimSubSystem实现了缓存变量和函数返回值。</p>
+            <figure class="post-figure">
+              <img src="assets/blog/animcalc_image15.png" loading="lazy" alt="图 15：PropertyAccess使用AnimSubSystem实现了缓存…" />
+              <figcaption>图 15：PropertyAccess使用AnimSubSystem实现了缓存…</figcaption>
+            </figure>
+          </div>
+
+          <div class="post-foot">
+            <span class="tag">动画并行</span><span class="tag">TickComponent</span><span class="tag">AnimInstance</span>
+            <span class="read">阅读全文</span>
+          </div>
+        </article>
+
       </section>
     </main>
-    <div class="mail-modal" id="mail-modal" hidden>
-      <button class="mail-modal__backdrop" type="button" data-mail-close aria-label="关闭邮件弹窗"></button>
-      <div class="mail-modal__panel" role="dialog" aria-modal="true" aria-labelledby="mail-modal-title">
-        <button class="mail-modal__close" type="button" data-mail-close aria-label="关闭">×</button>
-        <p class="eyebrow">// EMAIL</p>
-        <h2 id="mail-modal-title">联系邮箱</h2>
-        <p class="mail-address">zhouwatcher#gmail.com</p>
-        <p class="mail-note">发送邮件时请把 # 换成 @。</p>
+
+    <section class="blog-footer">
+      <h2 class="section-title">一起<em>做点好玩的</em></h2>
+      <p class="lede">想合作、交流技术，或只是聊聊游戏？随时联系我。</p>
+      <div class="contact-links">
+        <button class="btn btn-solid" id="emailBtn" type="button" data-email="zhouwatcher#gmail.com">发邮件</button>
+        <a class="btn btn-ghost" href="index.html" rel="noreferrer">返回主页</a>
+      </div>
+    </section>
+
+    <footer class="footer-base">
+      © 2026 Grapeman_zx · 用代码构建有趣的游戏世界
+    </footer>
+
+    <div class="modal" id="emailModal" aria-hidden="true">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-box" role="dialog" aria-modal="true" aria-label="邮箱地址">
+        <button class="modal-close" type="button" data-close aria-label="关闭">&times;</button>
+        <p class="modal-label">我的邮箱</p>
+        <p class="modal-email" id="modalEmail"></p>
+        <button class="btn btn-solid" id="copyEmail" type="button">复制邮箱</button>
       </div>
     </div>
 
-    <script src="./script.js"></script>
+    <!-- Article Reader Overlay -->
+    <div class="article-view" id="articleView" aria-hidden="true">
+      <header class="article-header">
+        <button class="article-back" id="articleBack" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+          返回列表
+        </button>
+        <button class="article-close" id="articleClose" type="button" aria-label="关闭">&times;</button>
+      </header>
+      <div class="article-content" id="articleContent"></div>
+    </div>
+
+    <script>
+      (function () {
+        var appears = document.querySelectorAll(".appear");
+        appears.forEach(function (node) {
+          node.addEventListener("animationend", function () { node.classList.add("is-in"); }, { once: true });
+        });
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            appears.forEach(function (node) {
+              var anims = node.getAnimations ? node.getAnimations() : [];
+              var running = anims.some(function (a) { return a.playState === "running"; });
+              var finished = anims.some(function (a) { return a.playState === "finished"; });
+              if (!running && !finished) node.classList.add("is-in");
+            });
+          });
+        });
+
+        var reveals = document.querySelectorAll(".reveal");
+        if ("IntersectionObserver" in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
+            });
+          }, { threshold: 0.1, rootMargin: "0px 0px -6% 0px" });
+          reveals.forEach(function (r) { io.observe(r); });
+        } else {
+          reveals.forEach(function (r) { r.classList.add("is-visible"); });
+        }
+
+        var burger = document.querySelector(".burger");
+        var body = document.body;
+        var nav = document.getElementById("site-nav");
+        function closeMenu() { body.classList.remove("menu-open"); if (burger) { burger.setAttribute("aria-expanded", "false"); burger.setAttribute("aria-label", "打开菜单"); } }
+        function openMenu() { body.classList.add("menu-open"); if (burger) { burger.setAttribute("aria-expanded", "true"); burger.setAttribute("aria-label", "关闭菜单"); } }
+        if (burger) burger.addEventListener("click", function () { if (body.classList.contains("menu-open")) closeMenu(); else openMenu(); });
+        if (nav) nav.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+        window.addEventListener("resize", function () { if (window.matchMedia("(min-width: 901px)").matches) closeMenu(); });
+
+        // Category filter
+        var catBtns = document.querySelectorAll(".cat-btn");
+        var postCards = document.querySelectorAll(".post-card[data-post]");
+        catBtns.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            // Toggle active state
+            catBtns.forEach(function (b) { b.classList.remove("active"); });
+            btn.classList.add("active");
+            var cat = btn.getAttribute("data-cat");
+            postCards.forEach(function (card) {
+              if (cat === "all") { card.classList.remove("hidden"); }
+              else {
+                var cats = (card.getAttribute("data-cat") || "").split(",");
+                card.classList.toggle("hidden", !cats.includes(cat));
+              }
+            });
+          });
+        });
+
+        // Click card → open full article view
+        var articleView = document.getElementById("articleView");
+        var articleContent = document.getElementById("articleContent");
+        var articleBack = document.getElementById("articleBack");
+        var articleClose = document.getElementById("articleClose");
+
+        function openArticle(card) {
+          // Clone the card's content into the article viewer
+          articleContent.innerHTML = "";
+          // Copy tag + title + meta
+          var tag = card.querySelector(".post-tag").cloneNode(true);
+          var title = card.querySelector(".post-title").cloneNode(true);
+          var meta = card.querySelector(".post-meta").cloneNode(true);
+          var excerpt = card.querySelector(".post-excerpt").cloneNode(true);
+          var divider = card.querySelector(".post-divider") ? card.querySelector(".post-divider").cloneNode(true) : null;
+          var body = card.querySelector(".post-body") ? card.querySelector(".post-body").cloneNode(true) : null;
+          var foot = card.querySelector(".post-foot") ? card.querySelector(".post-foot").cloneNode(true) : null;
+
+          if (tag) articleContent.appendChild(tag);
+          if (title) articleContent.appendChild(title);
+          if (meta) articleContent.appendChild(meta);
+          if (excerpt) articleContent.appendChild(excerpt);
+          if (divider) articleContent.appendChild(divider);
+          if (body) articleContent.appendChild(body);
+          if (foot) articleContent.appendChild(foot);
+
+          articleView.classList.add("open");
+          articleView.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+          // Scroll to top of article
+          articleView.scrollTop = 0;
+        }
+
+        function closeArticle() {
+          articleView.classList.remove("open");
+          articleView.setAttribute("aria-hidden", "true");
+          document.body.style.overflow = "";
+          articleContent.innerHTML = "";
+        }
+
+        document.querySelectorAll(".post-card[data-post]").forEach(function (card) {
+          card.addEventListener("click", function (e) {
+            // Don't open if clicking inside a link/button that has its own handler
+            if (e.target.closest("button, a")) return;
+            openArticle(card);
+          });
+        });
+
+        if (articleBack) articleBack.addEventListener("click", closeArticle);
+        if (articleClose) articleClose.addEventListener("click", closeArticle);
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && articleView.classList.contains("open")) closeArticle();
+        });
+
+        var emailBtn = document.getElementById("emailBtn");
+        var modal = document.getElementById("emailModal");
+        var modalEmail = document.getElementById("modalEmail");
+        var copyBtn = document.getElementById("copyEmail");
+        function openModal() {
+          var raw = emailBtn.getAttribute("data-email") || "";
+          modalEmail.textContent = raw.replace(/#/g, "@");
+          modal.classList.add("open"); modal.setAttribute("aria-hidden", "false");
+        }
+        function closeModal() { modal.classList.remove("open"); modal.setAttribute("aria-hidden", "true"); }
+        if (emailBtn) emailBtn.addEventListener("click", openModal);
+        modal.querySelectorAll("[data-close]").forEach(function (el) { el.addEventListener("click", closeModal); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape" && modal.classList.contains("open")) closeModal(); });
+        if (copyBtn) {
+          copyBtn.addEventListener("click", function () {
+            var text = modalEmail.textContent;
+            var done = function () { copyBtn.textContent = "已复制 ✓"; setTimeout(function () { copyBtn.textContent = "复制邮箱"; }, 1500); };
+            if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, done); }
+            else { var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); } catch (e) {} document.body.removeChild(ta); done(); }
+          });
+        }
+      })();
+    </script>
   </body>
 </html>

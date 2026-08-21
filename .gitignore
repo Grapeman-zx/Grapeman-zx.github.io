@@ -1,0 +1,13 @@
+# 项目数据与临时文件，不部署到 GitHub Pages
+.workbuddy/
+*.zip
+preview-check.png
+final-retro-home.png
+final-retro-mobile.png
+final-retro-works.png
+star-avatar-transparent-preview.png
+
+# 其他项目残留
+prisma/
+node_modules/
+dist/
