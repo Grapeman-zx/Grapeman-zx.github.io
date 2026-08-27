@@ -2441,6 +2441,173 @@ public:
 <span class="read">阅读全文</span>
 </div>
 </article>
+<article class="post-card reveal" data-cat="graphics" data-post="12">
+<span class="post-tag"><span class="dot"></span>四元数 · 旋转 · 计算机图形学</span>
+<h2 class="post-title">终于搞懂四元数：<em>从欧拉角到 Slerp</em></h2>
+<div class="post-meta">
+<span class="post-avatar">
+<svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"></circle><rect height="14.6" rx="1.8" width="3.6" x="5.5" y="4.7"></rect><rect height="14.6" rx="1.8" width="3.6" x="14.9" y="4.7"></rect><circle cx="16.7" cy="20.8" r="1.45"></circle></g></svg>
+</span>
+<span class="name">Grapeman_zx</span><span class="sep">·</span><span>2026</span><span class="sep">·</span><span>计算机图形学</span>
+</div>
+<p class="post-excerpt">
+            网上四元数相关的文章看得人想“跳楼”。本文不上来堆公式，而是先问一个问题：没有四元数之前我们用什么表示旋转？从欧拉角与万向锁讲起，再看四元数如何把“旋转轴 + 旋转角”编码成四个数，最后聊透四元数乘法与 Slerp 球面插值。
+          </p>
+<hr class="post-divider"/>
+<div class="post-body">
+<h2>1. 欧拉角</h2>
+<p>没有四元数之前，我们都在用什么表示旋转？</p>
+<p><strong>Bingo！欧拉角。</strong>欧拉角的意思就是：绕 X / Y / Z 转多少度。</p>
+<pre class="post-code">Pitch = 30°
+Yaw   = 60°
+Roll  = 10°</pre>
+<p>很好理解，但它有一个著名问题：万向锁 Gimbal Lock。所以游戏引擎内部经常不用欧拉角真正做旋转，而是用四元数。</p>
+<p>我们先不看万向锁是什么，就假装它是一个问题。</p>
+
+<h2>2. 四元数</h2>
+<p>四元数长这样：</p>
+<pre class="post-code">Quaternion = (x, y, z, w)</pre>
+<p><strong>PS：</strong>你可能第一反应：四个数字跟旋转有毛关系？</p>
+<p><strong>核心来了，你可以把它理解成：旋转轴 + 旋转角度。</strong></p>
+<p>假设我要：绕 Y 轴，旋转 60°。拆一下信息：</p>
+<pre class="post-code">旋转轴：Axis = (0, 1, 0)
+角度：  θ    = 60°</pre>
+<p>对应的四元数实际上存的是：</p>
+<pre class="post-code">x = Axis.x * sin(θ/2)
+y = Axis.y * sin(θ/2)
+z = Axis.z * sin(θ/2)
+w = cos(θ/2)</pre>
+<p>等价于：</p>
+<pre class="post-code">q = ( 0*sin30°, 1*sin30°, 0*sin30°, cos30° ) = (0, 0.5, 0, 0.866)</pre>
+<p>没毛病吧，对这就是一个四元数。</p>
+
+<h3>2.1 那它和欧拉角的区别呢？</h3>
+<p>欧拉角是：x 轴转多少，y 轴转多少，z 轴转多少。</p>
+<p>四元数更接近：我要围绕这根轴，整体旋转 θ 度。</p>
+<p>也就是：<strong>任意旋转 = 一根旋转轴 + 一个旋转角度</strong>。</p>
+<p>四元数只是用一种很巧妙的数学方式，把 Axis + Angle 编码成 x y z w。</p>
+
+<h3>2.2 为什么角度要 /2？（凭什么？！）</h3>
+<p>先记住：四元数描述 3D 旋转的时候，数学结构天然使用“半角”。</p>
+<p>就像透视投影，一开始也可以先接受 tan(FOV / 2)。这可不是设计者闲着蛋疼没事除 2，而是数学推导最终就长这样。（这块比较复杂，后面会详细讲！）</p>
+
+<h3>2.3 四元数的优势在哪里？！（凭什么代替我的欧拉角）</h3>
+<p><strong>（1）万向死锁！！！！【最重要的原因】</strong></p>
+<p>欧拉角非常直观，大家一眼就能看出来每个轴转了多少。</p>
+<p>四元数非常不直观 (0, 0.5, 0, 0.866) 放到代码里，我一个核桃脑袋能看懂这个是旋转多少么？显然是不可能的。但是四元数有个牛逼的地方就是特别适合旋转插值。</p>
+
+<h3>2.4 那它到底怎么适合了？</h3>
+<p>假设一个人物现在朝前：</p>
+<figure class="post-figure"><img alt="角色前向坐标轴" loading="lazy" src="assets/quaternion-diagrams/forward_axis.png"/><figcaption>图：角色当前朝向，前为 Z，右为 X。</figcaption></figure>
+<p>做两个旋转：</p>
+<pre class="post-code">旋转 A：向右转 90°
+旋转 B：再抬头 30°</pre>
+<p>最终结果显然是：初始姿态 → 旋转 A → 旋转 B → 最终姿态。</p>
+<p>如果用旋转矩阵：<code>Mfinal = MB * MA</code>。四元数形式和它完全一样：<code>qfinal = qB * qA</code>。</p>
+<p>所以第一层理解就这么简单：四元数乘法，可以先把它当成旋转矩阵乘法，把两个旋转组合成一个新的旋转。</p>
+<pre class="post-code">（1）QuatA = 向右转 90 度
+（2）QuatB = 抬头 30 度
+（3）QuatResult = B * A</pre>
+<p>这个 Result 本身又是一个四元数。于是原来两个操作：先转 A，再转 B 被压成了 Result 一个旋转。</p>
+
+<h3>2.4.1 为什么不能直接把 xyz 加起来？</h3>
+<pre class="post-code">A = 绕 Y 轴转 90°，B = 绕 X 轴转 90°</pre>
+<p>可能直觉觉得：旋转结果 = Y 90° + X 90°。</p>
+<p>但 3D 旋转有一个很麻烦的特点：<strong>旋转顺序会影响结果</strong>。先向右转 90° 再向前翻 90° 和先向前翻 90° 再向右转 90°，结果明显不一样。</p>
+<p>所以 <code>qB * qA ≠ qA * qB</code>。（四元数乘法不满足交换律）这里和矩阵一样。</p>
+
+<h3>2.4.2 四元数乘法到底干了什么？</h3>
+<p>假设 qA = 旋转 A，qB = 旋转 B。每个四元数背后都表示：旋转轴 + 旋转角度。数学会重新计算出 qC —— 一根新的旋转轴 + 一个新的旋转角度。</p>
+<p>所以关键不是：四元数把两个角度加起来。而是：<strong>四元数把两个连续旋转，重新合成为“一次等价旋转”</strong>。</p>
+
+<h3>2.4.3 Axis-Angle</h3>
+<p>我们想想为什么“一堆旋转”最后能变成“一根轴 + 一个角”？</p>
+<p>因为在 3D 空间里，不论你先绕 X 转、再绕 Y 转、再绕 Z 转、再绕奇怪的轴转，最终姿态总能找到：某一根轴 Axis + 某一个角度 θ 一次旋转直接转过去。这就是 Axis-Angle。而四元数特别适合干这件事。</p>
+
+<h3>2.5 四元数怎么真正旋转一个 Vector？</h3>
+<p>假设 <code>VectorForward = (0, 0, 1)</code>，Quaternion q；要让 Forward 被 q 旋转，数学上写 <code>v′ = q * v * q⁻¹</code>。（看到这个先别害怕。）</p>
+<p>翻译成人话：原始向量 v —— 套进去旋转 q —— 得到旋转后的 v′。</p>
+<p>这里的 q⁻¹ 是什么鬼？你可以暂时理解成：<strong>反向旋转</strong>。例如 q 绕 Y +90°，那么 q⁻¹ 绕 Y -90°。</p>
+<p>对于标准化四元数特别简单。假设 <code>q = (x, y, z, w)</code>，它的共轭 <code>q* = (-x, -y, -z, w)</code>。如果长度为 1，则 <code>q⁻¹ = q*</code>。</p>
+<p>比如 <code>q = (0, 0.707, 0, 0.707)</code> 代表绕 Y +90°，那么 <code>q⁻¹ = (0, -0.707, 0, 0.707)</code> 就是 -90°。</p>
+<p><strong>四元数反旋转 ≈ xyz 取负 w 不变。</strong></p>
+<p>为什么写 <code>q * v * q⁻¹</code> 而不是 <code>q * v</code>？因为 Quaternion 和 Vector 本质不是一个东西。我们会偷偷把 Vector v = (x, y, z) 变成一种特殊四元数 <code>V = (x, y, z, 0)</code>。【升维】然后 <code>V′ = q * V * q⁻¹</code>，最终算出来 <code>V′ = (x′, y′, z′, 0)</code>，取前三个就是旋转后的向量。你暂时不用背乘法展开，只要知道：q 夹住 Vector，q * V * q⁻¹ 就完成旋转。</p>
+<p>用过 UE 的同学都知道平时用的旋转接口是：</p>
+<pre class="post-code">FQuat Rotation;
+FVector Forward = FVector::ForwardVector;
+
+FVector NewForward = Rotation.RotateVector(Forward);</pre>
+<p>你表面看到 <code>Rotation.RotateVector(Forward)</code>，底层思想就是 <code>q * V * q⁻¹</code>，实际实现会做数学展开优化，不会傻乎乎真创建三个 Quaternion 一顿乘。</p>
+
+<h3>2.6 万向死锁 Gimbal Lock</h3>
+<p>它本质特别简单：欧拉角是“一根轴转完，再绕另一根轴转”。某些姿态下，两根旋转轴会重合，于是你少了一个自由度。</p>
+<p>想深入看 3D 效果的同学看其他大佬的文章：欧拉角万向节死锁（218 赞同 · 31 评论 文章）。</p>
+<p>因为欧拉角的几个旋转轴是逐层旋转的。简单来说：Pitch 转到 90° 以后，原来负责 Yaw 和负责 Roll 的两个轴可能方向重合。</p>
+<p><strong>注意：不是“旋转坏掉了！！！！！！！”</strong> 万向锁不是说 3D 世界突然不能旋转了，而是你选择的 Euler Angle 这种表示方式在该姿态附近失去了一个独立旋转轴。空间本身当然正常，问题出在 Yaw → Pitch → Roll 这种连续绕三个轴旋转的表示法。</p>
+
+<h3>2.6.1 Quaternion 为什么没这个问题？</h3>
+<p>因为 Quaternion 根本不是这样描述旋转的。Euler 是：绕 X 转一点、再绕 Y 转一点、再绕 Z 转一点，它依赖三个旋转轴，所以轴可能互相撞到一起。但是 Quaternion 的想法是：<strong>不要给我三个连续旋转，直接告诉我绕哪一根轴 Axis 转多少度 Angle</strong>。</p>
+<p>还有同学认为：Quaternion 有四个维度，所以比 Euler 多一个维度，因此没有 Gimbal Lock。这句话是不对的！！！！！！！！！！！！！！！ Quaternion 虽有 x y z w 四个数，但表示 3D Rotation 时通常是单位四元数 <code>x² + y² + z² + w² = 1</code>，所以这四个数字并不是四个随便变化的自由度。3D Rotation 本质仍然只有 3 个自由度。Quaternion 避免 Gimbal Lock 的原因不是“多一个数”，而是它没有使用 Euler Angle 那种三个连续旋转轴的参数化方式。</p>
+
+<h3>2.6.2 编辑器还是给我显示 Pitch / Yaw / Roll</h3>
+<p>因为 Quaternion 太反人类。比如 <code>(0.183, 0.423, -0.081, 0.883)</code> 你能看出角色朝哪吗？完全不能，所以编辑器上层显示还是欧拉角，但实际运算还是会把欧拉角转换成四元数来处理。</p>
+
+<h2>3. Slerp（球面线性插值）</h2>
+<p>Quaternion 牛逼的地方。假设人物当前朝向 ↑，目标朝向 →，希望他慢慢转：↑ ↗ →。最简单想法可能是 <code>CurrentRotation = Lerp(A, B, t)</code>，但对 Rotation 来说普通 Lerp 并不总是理想。Quaternion 有专门的东西：<strong>Slerp(A, B, t) 球面线性插值</strong>。</p>
+
+<h3>3.1 不是哥们 Quaternion 和“球”有关系？</h3>
+<p>刚才说了，旋转 Quaternion 一般要求 <code>x² + y² + z² + w² = 1</code>。你觉得眼熟吗？</p>
+<pre class="post-code">二维：x² + y² = 1，这不就是圆的公式么？！
+三维：x² + y² + z² = 1，这不就是单位球么？！
+x² + y² + z² + w² 那岂不是四维球？！</pre>
+<p>这就是很多人说四元数是 4 维的原因。所有合法单位 Quaternion，都在一个“四维单位球面”上。</p>
+<figure class="post-figure"><img alt="球面上的两个 Quaternion A 和 B" loading="lazy" src="assets/quaternion-diagrams/sphere_ab.png"/><figcaption>图：两个单位四元数 A、B 可想象成四维单位球面上的两个点。</figcaption></figure>
+<p>Slerp 做的事情就是：沿着球面，从 A 平滑地走向 B，而不是直接穿球内部。常用代码样子：</p>
+<pre class="post-code">FQuat Result = FQuat::Slerp(A, B, t);</pre>
+
+<h3>3.1.1 哥们为什么这特别适合旋转？</h3>
+<p>因为我们真正关心的是：旋转角度均匀变化。例如角色转头：0° 20° 40° 60° 80° 90°，视觉上应该是匀速旋转。Slerp 正好保证：沿旋转空间的最短圆弧进行插值，并且角速度保持比较自然的均匀变化。所以动画、骨骼、IK、Camera Rotation 里会大量出现 Quaternion 插值。</p>
+
+<h3>3.1.2 之前 q 和 -q 为啥是同一个旋转？？</h3>
+<p>假设四元数 q 其实就是：绕某一根轴旋转某个角度 θ。现在把整个四元数取反（x, y, z, w 全变号）得到 -q，看起来和 q 完全不一样，但神奇的是它俩表示同一个最终 3D 旋转。怎么可能呢？！</p>
+<p>先最简单理解：你可以想象一个圆，一个方向可以顺时针转 60°，也可以逆时针转 300°，最后朝向一样。四元数里也有类似的“两个表示对应同一个旋转”的现象。</p>
+<figure class="post-figure"><img alt="q 与 -q 在四元数球面上相对，映射到同一旋转" loading="lazy" src="assets/quaternion-diagrams/double_cover.png"/><figcaption>图：q 与 -q 在四元数球面上是相反两点，但映射到 3D 旋转是同一个（Double Cover）。</figcaption></figure>
+<p>这叫 <strong>Double Cover（双重覆盖）</strong>。为什么从公式上也成立？还记得旋转 Vector：<code>v′ = q * v * q⁻¹</code>。把 q 全换成 -q：<code>(-q) * v * (-q)⁻¹</code>。因为 <code>(-q)⁻¹ = -q⁻¹</code>，所以 <code>-q * v * -q⁻¹</code> 负号抵消了，又回来 <code>q * v * q⁻¹</code>。结果完全一样。也就是说 q 旋转 Vector 和 -q 旋转 Vector 结果完全相同。</p>
+
+<h3>3.1.3 话说回来，这跟 Slerp 有什么关系？</h3>
+<p>假设 A = 当前旋转，B = 目标旋转。Quaternion 在球面上，B 和 -B 表示现实世界完全一样的旋转，但在 Quaternion 球面里却位于相反位置。问题来了：假设 A 离 -B 很近，但你偏偏让 Slerp 去找 B，那它可能 A 绕球面走非常远才到 B，现实里明明只需转 20°，结果给你绕 340°。</p>
+<figure class="post-figure"><img alt="A 离 -B 近、离 B 远，应选最近表示" loading="lazy" src="assets/quaternion-diagrams/slerp_sphere.png"/><figcaption>图：A 离 -B 更近，应选 -B 作为插值终点走最短路径；红色为错误绕远路。</figcaption></figure>
+<p>所以要选最近的那个表示。既然 B 和 -B 表示现实世界完全一样的旋转，那我们当然选离 A 更近的那个。怎么知道谁更近？用 <code>Dot(A, B)</code> 四元数点积，它和 Vector 点积思想一样：</p>
+<pre class="post-code">Dot > 0（夹角 < 90°）  说明两者在 quaternion 球面上离得近
+Dot < 0（夹角 > 90°）  A 和 B 离得比较远</pre>
+<pre class="post-code">if (Dot(A, B) < 0)
+{
+    B = -B;
+}</pre>
+<p>变成：原本 A ────────── B，实际上改成 A ── -B，从 A 到 -B 插值。因为 B == -B 在最终旋转意义上完全一样，于是能走最短路径。</p>
+
+<h3>3.1.4 Slerp 的核心</h3>
+<pre class="post-code">Quat Slerp(Quat A, Quat B, float t)
+{
+    float Dot = dot(A, B);
+
+    if (Dot < 0)
+    {
+        B = -B;
+        Dot = -Dot;
+    }
+    // ... 真正的球面插值展开
+}</pre>
+<p>第一件事经常就是上面的点积处理。这段以前看源码可能感觉莫名其妙：为啥好端端把 Quaternion 乘 -1？现在知道了：<strong>q 和 -q 表示同一个 Rotation，选离 A 最近的那个表示，避免 Slerp 绕远路</strong>。</p>
+<p>第二件事：真正的 Slerp 才开始。假设四元数球面上 A 和 B 之间夹角叫 Ω，Slerp 会让结果 t=0 在 A，t=1 在 B，沿圆弧均匀运动。所以它叫球面线性插值。</p>
+<figure class="post-figure"><img alt="Lerp 直线穿球内部 vs Slerp 沿球面圆弧" loading="lazy" src="assets/quaternion-diagrams/lerp_vs_slerp.png"/><figcaption>图：Lerp 直接两点连直线穿过球内部（长度可能不再是 1），Slerp 沿球面圆弧走，更符合 Rotation 空间。</figcaption></figure>
+<p>这里有个容易混淆的地方：Slerp 和 Lerp 区别可以直接想成——Lerp 直接两点连直线，会穿过球内部，结果长度可能不再是 1（<code>|q| != 1</code>），所以通常还要 <code>Normalize()</code>，这就得到 Nlerp = Normalized Lerp。Slerp 则是沿球面圆弧走，更符合 Rotation 空间。</p>
+<p>那是不是 Slerp 永远比 Nlerp 好？这种问题一般都是：不是。哈哈哈哈。为啥？其实很简单：Slerp 比 Nlerp 更贵，多了一些运算。仅此而已。</p>
+</div>
+<div class="post-foot">
+<span class="tag">四元数</span><span class="tag">旋转</span><span class="tag">Slerp</span><span class="read">阅读约 15 分钟</span>
+</div>
+</article>
 </section>
 
 <section class="blog-home" id="blogHome">
@@ -2546,6 +2713,7 @@ public:
         var catLabels = {
           ui: "UI 与 Slate",
           render: "渲染",
+          graphics: "计算机图形学",
           engine: "引擎",
           cpp: "C++",
           math: "数学",
@@ -2584,7 +2752,7 @@ public:
           if (!sidebarNav) return;
           sidebarNav.innerHTML = "";
           var groups = groupByCat(cards);
-          var order = ["ui", "render", "engine", "cpp", "math", "physics", "anim", "platform"];
+          var order = ["ui", "render", "graphics", "engine", "cpp", "math", "physics", "anim", "platform"];
           var cats = Object.keys(groups).sort(function (a, b) {
             var ia = order.indexOf(a), ib = order.indexOf(b);
             if (ia === -1) ia = 999; if (ib === -1) ib = 999;
