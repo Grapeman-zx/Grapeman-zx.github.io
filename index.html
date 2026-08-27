@@ -1419,6 +1419,16 @@
             zh_author: "拿破仑·波拿巴"
           }
         ];
+        function shuffle(arr) {
+          var a = arr.slice();
+          for (var i = a.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+          }
+          return a;
+        }
+        var shuffledQuotes = shuffle(QUOTES);
+
         var qIdx = 0;
         var qText = document.getElementById("quoteText");
         var qAuthor = document.getElementById("quoteAuthor");
@@ -1428,7 +1438,7 @@
           qText.classList.add("fade-out");
           qAuthor.classList.add("fade-out");
           setTimeout(function () {
-            var q = QUOTES[i];
+            var q = shuffledQuotes[i];
             qText.innerHTML = '&ldquo;' + q.en + '&rdquo;<br><span style="display:block;margin-top:8px;font-size:0.88em;color:var(--muted)">' + q.zh + "</span>";
             qAuthor.innerHTML = "&mdash; " + q.author + (q.zh_author ? "（" + q.zh_author + "）" : "");
             qText.classList.remove("fade-out");
@@ -1440,7 +1450,7 @@
         }
 
         // build dots
-        for (var di = 0; di < QUOTES.length; di++) {
+        for (var di = 0; di < shuffledQuotes.length; di++) {
           var dot = document.createElement("span");
           if (di === 0) dot.className = "active";
           dot.onclick = (function (idx) { return function () { qIdx = idx; showQuote(idx); restartTimer(); }; })(di);
@@ -1453,17 +1463,17 @@
         function restartTimer() {
           if (qTimer) clearInterval(qTimer);
           qTimer = setInterval(function () {
-            qIdx = (qIdx + 1) % QUOTES.length;
+            qIdx = (qIdx + 1) % shuffledQuotes.length;
             showQuote(qIdx);
           }, 8000);
         }
         if (qPrev) qPrev.addEventListener("click", function () {
-          qIdx = (qIdx - 1 + QUOTES.length) % QUOTES.length;
+          qIdx = (qIdx - 1 + shuffledQuotes.length) % shuffledQuotes.length;
           showQuote(qIdx);
           restartTimer();
         });
         if (qNext) qNext.addEventListener("click", function () {
-          qIdx = (qIdx + 1) % QUOTES.length;
+          qIdx = (qIdx + 1) % shuffledQuotes.length;
           showQuote(qIdx);
           restartTimer();
         });
