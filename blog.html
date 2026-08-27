@@ -2441,7 +2441,7 @@ public:
 <span class="read">阅读全文</span>
 </div>
 </article>
-<article class="post-card reveal" data-cat="graphics" data-post="12">
+<article class="post-card reveal" data-cat="graphics" data-post="12" data-thumb="assets/quaternion-diagrams/sphere_ab.png">
 <span class="post-tag"><span class="dot"></span>四元数 · 旋转 · 计算机图形学</span>
 <h2 class="post-title">终于搞懂四元数：<em>从欧拉角到 Slerp</em></h2>
 <div class="post-meta">
@@ -2741,11 +2741,23 @@ Dot < 0（夹角 > 90°）  A 和 B 离得比较远</pre>
           return m ? m[1] + "/" + m[2] + "/" + m[3] : "";
         }
 
+        var PLACEHOLDER_THUMB = "data:image/svg+xml;utf8," + encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240">' +
+          '<rect width="400" height="240" fill="#1e1e1e"/>' +
+          '<circle cx="200" cy="120" r="72" fill="none" stroke="#3a3a3a" stroke-width="2"/>' +
+          '<circle cx="168" cy="98" r="6" fill="#8ab4ff"/>' +
+          '<circle cx="232" cy="142" r="6" fill="#8ab4ff"/>' +
+          '<path d="M168 98 A 72 72 0 0 1 232 142" fill="none" stroke="#8ab4ff" stroke-width="2"/>' +
+          '<text x="200" y="216" fill="#6a6a6a" font-family="sans-serif" font-size="13" text-anchor="middle">暂无封面</text>' +
+          '</svg>'
+        );
         function getCardThumb(card) {
+          var explicit = card.getAttribute("data-thumb");
+          if (explicit) return explicit;
           var body = card.querySelector(".post-body");
-          if (!body) return "";
+          if (!body) return PLACEHOLDER_THUMB;
           var img = body.querySelector("img");
-          return img ? img.getAttribute("src") : "";
+          return img ? img.getAttribute("src") : PLACEHOLDER_THUMB;
         }
 
         function buildSidebar() {
