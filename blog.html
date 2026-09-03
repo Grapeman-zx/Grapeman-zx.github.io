@@ -2685,7 +2685,7 @@ Dot < 0（夹角 > 90°）  A 和 B 离得比较远</pre>
 <h2 class="section-title">没有天赋，<em>那就重复。</em></h2>
 <p class="lede">想合作、交流技术，或只是聊聊游戏？随时联系我。</p>
 <div class="contact-links">
-<button class="btn btn-solid" data-email="zhouwatcher#gmail.com" id="emailBtn" type="button">发邮件</button>
+<button class="btn btn-solid" data-email="zhouwatcher@gmail.com" id="emailBtn" type="button">发邮件</button>
 <a class="btn btn-ghost" href="index.html" rel="noreferrer">返回主页</a>
 </div>
 </section>
@@ -3035,7 +3035,7 @@ Dot < 0（夹角 > 90°）  A 和 B 离得比较远</pre>
         var copyBtn = document.getElementById("copyEmail");
         function openModal() {
           var raw = emailBtn.getAttribute("data-email") || "";
-          modalEmail.textContent = raw.replace(/#/g, "@");
+          modalEmail.textContent = raw;
           modal.classList.add("open"); modal.setAttribute("aria-hidden", "false");
         }
         function closeModal() { modal.classList.remove("open"); modal.setAttribute("aria-hidden", "true"); }

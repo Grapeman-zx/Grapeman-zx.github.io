@@ -1070,7 +1070,7 @@
               想合作、交流技术，或只是聊聊游戏？随时联系我。
             </p>
             <div class="contact-links">
-              <button class="btn btn-solid" id="emailBtn" type="button" data-email="zhouwatcher#gmail.com">发邮件</button>
+              <button class="btn btn-solid" id="emailBtn" type="button" data-email="zhouwatcher@gmail.com">发邮件</button>
               <a class="btn btn-ghost" href="https://space.bilibili.com/" target="_blank" rel="noreferrer">B 站主页</a>
               <a class="btn btn-ghost" href="blog.html" target="_blank" rel="noreferrer">技术博客</a>
             </div>
@@ -1486,7 +1486,7 @@
 
         function openModal() {
           var raw = emailBtn.getAttribute("data-email") || "";
-          modalEmail.textContent = raw.replace(/#/g, "@");
+          modalEmail.textContent = raw;
           modal.classList.add("open");
           modal.setAttribute("aria-hidden", "false");
         }
