@@ -740,7 +740,7 @@
               <code>FT_Outline_EmboldenXY</code> 接口。此接口可以加粗轮廓，基本效果和加粗一样。
             </p>
 <figure class="post-figure">
-<img alt="FT_Outline_EmboldenXY 加粗轮廓示意" loading="lazy" src="assets/blog/font_image1.png"/>
+<img alt="FT_Outline_EmboldenXY 加粗轮廓示意" loading="lazy" src="assets/blog/font_image1.png" width="690" height="390" decoding="async" />
 <figcaption>图：FreeType 的 FT_Outline_EmboldenXY 用来加粗字体轮廓。</figcaption>
 </figure>
 <p>
@@ -761,7 +761,7 @@
                   不然算字体点阵尺寸会漏掉加粗效果。
                 </div>
 <figure class="post-figure">
-<img alt="在 FT_Outline_Get_CBox 之前调用加粗接口" loading="lazy" src="assets/blog/font_image2.png"/>
+<img alt="在 FT_Outline_Get_CBox 之前调用加粗接口" loading="lazy" src="assets/blog/font_image2.png" width="759" height="378" decoding="async" />
 <figcaption>图：务必在 FT_Outline_Get_CBox 之前调用加粗接口。</figcaption>
 </figure>
 </li>
@@ -771,11 +771,11 @@
                 回到 <code>GetRenderDataInternal</code> 方法，这里的判断用来区分是不是描边，
                 所以接下来要去条件的 <code>ELSE</code> 分支里，加入 <code>FT_Outline_EmboldenXY</code>。
                 <figure class="post-figure">
-<img alt="GetRenderDataInternal 的 ELSE 分支加入加粗" loading="lazy" src="assets/blog/font_image3.png"/>
+<img alt="GetRenderDataInternal 的 ELSE 分支加入加粗" loading="lazy" src="assets/blog/font_image3.png" width="1310" height="163" decoding="async" />
 <figcaption>图：在 GetRenderDataInternal 的 ELSE 分支中调用加粗接口。</figcaption>
 </figure>
 <figure class="post-figure">
-<img alt="加粗后的点阵对比" loading="lazy" src="assets/blog/font_image4.png"/>
+<img alt="加粗后的点阵对比" loading="lazy" src="assets/blog/font_image4.png" width="985" height="185" decoding="async" />
 <figcaption>图：加粗前后的点阵效果对比。</figcaption>
 </figure>
 </li>
@@ -785,7 +785,7 @@
                 可能会发现字体描边和字体有一个偏移情况。所以，我们根据是否加粗把位置再偏移回去，
                 加入对应的偏移代码即可。
                 <figure class="post-figure">
-<img alt="1:1 缩放下描边偏移问题及修正" loading="lazy" src="assets/blog/font_image5.png"/>
+<img alt="1:1 缩放下描边偏移问题及修正" loading="lazy" src="assets/blog/font_image5.png" width="1270" height="451" decoding="async" />
 <figcaption>图：1:1 缩放下描边偏移问题及修正代码。</figcaption>
 </figure>
 </li>
@@ -797,14 +797,14 @@
               同时，在 <code>ISlateTextLineHighlighter::OnPaint</code> 中有 UnderLine 的绘制。
             </p>
 <figure class="post-figure">
-<img alt="SlateType.h 中定义的 UnderlineBrush" loading="lazy" src="assets/blog/font_image6.png"/>
+<img alt="SlateType.h 中定义的 UnderlineBrush" loading="lazy" src="assets/blog/font_image6.png" width="1168" height="100" decoding="async" />
 <figcaption>图：SlateType.h 中定义的 UnderlineBrush。</figcaption>
 </figure>
 <p>
               同时，在 <code>ISlateTextLineHighlighter::OnPaint</code> 中有 UnderLine 的绘制。
             </p>
 <figure class="post-figure">
-<img alt="ISlateTextLineHighlighter::OnPaint 中的 UnderLine 绘制" loading="lazy" src="assets/blog/font_image7.png"/>
+<img alt="ISlateTextLineHighlighter::OnPaint 中的 UnderLine 绘制" loading="lazy" src="assets/blog/font_image7.png" width="821" height="227" decoding="async" />
 <figcaption>图：ISlateTextLineHighlighter::OnPaint 中的 UnderLine 绘制逻辑。</figcaption>
 </figure>
 <h3>实现步骤</h3>
@@ -815,11 +815,11 @@
                 <code>Brush</code>，用来绘制 UnderLine。并且，实现将
                 <code>TextBlock</code> 传递给 <code>STextBlock</code>。
                 <figure class="post-figure">
-<img alt="TextBlock / STextBlock 中定义 UnderLine Brush" loading="lazy" src="assets/blog/font_image8.png"/>
+<img alt="TextBlock / STextBlock 中定义 UnderLine Brush" loading="lazy" src="assets/blog/font_image8.png" width="623" height="130" decoding="async" />
 <figcaption>图：在 TextBlock / STextBlock 中定义绘制下划线的 Brush。</figcaption>
 </figure>
 <figure class="post-figure">
-<img alt="将 TextBlock 的 UnderLine 参数传递给 STextBlock" loading="lazy" src="assets/blog/font_image9.png"/>
+<img alt="将 TextBlock 的 UnderLine 参数传递给 STextBlock" loading="lazy" src="assets/blog/font_image9.png" width="463" height="98" decoding="async" />
 <figcaption>图：将 TextBlock 的 UnderLine 参数传递给 STextBlock。</figcaption>
 </figure>
 </li>
@@ -828,7 +828,7 @@
                 在 <code>STextBlock</code> 中，获取 <code>TextStyle</code> 的时候，
                 传递一下 <code>UnderLine</code> 即可设置下划线。
                 <figure class="post-figure">
-<img alt="在 STextBlock 获取 TextStyle 时设置 UnderLine" loading="lazy" src="assets/blog/font_image10.png"/>
+<img alt="在 STextBlock 获取 TextStyle 时设置 UnderLine" loading="lazy" src="assets/blog/font_image10.png" width="767" height="723" decoding="async" />
 <figcaption>图：获取 TextStyle 时传递 UnderLine 以设置下划线。</figcaption>
 </figure>
 </li>
@@ -843,11 +843,11 @@
 <code>FontUnderLinePos</code> 用来控制下划线的位置【这个是自己定义的】。
             </p>
 <figure class="post-figure">
-<img alt="FontUnderLineWidth 控制下划线宽度" loading="lazy" src="assets/blog/font_image11.png"/>
+<img alt="FontUnderLineWidth 控制下划线宽度" loading="lazy" src="assets/blog/font_image11.png" width="919" height="293" decoding="async" />
 <figcaption>图：FontUnderLineWidth 控制下划线宽度。</figcaption>
 </figure>
 <figure class="post-figure">
-<img alt="FontUnderLinePos 控制下划线位置" loading="lazy" src="assets/blog/font_image12.png"/>
+<img alt="FontUnderLinePos 控制下划线位置" loading="lazy" src="assets/blog/font_image12.png" width="1685" height="196" decoding="async" />
 <figcaption>图：FontUnderLinePos 控制下划线位置。</figcaption>
 </figure>
 <p>然后，基本思路就是从 <code>TextBlock</code> 把值传递过来就行。</p>
@@ -883,7 +883,7 @@
               它是不会换行的。所以要想按照字符换行这种思路就不太行了。
             </p>
 <figure class="post-figure">
-<img alt="旧实现通过 CreateDecoratorWidget 创建 SRichTextHyperlink" loading="lazy" src="assets/blog/umg_image1.png"/>
+<img alt="旧实现通过 CreateDecoratorWidget 创建 SRichTextHyperlink" loading="lazy" src="assets/blog/umg_image1.png" width="926" height="345" decoding="async" />
 <figcaption>图：旧实现通过 CreateDecoratorWidget 创建 SRichTextHyperlink（本质是个 Button，不换行）。</figcaption>
 </figure>
 <h2><span class="sec-num">[3]</span> 第一个问题 — 下划线不显示</h2>
@@ -892,7 +892,7 @@
               <code>Decorator</code>，Decorator 创建就不会走到 <code>else</code> 里的设置下划线的方法。
             </p>
 <figure class="post-figure">
-<img alt="Decorator 创建导致走不到设置下划线的逻辑" loading="lazy" src="assets/blog/umg_image2.png"/>
+<img alt="Decorator 创建导致走不到设置下划线的逻辑" loading="lazy" src="assets/blog/umg_image2.png" width="898" height="392" decoding="async" />
 <figcaption>图：Decorator 创建后走不到设置下划线的逻辑分支。</figcaption>
 </figure>
 <h2><span class="sec-num">[4]</span> 第二个问题 — 无法换行</h2>
@@ -911,12 +911,12 @@
             </p>
 <p><code>FSlateWidgetRun::Measure</code></p>
 <figure class="post-figure">
-<img alt="FSlateWidgetRun::Measure 按 Widget 尺寸计算" loading="lazy" src="assets/blog/umg_image3.png"/>
+<img alt="FSlateWidgetRun::Measure 按 Widget 尺寸计算" loading="lazy" src="assets/blog/umg_image3.png" width="999" height="167" decoding="async" />
 <figcaption>图：FSlateWidgetRun::Measure 按 Widget 资源尺寸计算，无法按字符换行。</figcaption>
 </figure>
 <p><code>FSlateTextRun::Measure</code></p>
 <figure class="post-figure">
-<img alt="FSlateTextRun::Measure 文本 Run 的换行尺寸计算" loading="lazy" src="assets/blog/umg_image4.png"/>
+<img alt="FSlateTextRun::Measure 文本 Run 的换行尺寸计算" loading="lazy" src="assets/blog/umg_image4.png" width="1424" height="292" decoding="async" />
 <figcaption>图：FSlateTextRun::Measure 可以按字符计算文本换行尺寸。</figcaption>
 </figure>
 <h2><span class="sec-num">[5]</span> 解决办法</h2>
@@ -927,7 +927,7 @@
               <code>FSlateHyperlinkRun</code>，需要几个参数，最重要的就是点击事件参数。
             </p>
 <figure class="post-figure">
-<img alt="使用 FSlateHyperlinkRun 创建超链接 Slate 部分" loading="lazy" src="assets/blog/umg_image5.png"/>
+<img alt="使用 FSlateHyperlinkRun 创建超链接 Slate 部分" loading="lazy" src="assets/blog/umg_image5.png" width="945" height="154" decoding="async" />
 <figcaption>图：使用 FSlateHyperlinkRun 创建超链接的 Slate 部分。</figcaption>
 </figure>
 <p>
@@ -938,12 +938,12 @@
               <code>hello</code> 为一个 Run。
             </p>
 <figure class="post-figure">
-<img alt="富文本按标签拆分为多个 Run" loading="lazy" src="assets/blog/umg_image6.png"/>
+<img alt="富文本按标签拆分为多个 Run" loading="lazy" src="assets/blog/umg_image6.png" width="1291" height="541" decoding="async" />
 <figcaption>图：富文本按标签拆分为多个 Run。</figcaption>
 </figure>
 <p>这里的 Run 具体用哪一个，取决于 RichText 的 <code>Decorator</code>。</p>
 <figure class="post-figure">
-<img alt="RichText 的 Decorator 决定使用哪个 Run" loading="lazy" src="assets/blog/umg_image7.png"/>
+<img alt="RichText 的 Decorator 决定使用哪个 Run" loading="lazy" src="assets/blog/umg_image7.png" width="884" height="544" decoding="async" />
 <figcaption>图：RichText 的 Decorator 决定使用哪个 Run。</figcaption>
 </figure>
 <ul>
@@ -951,7 +951,7 @@
                 我们实现一个 <code>Decorator</code> 继承 <code>FHyperlinkDecorator</code>，
                 <code>FHyperlinkDecorator</code> 会帮我们创建一个 <code>FSlateHyperlinkRun</code>。
                 <figure class="post-figure">
-<img alt="实现继承 FHyperlinkDecorator 的 Decorator" loading="lazy" src="assets/blog/umg_image8.png"/>
+<img alt="实现继承 FHyperlinkDecorator 的 Decorator" loading="lazy" src="assets/blog/umg_image8.png" width="759" height="368" decoding="async" />
 <figcaption>图：实现继承 FHyperlinkDecorator 的 Decorator。</figcaption>
 </figure>
 </li>
@@ -959,7 +959,7 @@
 <code>FSlateHyperlinkRun</code> 里会根据目前的换行情况创建
                 <code>SRichTextHyperlink</code>，<code>SRichTextHyperlink</code> 是引擎实现的超链接样式。
                 <figure class="post-figure">
-<img alt="FSlateHyperlinkRun 按换行创建 SRichTextHyperlink" loading="lazy" src="assets/blog/umg_image9.png"/>
+<img alt="FSlateHyperlinkRun 按换行创建 SRichTextHyperlink" loading="lazy" src="assets/blog/umg_image9.png" width="1086" height="633" decoding="async" />
 <figcaption>图：FSlateHyperlinkRun 按当前换行情况创建 SRichTextHyperlink。</figcaption>
 </figure>
 </li>
@@ -972,11 +972,11 @@
                 同时，我们还要提供一个 <code>UObject</code> 的 <code>Decorator</code>，
                 用来监听点击事件和处理超链接的样式。
                 <figure class="post-figure">
-<img alt="提供 UObject Decorator 监听点击与样式" loading="lazy" src="assets/blog/umg_image10.png"/>
+<img alt="提供 UObject Decorator 监听点击与样式" loading="lazy" src="assets/blog/umg_image10.png" width="747" height="494" decoding="async" />
 <figcaption>图：提供 UObject Decorator 监听点击事件与样式。</figcaption>
 </figure>
 <figure class="post-figure">
-<img alt="超链接 Decorator 配置与样式" loading="lazy" src="assets/blog/umg_image11.png"/>
+<img alt="超链接 Decorator 配置与样式" loading="lazy" src="assets/blog/umg_image11.png" width="1439" height="793" decoding="async" />
 <figcaption>图：超链接 Decorator 的配置与样式设置。</figcaption>
 </figure>
 </li>
@@ -984,7 +984,7 @@
 <code>UHyperLinkRichTextBlockDecorator</code> 最终会配置到富文本控件的
                 <code>Decorators</code>。
                 <figure class="post-figure">
-<img alt="UHyperLinkRichTextBlockDecorator 配置到 Decorators" loading="lazy" src="assets/blog/umg_image12.png"/>
+<img alt="UHyperLinkRichTextBlockDecorator 配置到 Decorators" loading="lazy" src="assets/blog/umg_image12.png" width="764" height="399" decoding="async" />
 <figcaption>图：UHyperLinkRichTextBlockDecorator 配置到富文本控件的 Decorators。</figcaption>
 </figure>
 </li>
@@ -996,7 +996,7 @@
 <h2><span class="sec-num">[6]</span> 最终实现效果</h2>
 <p>超链接既能按字符正常换行，又保留了点击交互与下划线样式。</p>
 <figure class="post-figure">
-<img alt="最终实现效果动图" loading="lazy" src="assets/blog/umg_image13.gif"/>
+<img alt="最终实现效果动图" loading="lazy" src="assets/blog/umg_image13.gif" width="384" height="244" decoding="async" />
 <figcaption>图：最终实现效果（可换行的超链接，动图）。</figcaption>
 </figure>
 </div>
@@ -1006,7 +1006,7 @@
 </div>
 </article>
 <!-- POST 3 -->
-<article class="post-card reveal" data-cat="ui" data-post="3">
+<article class="post-card reveal" data-cat="ui" data-post="3" data-thumb="assets/thumbs/listitem_image1.jpg">
 <span class="post-tag"><span class="dot"></span>UI · List Item · 半透</span>
 <h2 class="post-title">List Item 遮挡半透<em>方案总结</em></h2>
 <div class="post-meta">
@@ -1023,20 +1023,20 @@
 <div class="post-body">
 <p>下面是文档的版本记录：</p>
 <figure class="post-figure">
-<img alt="版本记录表格" loading="lazy" src="assets/blog/listitem_image1.png"/>
+<img alt="版本记录表格" loading="lazy" src="assets/blog/listitem_image1.png" width="1161" height="663" decoding="async" />
 <figcaption>图：版本 / 时间 / 描述 记录（v0.1 2023.10.31 初始方案文档）。</figcaption>
 </figure>
 <h2><span class="sec-num">[1]</span> 需求情况</h2>
 <p>美术需要 List Item 或者使用其他滚动容器时，被遮挡的 Item 绘制一个半透过渡的状态，参考如下：</p>
 <figure class="post-figure">
-<img alt="需求参考效果" loading="lazy" src="assets/blog/listitem_image2.png"/>
+<img alt="需求参考效果" loading="lazy" src="assets/blog/listitem_image2.png" width="1344" height="896" decoding="async" />
 <figcaption>图：被遮挡 Item 的半透过渡参考效果。</figcaption>
 </figure>
 <h2><span class="sec-num">[2]</span> 历史方案情况（可以继续使用）</h2>
 <p>之前基于 RetainerBox 扩展过一版实现，但是问题如下：</p>
 <p>之前在使用 Retainer Box 的方案的问题在于，如果 Item 的底图是半透的就会发生色彩偏差。</p>
 <figure class="post-figure">
-<img alt="RetainerBox 半透色彩偏差" loading="lazy" src="assets/blog/listitem_image3.png"/>
+<img alt="RetainerBox 半透色彩偏差" loading="lazy" src="assets/blog/listitem_image3.png" width="529" height="251" decoding="async" />
 <figcaption>图：RetainerBox 方案下半透底图出现色彩偏差。</figcaption>
 </figure>
 <p>
@@ -1044,11 +1044,11 @@
               需要使用 Alpha…（如下）。
             </p>
 <figure class="post-figure">
-<img alt="AdvanceMaterial Blend 设置" loading="lazy" src="assets/blog/listitem_image4.png"/>
+<img alt="AdvanceMaterial Blend 设置" loading="lazy" src="assets/blog/listitem_image4.png" width="518" height="256" decoding="async" />
 <figcaption>图：AdvanceMaterial 的 Blend 设置。</figcaption>
 </figure>
 <figure class="post-figure">
-<img alt="Material 设置" loading="lazy" src="assets/blog/listitem_image5.png"/>
+<img alt="Material 设置" loading="lazy" src="assets/blog/listitem_image5.png" width="2013" height="1159" decoding="async" />
 <figcaption>图：对应的 Material 设置。</figcaption>
 </figure>
 <p>
@@ -1072,7 +1072,7 @@
               </li>
 </ul>
 <figure class="post-figure">
-<img alt="复杂文本效果不支持示例" loading="lazy" src="assets/blog/listitem_image6.png"/>
+<img alt="复杂文本效果不支持示例" loading="lazy" src="assets/blog/listitem_image6.png" width="703" height="193" decoding="async" />
 <figcaption>图：不支持的复杂文本效果示例。</figcaption>
 </figure>
 <ul>
@@ -1083,7 +1083,7 @@
               </li>
 </ul>
 <figure class="post-figure">
-<img alt="ScrollBox 阴影模拟方案" loading="lazy" src="assets/blog/listitem_image7.png"/>
+<img alt="ScrollBox 阴影模拟方案" loading="lazy" src="assets/blog/listitem_image7.png" width="837" height="634" decoding="async" />
 <figcaption>图：用 ScrollBox 阴影效果模拟半透过渡。</figcaption>
 </figure>
 <p>相关测试和示例附件：原路径在 <code>Content\Test</code>（FadeItem.rar）。</p>
@@ -1094,7 +1094,7 @@
 </div>
 </article>
 <!-- POST 4 -->
-<article class="post-card reveal" data-cat="ui" data-post="4">
+<article class="post-card reveal" data-cat="ui" data-post="4" data-thumb="assets/thumbs/tbwrap_image1.jpg">
 <span class="post-tag"><span class="dot"></span>UI · TextBlock · 换行</span>
 <h2 class="post-title">TextBlock 异常<em>换行问题</em></h2>
 <div class="post-meta">
@@ -1113,19 +1113,19 @@
 <h2><span class="sec-num">[1]</span> 在编辑器下</h2>
 <p>在 UMG 编辑器下不停的缩放 Zoom，就会发现 TextBlock 的尺寸越来越小。</p>
 <figure class="post-figure">
-<img alt="编辑器缩放尺寸越来越小" loading="lazy" src="assets/blog/tbwrap_image1.gif"/>
+<img alt="编辑器缩放尺寸越来越小" loading="lazy" src="assets/blog/tbwrap_image1.gif" width="940" height="522" decoding="async" />
 <figcaption>图：UMG 编辑器下不停缩放，TextBlock 尺寸越来越小（动图）。</figcaption>
 </figure>
 <h2><span class="sec-num">[2]</span> 游戏中</h2>
 <p>TextBlock 会在不正确的位置上换行，这个位置感觉像是随机的。</p>
 <p>我们简单的查了一下 Slate 层的代码，发现可能是这里的逻辑造成了换行不对的结果。</p>
 <figure class="post-figure">
-<img alt="Slate 层换行逻辑代码" loading="lazy" src="assets/blog/tbwrap_image2.jpeg"/>
+<img alt="Slate 层换行逻辑代码" loading="lazy" src="assets/blog/tbwrap_image2.jpeg" width="1025" height="260" decoding="async" />
 <figcaption>图：怀疑造成换行异常的 Slate 层代码逻辑。</figcaption>
 </figure>
 <p>同时，为了确保思路和消除隐患，请教了 Epic 官方的人员，得到了回复。</p>
 <figure class="post-figure">
-<img alt="Epic 官方回复" loading="lazy" src="assets/blog/tbwrap_image3.png"/>
+<img alt="Epic 官方回复" loading="lazy" src="assets/blog/tbwrap_image3.png" width="1073" height="170" decoding="async" />
 <figcaption>图：Epic 官方人员的回复。</figcaption>
 </figure>
 <h2><span class="sec-num">[3]</span> 最终解决方案</h2>
@@ -1134,7 +1134,7 @@
               直接利用 <code>WrappingWidth</code> 而不是求 <code>WrappingWidth</code> 和 <code>CacheSize</code>…（的较小值）。
             </p>
 <figure class="post-figure">
-<img alt="可选开关解决方案代码" loading="lazy" src="assets/blog/tbwrap_image4.png"/>
+<img alt="可选开关解决方案代码" loading="lazy" src="assets/blog/tbwrap_image4.png" width="1381" height="346" decoding="async" />
 <figcaption>图：加入可选开关，直接用 WrappingWidth 的方案代码。</figcaption>
 </figure>
 </div>
@@ -1144,7 +1144,7 @@
 </div>
 </article>
 <!-- POST 5 -->
-<article class="post-card reveal" data-cat="ui" data-post="5">
+<article class="post-card reveal" data-cat="ui" data-post="5" data-thumb="assets/thumbs/adjustfont_image1.jpg">
 <span class="post-tag"><span class="dot"></span>UI · TextBlock · Overlay</span>
 <h2 class="post-title">TextBlock 勾选 AdjustFontSize 被 Overlay 包裹<em>尺寸异常</em></h2>
 <div class="post-meta">
@@ -1164,7 +1164,7 @@
 <h2><span class="sec-num">[2]</span> 原因</h2>
 <p>TextBlock 之前的 AdjustFontSize 的逻辑在 <code>OnPaint</code> 里。</p>
 <figure class="post-figure">
-<img alt="AdjustFontSize 在 OnPaint 里" loading="lazy" src="assets/blog/adjustfont_image1.png"/>
+<img alt="AdjustFontSize 在 OnPaint 里" loading="lazy" src="assets/blog/adjustfont_image1.png" width="1269" height="745" decoding="async" />
 <figcaption>图：AdjustFontSize 的逻辑位于 OnPaint 内。</figcaption>
 </figure>
 <p>如果 <code>SOverlay</code> 包裹 TextBlock，那么会先走 <code>SOverlay</code> 的 <code>OnPaint</code> 方法。</p>
@@ -1173,12 +1173,12 @@
               这个时候是调不到 TextBlock 的…
             </p>
 <figure class="post-figure">
-<img alt="SOverlay ArrangeChildren" loading="lazy" src="assets/blog/adjustfont_image2.png"/>
+<img alt="SOverlay ArrangeChildren" loading="lazy" src="assets/blog/adjustfont_image2.png" width="1292" height="162" decoding="async" />
 <figcaption>图：SOverlay 先调用 ArrangeChildren 计算子控件布局大小。</figcaption>
 </figure>
 <p>这里会调用 <code>GetDesiredSize</code> 获取尺寸，这块就会有问题。</p>
 <figure class="post-figure">
-<img alt="GetDesiredSize 尺寸问题" loading="lazy" src="assets/blog/adjustfont_image3.png"/>
+<img alt="GetDesiredSize 尺寸问题" loading="lazy" src="assets/blog/adjustfont_image3.png" width="1191" height="623" decoding="async" />
 <figcaption>图：GetDesiredSize 处获取尺寸出现问题。</figcaption>
 </figure>
 <h2><span class="sec-num">[3]</span> 修改方法</h2>
@@ -1187,7 +1187,7 @@
               这样 SizeBox 用来…（固定/承接尺寸）。
             </p>
 <figure class="post-figure">
-<img alt="SizeBox 包裹 TextBlock 方案" loading="lazy" src="assets/blog/adjustfont_image4.png"/>
+<img alt="SizeBox 包裹 TextBlock 方案" loading="lazy" src="assets/blog/adjustfont_image4.png" width="1911" height="1026" decoding="async" />
 <figcaption>图：用 SizeBox 包裹 TextBlock 的修改方案。</figcaption>
 </figure>
 <p>修改以后效果正常（见修改后录屏）。</p>
@@ -1198,7 +1198,7 @@
 </div>
 </article>
 <!-- POST 6 -->
-<article class="post-card reveal" data-cat="platform" data-post="6">
+<article class="post-card reveal" data-cat="platform" data-post="6" data-thumb="assets/thumbs/xcode_image1.jpg">
 <span class="post-tag"><span class="dot"></span>iOS · Xcode · Metal 调试</span>
 <h2 class="post-title">Xcode Capture GPU 使用指导</h2>
 <div class="post-meta">
@@ -1228,13 +1228,13 @@
 <p>Xcode会在你的目标链接到Metal框架或使用Metal API的任何其他框架时，自动启用GPU帧捕获选项。如果你在协作项目中，有可能其他人已经禁用了GPU帧捕获。为确保它已启用，请按照以下步骤进行：</p>
 <p>在Xcode 工具栏, 从“Scheme”菜单中选择 Edit Scheme from.</p>
 <figure class="post-figure">
-<img alt="图 1：在Xcode 工具栏, 从“Scheme”菜单中选择 Edit Sc…" loading="lazy" src="assets/blog/xcode_image1.png"/>
+<img alt="图 1：在Xcode 工具栏, 从“Scheme”菜单中选择 Edit Sc…" loading="lazy" src="assets/blog/xcode_image1.png" width="920" height="193" decoding="async" />
 <figcaption>图 1：在Xcode 工具栏, 从“Scheme”菜单中选择 Edit Sc…</figcaption>
 </figure>
 <p>左侧选择 “Run ”，然后右侧点击“Options”.</p>
 <p>选择一个 GPU Frame Capture option 然后点击 Close.</p>
 <figure class="post-figure">
-<img alt="图 2：选择一个 GPU Frame Capture option 然后点击…" loading="lazy" src="assets/blog/xcode_image2.png"/>
+<img alt="图 2：选择一个 GPU Frame Capture option 然后点击…" loading="lazy" src="assets/blog/xcode_image2.png" width="920" height="429" decoding="async" />
 <figcaption>图 2：选择一个 GPU Frame Capture option 然后点击…</figcaption>
 </figure>
 <p>GPU帧捕获选项包括以下内容：</p>
@@ -1245,7 +1245,7 @@
 <p>当调试app的时候可以通过以下几步捕获GPU trace：</p>
 <p>点击调试条上面的Capture GPU Workload功能.</p>
 <figure class="post-figure">
-<img alt="图 3：点击调试条上面的Capture GPU Workload功能." loading="lazy" src="assets/blog/xcode_image3.png"/>
+<img alt="图 3：点击调试条上面的Capture GPU Workload功能." loading="lazy" src="assets/blog/xcode_image3.png" width="584" height="327" decoding="async" />
 <figcaption>图 3：点击调试条上面的Capture GPU Workload功能.</figcaption>
 </figure>
 <p>选择你要捕获的范围。这可以是帧（frame）、Metal层、命令队列、设备，或者你之前设置过的任何自定义范围。</p>
@@ -1254,7 +1254,7 @@
 <p>点击“捕获”按钮。Xcode会在触发范围时自动开始捕获GPU跟踪，并根据你选择的范围结束捕获。你也可以随时点击“完成”按钮手动停止捕获</p>
 <p>如下图，捕获后，会自动跳转到Summary，</p>
 <figure class="post-figure">
-<img alt="图 4：如下图，捕获后，会自动跳转到Summary，" loading="lazy" src="assets/blog/xcode_image4.png"/>
+<img alt="图 4：如下图，捕获后，会自动跳转到Summary，" loading="lazy" src="assets/blog/xcode_image4.png" width="2403" height="1211" decoding="async" />
 <figcaption>图 4：如下图，捕获后，会自动跳转到Summary，</figcaption>
 </figure>
 <h2><span class="sec-num">[3]</span> 通过Summary分析Mesh Workload</h2>
@@ -1262,47 +1262,47 @@
 <p>在捕获Metal Workload（参见Xcode中的捕获Metal工作负载）或回放GPU trace文件（参见回放GPU跟踪文件）后，Metal调试器将呈现Summary。摘要查看器在左侧包括你的应用程序中上一个呈现的可绘制对象的预览，在右侧有一些统计数据，并在底部列出了自动生成的建议，称为洞察（Insights）。</p>
 <p>在摘要查看器的左侧是调试导航器，它可以快速访问关于你的Metal工作负载的顶级信息。你可以探索捕获中的所有GPU命令，以及它使用的所有管道状态</p>
 <figure class="post-figure">
-<img alt="图 5：在摘要查看器的左侧是调试导航器，它可以快速访问关于你的Metal工作…" loading="lazy" src="assets/blog/xcode_image5.png"/>
+<img alt="图 5：在摘要查看器的左侧是调试导航器，它可以快速访问关于你的Metal工作…" loading="lazy" src="assets/blog/xcode_image5.png" width="920" height="589" decoding="async" />
 <figcaption>图 5：在摘要查看器的左侧是调试导航器，它可以快速访问关于你的Metal工作…</figcaption>
 </figure>
 <h3>查看Metal Workload的统计信息</h3>
 <p>Metal调试器会自动计算多项统计数据并将其显示在摘要查看器的右侧。</p>
 <p>概览部分包括Command Buffer、Render Encoders，Blit Encoders， Compute Encoders， DrawCallsDispatch Calls数量。编码命令需要CPU时间，而执行命令则需要GPU时间。如果你的应用程序创建了过多的命令缓冲区或命令编码器，开始对性能产生显著影响，考虑减少工作负载。你可以点击“ShowDependencies”按钮打开依赖性查看器，了解命令编码器之间的连接方式。</p>
 <figure class="post-figure">
-<img alt="图 6：概览部分包括Command Buffer、Render Encode…" loading="lazy" src="assets/blog/xcode_image6.png"/>
+<img alt="图 6：概览部分包括Command Buffer、Render Encode…" loading="lazy" src="assets/blog/xcode_image6.png" width="920" height="372" decoding="async" />
 <figcaption>图 6：概览部分包括Command Buffer、Render Encode…</figcaption>
 </figure>
 <p>Performance部分包括总GPU时间和顶点数量。如果你的工作负载具有较高的GPU时间。你还可以点击“显示性能”按钮以显示性能时间轴，并发现你的Metal工作负载中哪些方面花费了最多的时间（参见使用可视时间轴分析Apple GPU性能）。</p>
 <figure class="post-figure">
-<img alt="图 7：Performance部分包括总GPU时间和顶点数量。如果你的工作负…" loading="lazy" src="assets/blog/xcode_image7.png"/>
+<img alt="图 7：Performance部分包括总GPU时间和顶点数量。如果你的工作负…" loading="lazy" src="assets/blog/xcode_image7.png" width="920" height="378" decoding="async" />
 <figcaption>图 7：Performance部分包括总GPU时间和顶点数量。如果你的工作负…</figcaption>
 </figure>
 <p>提示：</p>
 <p>如果你在Metal捕获弹出窗口（参见在Xcode中捕获Metal工作负载）中没有选择“重放后进行性能分析”复选框，或者在重放窗口（参见回放GPU跟踪文件）中没有选择“性能分析GPU跟踪”复选框，性能部分将不显示任何统计信息。要查看统计信息，请点击“性能分析”按钮并等待性能分析完成</p>
 <figure class="post-figure">
-<img alt="图 8：如果你在Metal捕获弹出窗口（参见在Xcode中捕获Metal工作…" loading="lazy" src="assets/blog/xcode_image8.png"/>
+<img alt="图 8：如果你在Metal捕获弹出窗口（参见在Xcode中捕获Metal工作…" loading="lazy" src="assets/blog/xcode_image8.png" width="382" height="90" decoding="async" />
 <figcaption>图 8：如果你在Metal捕获弹出窗口（参见在Xcode中捕获Metal工作…</figcaption>
 </figure>
 <p>内存部分包括对各种资源类型（如纹理和缓冲区）的GPU内存的简要概述。如果你的Metal工作负载使用了大量内存，请考虑优化内存使用。你还可以点击“显示内存”按钮打开内存查看器，并发现你的Metal工作负载中哪些方面使用了最多的内存。</p>
 <figure class="post-figure">
-<img alt="图 9：内存部分包括对各种资源类型（如纹理和缓冲区）的GPU内存的简要概述。…" loading="lazy" src="assets/blog/xcode_image9.png"/>
+<img alt="图 9：内存部分包括对各种资源类型（如纹理和缓冲区）的GPU内存的简要概述。…" loading="lazy" src="assets/blog/xcode_image9.png" width="920" height="370" decoding="async" />
 <figcaption>图 9：内存部分包括对各种资源类型（如纹理和缓冲区）的GPU内存的简要概述。…</figcaption>
 </figure>
 <h3>浏览 API 调用</h3>
 <p>默认情况下，Metal调试器在调试导航器中显示捕获的Metal命令的大纲，按照命令缓冲区、通道和调试组进行分组。此外，对于渲染通道，大纲还包括渲染附件缩略图图像的列表。</p>
 <figure class="post-figure">
-<img alt="图 10：默认情况下，Metal调试器在调试导航器中显示捕获的Metal命令的…" loading="lazy" src="assets/blog/xcode_image10.png"/>
+<img alt="图 10：默认情况下，Metal调试器在调试导航器中显示捕获的Metal命令的…" loading="lazy" src="assets/blog/xcode_image10.png" width="920" height="632" decoding="async" />
 <figcaption>图 10：默认情况下，Metal调试器在调试导航器中显示捕获的Metal命令的…</figcaption>
 </figure>
 <p>渲染通道通常会发出大量的绘制命令。你可以通过将指针移动到行上，快速定位感兴趣的绘制命令。Metal调试器在弹出窗口中显示了第一个attachment的预览。</p>
 <figure class="post-figure">
-<img alt="图 11：渲染通道通常会发出大量的绘制命令。你可以通过将指针移动到行上，快速定…" loading="lazy" src="assets/blog/xcode_image11.png"/>
+<img alt="图 11：渲染通道通常会发出大量的绘制命令。你可以通过将指针移动到行上，快速定…" loading="lazy" src="assets/blog/xcode_image11.png" width="556" height="252" decoding="async" />
 <figcaption>图 11：渲染通道通常会发出大量的绘制命令。你可以通过将指针移动到行上，快速定…</figcaption>
 </figure>
 <h3>浏览pipeline states</h3>
 <p>与查看Metal命令的层次结构不同，你可以从管道状态开始探索捕获的Metal工作负载。点击Outline弹出菜单，然后选择按照管道状态进行分组</p>
 <figure class="post-figure">
-<img alt="图 12：与查看Metal命令的层次结构不同，你可以从管道状态开始探索捕获的M…" loading="lazy" src="assets/blog/xcode_image12.png"/>
+<img alt="图 12：与查看Metal命令的层次结构不同，你可以从管道状态开始探索捕获的M…" loading="lazy" src="assets/blog/xcode_image12.png" width="920" height="486" decoding="async" />
 <figcaption>图 12：与查看Metal命令的层次结构不同，你可以从管道状态开始探索捕获的M…</figcaption>
 </figure>
 <p>Metal调试器显示了一系列管道状态（PipelineState）。展开一个管道状态可以看到它的着色器。进一步展开显示使用该管道状态的所有绘制命令和计算调度。</p>
@@ -1311,7 +1311,7 @@
 <p>Metal调试器会自动生成一些建议，称为Insights，并将它们包含在Summary查看器底部，以帮助你改进Metal工作负载。Insights信息包括以下类别：</p>
 <p>内存内存建议提供了减少工作负载使用的GPU内存量的建议。默认情况下，Xcode按照节省的内存量对建议进行排序，因此你可以首先关注潜在的最大收益。在以下示例中，设置错误的存储模式导致额外使用了10.2 MB的GPU内存。该应用程序的开发者可以通过遵循建议并切换到无内存模式来节省该内存</p>
 <figure class="post-figure">
-<img alt="图 13：内存内存建议提供了减少工作负载使用的GPU内存量的建议。默认情况下，…" loading="lazy" src="assets/blog/xcode_image13.png"/>
+<img alt="图 13：内存内存建议提供了减少工作负载使用的GPU内存量的建议。默认情况下，…" loading="lazy" src="assets/blog/xcode_image13.png" width="920" height="340" decoding="async" />
 <figcaption>图 13：内存内存建议提供了减少工作负载使用的GPU内存量的建议。默认情况下，…</figcaption>
 </figure>
 <p>带宽</p>
@@ -1321,12 +1321,12 @@
 <p>API Usage</p>
 <p>API使用建议提供了改进Metal API使用的建议。更少的API调用可以导致更少的CPU时间。在以下示例中，你可以看到每个绘制命令都会冗余地绑定顶点和片段缓冲区</p>
 <figure class="post-figure">
-<img alt="图 14：API使用建议提供了改进Metal API使用的建议。更少的API调…" loading="lazy" src="assets/blog/xcode_image14.png"/>
+<img alt="图 14：API使用建议提供了改进Metal API使用的建议。更少的API调…" loading="lazy" src="assets/blog/xcode_image14.png" width="920" height="174" decoding="async" />
 <figcaption>图 14：API使用建议提供了改进Metal API使用的建议。更少的API调…</figcaption>
 </figure>
 <p>点击调试导航器中命令旁边的Insights按钮，以查看详细的信息和可能改进命令的建议</p>
 <figure class="post-figure">
-<img alt="图 15：点击调试导航器中命令旁边的Insights按钮，以查看详细的信息和可…" loading="lazy" src="assets/blog/xcode_image15.png"/>
+<img alt="图 15：点击调试导航器中命令旁边的Insights按钮，以查看详细的信息和可…" loading="lazy" src="assets/blog/xcode_image15.png" width="920" height="332" decoding="async" />
 <figcaption>图 15：点击调试导航器中命令旁边的Insights按钮，以查看详细的信息和可…</figcaption>
 </figure>
 <h3>使用Filters控制范围</h3>
@@ -1339,23 +1339,23 @@
 <h2><span class="sec-num">[4]</span> 分析Resource和Pass的Dependency</h2>
 <p>The Dependencies viewer提供了GPU跟踪结构的图形表示，并允许你查看资源与访问它们的编码器之间的关系。它还突出显示你在编码器之间使用的手动同步，并通过显示帧中所有未使用的资源来指示任何不必要的工作</p>
 <figure class="post-figure">
-<img alt="图 16：The Dependencies viewer提供了GPU跟踪结构的…" loading="lazy" src="assets/blog/xcode_image16.png"/>
+<img alt="图 16：The Dependencies viewer提供了GPU跟踪结构的…" loading="lazy" src="assets/blog/xcode_image16.png" width="920" height="565" decoding="async" />
 <figcaption>图 16：The Dependencies viewer提供了GPU跟踪结构的…</figcaption>
 </figure>
 <h3>按照不同的的Detail等级查看Graph</h3>
 <p>在最高级别，依赖性查看器（Dependency Viewer）显示了帧的整体结构。在这个级别，你可以看到命令缓冲区内的命令编码器的图形。你还可以看到帧中的所有pass。每个pass包括其工作的缩略图预览，以及它消耗或产生的资源数量。在这个级别，你可以看到数据是否流动以及通道之间是否有同步</p>
 <figure class="post-figure">
-<img alt="图 17：在最高级别，依赖性查看器（Dependency Viewer）显示了…" loading="lazy" src="assets/blog/xcode_image17.png"/>
+<img alt="图 17：在最高级别，依赖性查看器（Dependency Viewer）显示了…" loading="lazy" src="assets/blog/xcode_image17.png" width="920" height="565" decoding="async" />
 <figcaption>图 17：在最高级别，依赖性查看器（Dependency Viewer）显示了…</figcaption>
 </figure>
 <p>当你放大到下一个级别时，依赖性查看器（Dependency Viewer）展开了每个通道的资源。此外，每个资源上下可以有指示消耗和产生操作的图标。对于渲染通道中的附件，图标指的是加载和存储操作。否则，它们指的是一般的资源读写操作。在这个级别，你还可以查看哪些资源引入了通道之间的数据流或同步</p>
 <figure class="post-figure">
-<img alt="图 18：当你放大到下一个级别时，依赖性查看器（Dependency View…" loading="lazy" src="assets/blog/xcode_image18.png"/>
+<img alt="图 18：当你放大到下一个级别时，依赖性查看器（Dependency View…" loading="lazy" src="assets/blog/xcode_image18.png" width="920" height="438" decoding="async" />
 <figcaption>图 18：当你放大到下一个级别时，依赖性查看器（Dependency View…</figcaption>
 </figure>
 <p>随着进一步放大，依赖性查看器（Dependency Viewer）显示了资源的更大缩略图和元数据</p>
 <figure class="post-figure">
-<img alt="图 19：随着进一步放大，依赖性查看器（Dependency Viewer）显…" loading="lazy" src="assets/blog/xcode_image19.png"/>
+<img alt="图 19：随着进一步放大，依赖性查看器（Dependency Viewer）显…" loading="lazy" src="assets/blog/xcode_image19.png" width="920" height="437" decoding="async" />
 <figcaption>图 19：随着进一步放大，依赖性查看器（Dependency Viewer）显…</figcaption>
 </figure>
 <h3>查看资源的消耗和产生</h3>
@@ -1372,7 +1372,7 @@
 <h3>Pin 和UnPin Resource堆</h3>
 <p>为了保持一个紧凑的图形，依赖性查看器尝试保持图上可见的一些有趣的资源，并将其余资源隐藏在每个通道下面的一堆中。点击这堆会打开一个资源的弹出窗口</p>
 <figure class="post-figure">
-<img alt="图 20：为了保持一个紧凑的图形，依赖性查看器尝试保持图上可见的一些有趣的资源…" loading="lazy" src="assets/blog/xcode_image20.png"/>
+<img alt="图 20：为了保持一个紧凑的图形，依赖性查看器尝试保持图上可见的一些有趣的资源…" loading="lazy" src="assets/blog/xcode_image20.png" width="920" height="494" decoding="async" />
 <figcaption>图 20：为了保持一个紧凑的图形，依赖性查看器尝试保持图上可见的一些有趣的资源…</figcaption>
 </figure>
 <p>可以点击右侧的Pin Resource 按钮，来Pin和Unpin</p>
@@ -1385,7 +1385,7 @@
 <h3>使用Insights改进Metal Workload</h3>
 <p>点击依赖性查看器右下角的Insights按钮，以打开一个包含建议的弹出窗口</p>
 <figure class="post-figure">
-<img alt="图 21：点击依赖性查看器右下角的Insights按钮，以打开一个包含建议的弹…" loading="lazy" src="assets/blog/xcode_image21.png"/>
+<img alt="图 21：点击依赖性查看器右下角的Insights按钮，以打开一个包含建议的弹…" loading="lazy" src="assets/blog/xcode_image21.png" width="786" height="443" decoding="async" />
 <figcaption>图 21：点击依赖性查看器右下角的Insights按钮，以打开一个包含建议的弹…</figcaption>
 </figure>
 <h3>使用Filters控制显示范围</h3>
@@ -1396,7 +1396,7 @@
 <h2><span class="sec-num">[5]</span> 分析内存使用</h2>
 <p>内存查看器提供了关于你的Metal应用程序内存使用的详细信息。内存查看器的顶部部分显示了内存按类别的细分，底部部分显示了资源的表格。在表格中，你可以查看资源的内存大小、配置和其他特征</p>
 <figure class="post-figure">
-<img alt="图 22：内存查看器提供了关于你的Metal应用程序内存使用的详细信息。内存查…" loading="lazy" src="assets/blog/xcode_image22.png"/>
+<img alt="图 22：内存查看器提供了关于你的Metal应用程序内存使用的详细信息。内存查…" loading="lazy" src="assets/blog/xcode_image22.png" width="920" height="479" decoding="async" />
 <figcaption>图 22：内存查看器提供了关于你的Metal应用程序内存使用的详细信息。内存查…</figcaption>
 </figure>
 <p>Metal应用程序创建许多资源，而这些资源占用大量内存。例如，为了使用基于物理的渲染器渲染一个动画角色，你可能需要缓冲区来保存顶点和动画数据，以及多个纹理来提供材质属性。当你将这些要求扩展到多个角色和更大的场景时，你的应用程序的内存占用显著增加。</p>
@@ -1413,13 +1413,13 @@
 <p>此类别跟踪在捕获的帧中命令是否访问了资源。检查此类别以查看未使用资源的大量总数，这可能表明你需要释放一些资源或将其标记为Volatile。</p>
 <p>每个条形图由代表其跟踪的最大资源的段组成。每个条形图的最后一个段显示其较小资源的汇总总数。将鼠标指针悬停在一个段上，以查看一个包含资源名称、大小和其他信息的弹出窗口。单击一个段以获取有关该特定资源的更多信息</p>
 <figure class="post-figure">
-<img alt="图 23：每个条形图由代表其跟踪的最大资源的段组成。每个条形图的最后一个段显示…" loading="lazy" src="assets/blog/xcode_image23.png"/>
+<img alt="图 23：每个条形图由代表其跟踪的最大资源的段组成。每个条形图的最后一个段显示…" loading="lazy" src="assets/blog/xcode_image23.png" width="920" height="330" decoding="async" />
 <figcaption>图 23：每个条形图由代表其跟踪的最大资源的段组成。每个条形图的最后一个段显示…</figcaption>
 </figure>
 <h3>查看Resource表</h3>
 <p>要改进应用程序如何创建和管理资源，你需要了解一些数据的作用，以便指导怎么使用。内存查看器提供了在捕获期间在你的Metal应用程序中存活的资源的信息</p>
 <figure class="post-figure">
-<img alt="图 24：要改进应用程序如何创建和管理资源，你需要了解一些数据的作用，以便指导…" loading="lazy" src="assets/blog/xcode_image24.png"/>
+<img alt="图 24：要改进应用程序如何创建和管理资源，你需要了解一些数据的作用，以便指导…" loading="lazy" src="assets/blog/xcode_image24.png" width="920" height="206" decoding="async" />
 <figcaption>图 24：要改进应用程序如何创建和管理资源，你需要了解一些数据的作用，以便指导…</figcaption>
 </figure>
 <p>资源表为所有资源类型提供以下信息</p>
@@ -1437,7 +1437,7 @@
 <h3>使用Insights改进Metal Workload</h3>
 <p>点击右下角的Insights按钮以打开一个包含资源建议的弹出窗口</p>
 <figure class="post-figure">
-<img alt="图 25：点击右下角的Insights按钮以打开一个包含资源建议的弹出窗口" loading="lazy" src="assets/blog/xcode_image25.png"/>
+<img alt="图 25：点击右下角的Insights按钮以打开一个包含资源建议的弹出窗口" loading="lazy" src="assets/blog/xcode_image25.png" width="474" height="249" decoding="async" />
 <figcaption>图 25：点击右下角的Insights按钮以打开一个包含资源建议的弹出窗口</figcaption>
 </figure>
 <h3>使用Filters控制显示范围</h3>
@@ -1457,35 +1457,35 @@
 <h3>搜集性能数据</h3>
 <p>启用“Profile after Replay ”选项后，Metal调试器会在重播工作负载后自动开始收集性能数据。或者，你可以点击摘要查看器上的“配置文件”按钮来收集性能数据。</p>
 <figure class="post-figure">
-<img alt="图 26：启用“Profile after Replay ”选项后，Metal…" loading="lazy" src="assets/blog/xcode_image26.png"/>
+<img alt="图 26：启用“Profile after Replay ”选项后，Metal…" loading="lazy" src="assets/blog/xcode_image26.png" width="920" height="519" decoding="async" />
 <figcaption>图 26：启用“Profile after Replay ”选项后，Metal…</figcaption>
 </figure>
 <p>在进行性能分析时，GPU的性能状态很重要，因为它影响系统执行工作负载的速度。影响性能状态的因素包括热量和系统设置。</p>
 <p>默认情况下，Metal调试器在捕获时以相同的GPU性能状态分析工作负载，因此性能通常与你在设备上观察到的类似。然而，你可以通过在调试栏中点击GPU Profiler按钮，在Metal调试器中制定特定的GPU性能状态来进行性能分析</p>
 <p>For more information on GPU performance state, see Discover Metal debugging, profiling, and asset creation tools.</p>
 <figure class="post-figure">
-<img alt="图 27：For more information on GPU perfor…" loading="lazy" src="assets/blog/xcode_image27.png"/>
+<img alt="图 27：For more information on GPU perfor…" loading="lazy" src="assets/blog/xcode_image27.png" width="920" height="565" decoding="async" />
 <figcaption>图 27：For more information on GPU perfor…</figcaption>
 </figure>
 <p>你可以通过在调试栏中点击GPU Profiler按钮来在不同的GPU执行模式之间切换，包括并发和串行。默认情况下，Metal调试器在并发模式下分析工作负载。这允许GPU重叠顶点、片元和计算任务，以便尽快完成。在串行模式下，Metal调试器强制每个通道只能在前一个通道完成后运行，这增加了每个通道的数据报告的精度，但不代表运行时性能</p>
 <h3>使用Performance Timeline发现性能瓶颈</h3>
 <p>Metal调试器中的性能时间轴（Performance timeline）可以帮助你在捕获的工作负载中找到昂贵的任务和性能瓶颈。通过在调试导航器中点击性能按钮来打开性能时间轴（Performance timeline）</p>
 <figure class="post-figure">
-<img alt="图 28：Metal调试器中的性能时间轴（Performance timeli…" loading="lazy" src="assets/blog/xcode_image28.png"/>
+<img alt="图 28：Metal调试器中的性能时间轴（Performance timeli…" loading="lazy" src="assets/blog/xcode_image28.png" width="920" height="565" decoding="async" />
 <figcaption>图 28：Metal调试器中的性能时间轴（Performance timeli…</figcaption>
 </figure>
 <p>窗口左侧的时间轴导航器列出了所有已分析的通道、管线状态和GPU命令及其着色器时间成本。顶部部分有 Vertex, Fragment, 和 Compute GPU轨道，显示了具有重叠运行的单个通道的开始时间和持续时间。在GPU轨道下方是合并的着色器轨道，它们结合了单个着色器的信息。你可以通过展开合并的着色器轨道以瀑布式的方式查看单个着色器的时间轴。底部部分有一个单独的计数器时间轴，其中包括GPU计数器，如占用率、限制器和带宽。这些计数器可以帮助你诊断性能瓶颈。你可以通过在不同的计数器选项卡之间切换来专注于计数器子集。有关更多信息，see Analyzing Apple GPU performance using a visual timeline.</p>
 <h3>获取Pass和Draw的详细性能指标</h3>
 <p>你可以在GPU跟踪中查看应用程序通道（pass）或命令（Commands）的性能计数器统计信息。通过点击性能Performance timeline上方的Counters 标签页来打开性能计数器。</p>
 <figure class="post-figure">
-<img alt="图 29：你可以在GPU跟踪中查看应用程序通道（pass）或命令（Comman…" loading="lazy" src="assets/blog/xcode_image29.png"/>
+<img alt="图 29：你可以在GPU跟踪中查看应用程序通道（pass）或命令（Comman…" loading="lazy" src="assets/blog/xcode_image29.png" width="920" height="565" decoding="async" />
 <figcaption>图 29：你可以在GPU跟踪中查看应用程序通道（pass）或命令（Comman…</figcaption>
 </figure>
 <p>Metal调试器通过在具有重叠运行的工作负载中采样着色器来得出着色器分析器时间。在Shader Bound的工作负载中，按照着色器分析器时间对表进行排序可以指示整体上最耗时的通道（pass）或绘图（Draw）。此外，Metal调试器从每个通道或命令中独立测量详细的计数器。你还可以在顶部栏中选择不同的计数器集，以获得更集中的视图 For more information, see Analyzing Apple GPU performance using counter statistics.</p>
 <h3>在Debug导航器中为Command使用Pipeline States分组</h3>
 <p>为了以不同的视角查看Metal命令，点击调试导航器中的outline弹出菜单，然后选择“按管线状态分组”以查看管线状态的列表</p>
 <figure class="post-figure">
-<img alt="图 30：为了以不同的视角查看Metal命令，点击调试导航器中的outline…" loading="lazy" src="assets/blog/xcode_image30.png"/>
+<img alt="图 30：为了以不同的视角查看Metal命令，点击调试导航器中的outline…" loading="lazy" src="assets/blog/xcode_image30.png" width="920" height="565" decoding="async" />
 <figcaption>图 30：为了以不同的视角查看Metal命令，点击调试导航器中的outline…</figcaption>
 </figure>
 <p>在进行性能分析时，调试导航器显示在具有重叠运行的工作负载中从每个管线状态的着色器中采样的样本百分比。在shader bound的工作负载中，这个排序的管线状态列表有助于识别最昂贵的管线状态。展开一个管线状态可以找到使用该状态的命令列表。</p>
@@ -1494,7 +1494,7 @@
 <h3>使用逐行的Shader Profiling数据进行shader优化</h3>
 <p>在打开着色器后，你可以查找该管线状态中着色器的时间分解情况</p>
 <figure class="post-figure">
-<img alt="图 31：在打开着色器后，你可以查找该管线状态中着色器的时间分解情况" loading="lazy" src="assets/blog/xcode_image31.png"/>
+<img alt="图 31：在打开着色器后，你可以查找该管线状态中着色器的时间分解情况" loading="lazy" src="assets/blog/xcode_image31.png" width="920" height="565" decoding="async" />
 <figcaption>图 31：在打开着色器后，你可以查找该管线状态中着色器的时间分解情况</figcaption>
 </figure>
 <p>左侧边栏允许你查看着色器源文件和性能分析调用树。通过调用树，你可以通过每个帧的权重找到性能热点。</p>
@@ -1613,7 +1613,7 @@
 </div>
 </article>
 <!-- POST 7 -->
-<article class="post-card reveal" data-cat="render" data-post="7">
+<article class="post-card reveal" data-cat="render" data-post="7" data-thumb="assets/thumbs/thumb_image1.jpg">
 <span class="post-tag"><span class="dot"></span>渲染 · 资产 · 缩略图</span>
 <h2 class="post-title">资产缩略图渲染整理</h2>
 <div class="post-meta">
@@ -1632,85 +1632,85 @@
 <h3>保存</h3>
 <p>缩略图的保存在保存Package的时候，代码在SavePackage2</p>
 <figure class="post-figure">
-<img alt="图 1：缩略图的保存在保存Package的时候，代码在SavePackage…" loading="lazy" src="assets/blog/thumb_image1.png"/>
+<img alt="图 1：缩略图的保存在保存Package的时候，代码在SavePackage…" loading="lazy" src="assets/blog/thumb_image1.png" width="1158" height="349" decoding="async" />
 <figcaption>图 1：缩略图的保存在保存Package的时候，代码在SavePackage…</figcaption>
 </figure>
 <p>然后回调用<code>FObjectThumbnail</code>::Serialize方法来实现保存</p>
 <figure class="post-figure">
-<img alt="图 2：然后回调用FObjectThumbnail::Serialize方法…" loading="lazy" src="assets/blog/thumb_image2.png"/>
+<img alt="图 2：然后回调用FObjectThumbnail::Serialize方法…" loading="lazy" src="assets/blog/thumb_image2.png" width="840" height="79" decoding="async" />
 <figcaption>图 2：然后回调用FObjectThumbnail::Serialize方法…</figcaption>
 </figure>
 <p>默认情况下，UE启用的JPEG压缩。保存图片的时候会存CompressedImageData。</p>
 <figure class="post-figure">
-<img alt="图 3：默认情况下，UE启用的JPEG压缩。保存图片的时候会存Compres…" loading="lazy" src="assets/blog/thumb_image3.png"/>
+<img alt="图 3：默认情况下，UE启用的JPEG压缩。保存图片的时候会存Compres…" loading="lazy" src="assets/blog/thumb_image3.png" width="793" height="765" decoding="async" />
 <figcaption>图 3：默认情况下，UE启用的JPEG压缩。保存图片的时候会存Compres…</figcaption>
 </figure>
 <h3>加载</h3>
 <h3>加载的入口是LoadThumbnail</h3>
 <figure class="post-figure">
-<img alt="图 4：加载的入口是LoadThumbnail" loading="lazy" src="assets/blog/thumb_image4.png"/>
+<img alt="图 4：加载的入口是LoadThumbnail" loading="lazy" src="assets/blog/thumb_image4.png" width="1165" height="727" decoding="async" />
 <figcaption>图 4：加载的入口是LoadThumbnail</figcaption>
 </figure>
 <p>在此之前还会根据资源状态处理，例如：如果还在编译Shadering得放到等待栈。每一帧检测，编译完成会弹出开始LoadThumbanil。</p>
 <figure class="post-figure">
-<img alt="图 5：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…" loading="lazy" src="assets/blog/thumb_image5.png"/>
+<img alt="图 5：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…" loading="lazy" src="assets/blog/thumb_image5.png" width="1259" height="612" decoding="async" />
 <figcaption>图 5：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…</figcaption>
 </figure>
 <figure class="post-figure">
-<img alt="图 6：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…" loading="lazy" src="assets/blog/thumb_image6.png"/>
+<img alt="图 6：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…" loading="lazy" src="assets/blog/thumb_image6.png" width="1270" height="499" decoding="async" />
 <figcaption>图 6：在此之前还会根据资源状态处理，例如：如果还在编译Shadering得…</figcaption>
 </figure>
 <p>还会根据缩略图渲染模式选择不同渲染方式，属性变化还是实时渲染。</p>
 <figure class="post-figure">
-<img alt="图 7：还会根据缩略图渲染模式选择不同渲染方式，属性变化还是实时渲染。" loading="lazy" src="assets/blog/thumb_image7.png"/>
+<img alt="图 7：还会根据缩略图渲染模式选择不同渲染方式，属性变化还是实时渲染。" loading="lazy" src="assets/blog/thumb_image7.png" width="918" height="626" decoding="async" />
 <figcaption>图 7：还会根据缩略图渲染模式选择不同渲染方式，属性变化还是实时渲染。</figcaption>
 </figure>
 <p>往下走，就会正式的开始处理Loading。</p>
 <figure class="post-figure">
-<img alt="图 8：往下走，就会正式的开始处理Loading。" loading="lazy" src="assets/blog/thumb_image8.png"/>
+<img alt="图 8：往下走，就会正式的开始处理Loading。" loading="lazy" src="assets/blog/thumb_image8.png" width="865" height="234" decoding="async" />
 <figcaption>图 8：往下走，就会正式的开始处理Loading。</figcaption>
 </figure>
 <p>LoadingThumbnail会分为两部分，一个是缓存是否有，没有就读包。</p>
 <figure class="post-figure">
-<img alt="图 9：LoadingThumbnail会分为两部分，一个是缓存是否有，没有…" loading="lazy" src="assets/blog/thumb_image9.png"/>
+<img alt="图 9：LoadingThumbnail会分为两部分，一个是缓存是否有，没有…" loading="lazy" src="assets/blog/thumb_image9.png" width="1075" height="299" decoding="async" />
 <figcaption>图 9：LoadingThumbnail会分为两部分，一个是缓存是否有，没有…</figcaption>
 </figure>
 <p>读包的内容和上面的save一样会，调用LoadedThumbnail.Serialize方法。</p>
 <figure class="post-figure">
-<img alt="图 10：读包的内容和上面的save一样会，调用LoadedThumbnail…" loading="lazy" src="assets/blog/thumb_image10.png"/>
+<img alt="图 10：读包的内容和上面的save一样会，调用LoadedThumbnail…" loading="lazy" src="assets/blog/thumb_image10.png" width="1138" height="530" decoding="async" />
 <figcaption>图 10：读包的内容和上面的save一样会，调用LoadedThumbnail…</figcaption>
 </figure>
 <p>读取完成就会推给RHI进行渲染</p>
 <figure class="post-figure">
-<img alt="图 11：读取完成就会推给RHI进行渲染" loading="lazy" src="assets/blog/thumb_image11.png"/>
+<img alt="图 11：读取完成就会推给RHI进行渲染" loading="lazy" src="assets/blog/thumb_image11.png" width="1307" height="500" decoding="async" />
 <figcaption>图 11：读取完成就会推给RHI进行渲染</figcaption>
 </figure>
 <h3>绘制</h3>
 <p>由于UE5渲染资产的时候会以3D场景的形式拍快照，我们有时候需要定制里面的画面就需要对这里进行观察。</p>
 <p>我们以RenderThumbnail为入口观察发现。</p>
 <figure class="post-figure">
-<img alt="图 12：我们以RenderThumbnail为入口观察发现。" loading="lazy" src="assets/blog/thumb_image12.png"/>
+<img alt="图 12：我们以RenderThumbnail为入口观察发现。" loading="lazy" src="assets/blog/thumb_image12.png" width="1449" height="618" decoding="async" />
 <figcaption>图 12：我们以RenderThumbnail为入口观察发现。</figcaption>
 </figure>
 <p>这里会根据不同Object选择不同的Render。例如：动画序列的缩略图渲染，<code>UAnimSequenceThumbnailRenderer</code>等。</p>
 <p>不同类型的缩略图渲染器会创建对应类型的缩略图场景，以构建各自的资源缩略图预览场景，以<code>UStaticMeshThumbnailRenderer</code>为例</p>
 <figure class="post-figure">
-<img alt="图 13：不同类型的缩略图渲染器会创建对应类型的缩略图场景，以构建各自的资源缩…" loading="lazy" src="assets/blog/thumb_image13.png"/>
+<img alt="图 13：不同类型的缩略图渲染器会创建对应类型的缩略图场景，以构建各自的资源缩…" loading="lazy" src="assets/blog/thumb_image13.png" width="1449" height="870" decoding="async" />
 <figcaption>图 13：不同类型的缩略图渲染器会创建对应类型的缩略图场景，以构建各自的资源缩…</figcaption>
 </figure>
 <p>Draw方法每帧都会调用，这个会设置要看的模型资产。并且使用最大LOD，同时 关掉了所有高级效果。</p>
 <figure class="post-figure">
-<img alt="图 14：Draw方法每帧都会调用，这个会设置要看的模型资产。并且使用最大LO…" loading="lazy" src="assets/blog/thumb_image14.png"/>
+<img alt="图 14：Draw方法每帧都会调用，这个会设置要看的模型资产。并且使用最大LO…" loading="lazy" src="assets/blog/thumb_image14.png" width="425" height="61" decoding="async" />
 <figcaption>图 14：Draw方法每帧都会调用，这个会设置要看的模型资产。并且使用最大LO…</figcaption>
 </figure>
 <p>缩略图预览场景类负责构建各自类型的场景，<code>FStaticMeshThumbnailScene</code>派生自<code>FThumbnailPreviewScene</code>，<code>FThumbnailPreviewScene</code>派生自<code>FPreviewScene</code>；<code>FPreviewScene</code>类封装了一个用于预览或缩略图渲染的简单场景设置，比如摄像机的默认位置。有一个灯光，一个地面，一个附加灯，一个天空盒子。</p>
 <figure class="post-figure">
-<img alt="图 15：缩略图预览场景类负责构建各自类型的场景，FStaticMeshThu…" loading="lazy" src="assets/blog/thumb_image15.png"/>
+<img alt="图 15：缩略图预览场景类负责构建各自类型的场景，FStaticMeshThu…" loading="lazy" src="assets/blog/thumb_image15.png" width="994" height="771" decoding="async" />
 <figcaption>图 15：缩略图预览场景类负责构建各自类型的场景，FStaticMeshThu…</figcaption>
 </figure>
 <p><code>FPreviewScene</code>类继承了<code>FPreviewScene</code>，<code>FPreviewScene</code>会做一些更底层的初始化。类似于<code>UWorld</code>,WorldContext等。</p>
 <figure class="post-figure">
-<img alt="图 16：FPreviewScene类继承了FPreviewScene，FPr…" loading="lazy" src="assets/blog/thumb_image16.png"/>
+<img alt="图 16：FPreviewScene类继承了FPreviewScene，FPr…" loading="lazy" src="assets/blog/thumb_image16.png" width="1050" height="715" decoding="async" />
 <figcaption>图 16：FPreviewScene类继承了FPreviewScene，FPr…</figcaption>
 </figure>
 <h3>问题</h3>
@@ -1718,7 +1718,7 @@
 <p>要解决这个问题也比较简单：就是让<code>FPreviewScene</code>使用ES_31渲染。但是这么改会让引擎非常的不通用。所以，最终选择当前选什么管线预览，缩略图就用什么管线预览。</p>
 <p>基本思路：在<code>FPreviewScene</code>构造的时候，并且在PreviewWorld-&gt;<code>InitializeNewWorld()</code>之前初始化当前的FeatureLevel即可。</p>
 <figure class="post-figure">
-<img alt="图 17：基本思路：在FPreviewScene构造的时候，并且在Previe…" loading="lazy" src="assets/blog/thumb_image17.png"/>
+<img alt="图 17：基本思路：在FPreviewScene构造的时候，并且在Previe…" loading="lazy" src="assets/blog/thumb_image17.png" width="816" height="735" decoding="async" />
 <figcaption>图 17：基本思路：在FPreviewScene构造的时候，并且在Previe…</figcaption>
 </figure>
 </div>
@@ -1728,7 +1728,7 @@
 </div>
 </article>
 <!-- POST 8 -->
-<article class="post-card reveal" data-cat="render" data-post="8">
+<article class="post-card reveal" data-cat="render" data-post="8" data-thumb="assets/thumbs/rdg_image1.jpg">
 <span class="post-tag"><span class="dot"></span>渲染 · RDG · 渲染图</span>
 <h2 class="post-title">UE5 使用 RDG 使用总结</h2>
 <div class="post-meta">
@@ -1746,7 +1746,7 @@
 <p>渲染依赖图（Render Dependency Graph），也称为渲染图或 RDG，是一种即时模式应用程序编程接口（API），它将要编译和执行的渲染命令记录到图数据结构中。</p>
 <p>RDG通过自动化易出错的操作来简化高级渲染代码，并遍历依赖图以优化内存使用并在CPU和GPU上并行渲染通道。</p>
 <figure class="post-figure">
-<img alt="图 1：RDG通过自动化易出错的操作来简化高级渲染代码，并遍历依赖图以优化内…" loading="lazy" src="assets/blog/rdg_image1.jpeg"/>
+<img alt="图 1：RDG通过自动化易出错的操作来简化高级渲染代码，并遍历依赖图以优化内…" loading="lazy" src="assets/blog/rdg_image1.jpeg" width="1614" height="834" decoding="async" />
 <figcaption>图 1：RDG通过自动化易出错的操作来简化高级渲染代码，并遍历依赖图以优化内…</figcaption>
 </figure>
 <p>RDG在引擎渲染模块RHI层的上方，作为RHI和Render Pass调用的中间层，搜集所有Pass及其依赖资源的信息，通过将资源描述和资源分配解耦，RDG作为Pass管理器在搜集资源描述信息后，对Pass和资源进行分析，并结合硬件特性以最优的性能对Pass进行执行。</p>
@@ -1759,12 +1759,12 @@
 <p>一个RDG资源包含RHI Resource的描述符, 关联的RHI资源仅在(将此资源当作Pass参数传入的)Pass的Lambda函数体内有效。</p>
 <p>也就是Shader里的Texture2D&lt;XX&gt;和C++定义Shader的<code>SHADER</code>_PARAMETER_TEXTURE(Texture2D&lt;XX&gt; Name)这种资源。</p>
 <figure class="post-figure">
-<img alt="图 2：也就是Shader里的Texture2D&lt;XX&gt;和C++定义Shad…" loading="lazy" src="assets/blog/rdg_image2.png"/>
+<img alt="图 2：也就是Shader里的Texture2D&lt;XX&gt;和C++定义Shad…" loading="lazy" src="assets/blog/rdg_image2.png" width="816" height="172" decoding="async" />
 <figcaption>图 2：也就是Shader里的Texture2D&lt;XX&gt;和C++定义Shad…</figcaption>
 </figure>
 <p>所有RDG资源类型都提供一个<code>FRDGResource</code>::<code>GetRHI()</code>函数override，用于获取相应类型的RHI资源。 此函数严格限定在Pass的Lambda函数中执行。</p>
 <figure class="post-figure">
-<img alt="图 3：所有RDG资源类型都提供一个FRDGResource::GetRHI…" loading="lazy" src="assets/blog/rdg_image3.png"/>
+<img alt="图 3：所有RDG资源类型都提供一个FRDGResource::GetRHI…" loading="lazy" src="assets/blog/rdg_image3.png" width="1305" height="768" decoding="async" />
 <figcaption>图 3：所有RDG资源类型都提供一个FRDGResource::GetRHI…</figcaption>
 </figure>
 <p>下面是特定于Buffer和Texture的性质：</p>
@@ -1787,7 +1787,7 @@
 <p>Raster Pass走光栅化的pass，一般只要有片元着色器就是。常用接口<code>FPixelShaderUtils</code>::DrawFullscreenPixelShader。</p>
 <p>UE5 官方对封装了个AddFullscreenPass</p>
 <figure class="post-figure">
-<img alt="图 4：UE5 官方对封装了个AddFullscreenPass" loading="lazy" src="assets/blog/rdg_image4.png"/>
+<img alt="图 4：UE5 官方对封装了个AddFullscreenPass" loading="lazy" src="assets/blog/rdg_image4.png" width="1113" height="497" decoding="async" />
 <figcaption>图 4：UE5 官方对封装了个AddFullscreenPass</figcaption>
 </figure>
 <p>使用 <code>FRDGBuilder</code>::AddPass 函数添加通道，指定通道参数结构体和执行Lambda作为参数。</p>
@@ -1800,39 +1800,39 @@
 <p>理想情况下，所有通道Lambda都是线程安全的，但实际上一些通道仍然需要在执行期间创建或锁定RHI资源，这必须在渲染线程上完成。对于这些情况，请使用即时命令列表。</p>
 <p>以<code>FVirtualShadowMapProjectionCompositePS</code>为例，定义如下</p>
 <figure class="post-figure">
-<img alt="图 5：以FVirtualShadowMapProjectionCompos…" loading="lazy" src="assets/blog/rdg_image5.png"/>
+<img alt="图 5：以FVirtualShadowMapProjectionCompos…" loading="lazy" src="assets/blog/rdg_image5.png" width="1175" height="502" decoding="async" />
 <figcaption>图 5：以FVirtualShadowMapProjectionCompos…</figcaption>
 </figure>
 <p>注意代码中红框部分，资源的声明、申请、Pass的添加一定要用RDG专用的宏以及<code>FRDGBuilder</code>的接口，这样才能保证整个Pass被RDG管理。</p>
 <p>在使用的时候，也得使用<code>FRDGBuilder</code>的接口去创建<code>FParamaters</code>。</p>
 <figure class="post-figure">
-<img alt="图 6：在使用的时候，也得使用FRDGBuilder的接口去创建FParam…" loading="lazy" src="assets/blog/rdg_image6.png"/>
+<img alt="图 6：在使用的时候，也得使用FRDGBuilder的接口去创建FParam…" loading="lazy" src="assets/blog/rdg_image6.png" width="1273" height="295" decoding="async" />
 <figcaption>图 6：在使用的时候，也得使用FRDGBuilder的接口去创建FParam…</figcaption>
 </figure>
 <p>这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出Pass走完的结果。可以用下图的方式传，这个RT[0]其实是定义<code>FParamters</code>的时候定义的槽位。</p>
 <figure class="post-figure">
-<img alt="图 7：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…" loading="lazy" src="assets/blog/rdg_image7.png"/>
+<img alt="图 7：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…" loading="lazy" src="assets/blog/rdg_image7.png" width="1267" height="288" decoding="async" />
 <figcaption>图 7：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…</figcaption>
 </figure>
 <figure class="post-figure">
-<img alt="图 8：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…" loading="lazy" src="assets/blog/rdg_image8.png"/>
+<img alt="图 8：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…" loading="lazy" src="assets/blog/rdg_image8.png" width="1175" height="458" decoding="async" />
 <figcaption>图 8：这里需要注意，如果我们想要给一个Pass传一个RT。希望RT上绘制出…</figcaption>
 </figure>
 <p>我们会发现我们并没有执行  <code>GraphBuilder</code>.<code>Execute()</code>，Pass依然绘制成功了。那是因为SceneRenderer完成以后会执行一遍<code>GraphBuilder</code>.<code>Execute()</code>。</p>
 <figure class="post-figure">
-<img alt="图 9：我们会发现我们并没有执行  GraphBuilder.Execute…" loading="lazy" src="assets/blog/rdg_image9.png"/>
+<img alt="图 9：我们会发现我们并没有执行  GraphBuilder.Execute…" loading="lazy" src="assets/blog/rdg_image9.png" width="1244" height="707" decoding="async" />
 <figcaption>图 9：我们会发现我们并没有执行  GraphBuilder.Execute…</figcaption>
 </figure>
 <h3>Compute Pass</h3>
 <p>计算着色器Pass,一般用来处理并发计算。常用接口<code>FComputeShaderUtils</code>::AddPass。</p>
 <p>以<code>FClearVolumeCS</code>为例，定义如下：</p>
 <figure class="post-figure">
-<img alt="图 10：以FClearVolumeCS为例，定义如下：" loading="lazy" src="assets/blog/rdg_image10.png"/>
+<img alt="图 10：以FClearVolumeCS为例，定义如下：" loading="lazy" src="assets/blog/rdg_image10.png" width="1484" height="399" decoding="async" />
 <figcaption>图 10：以FClearVolumeCS为例，定义如下：</figcaption>
 </figure>
 <p>使用如下：</p>
 <figure class="post-figure">
-<img alt="图 11：使用如下：" loading="lazy" src="assets/blog/rdg_image11.png"/>
+<img alt="图 11：使用如下：" loading="lazy" src="assets/blog/rdg_image11.png" width="906" height="231" decoding="async" />
 <figcaption>图 11：使用如下：</figcaption>
 </figure>
 <h3>怎么回读Buffer</h3>
@@ -1842,31 +1842,31 @@
 <p>如果你在上面的调用<code>FPixelShaderUtils</code>::AddFullscreenPass 或者 <code>GraphBuilder</code>.AddPass 之后调用<code>GraphBuilder</code>.<code>Execute()</code>，会触发报错。因为图构建器API是单线程的，一次只能实例化一个实例，不含层级图或并列图。对每个场景渲染调用，延迟渲染器和移动渲染器都使用单个构建器实例。</p>
 <p>如果有些操作就是依赖<code>GraphBuilder</code>.<code>Execute()</code>，例如：</p>
 <figure class="post-figure">
-<img alt="图 12：如果有些操作就是依赖GraphBuilder.Execute()，例…" loading="lazy" src="assets/blog/rdg_image12.png"/>
+<img alt="图 12：如果有些操作就是依赖GraphBuilder.Execute()，例…" loading="lazy" src="assets/blog/rdg_image12.png" width="796" height="279" decoding="async" />
 <figcaption>图 12：如果有些操作就是依赖GraphBuilder.Execute()，例…</figcaption>
 </figure>
 <p>AppendBuffer 依赖上面<code>QueueBufferExtraction()</code>查询的结果，这个时候就必须执行<code>GraphBuilder</code>.<code>Execute()</code>。</p>
 <p>但是执行如果报错，你又没办法立即创建一个新的<code>GraphBuilder</code>。那么可以去在<code>GraphBuilder</code>.AddPass 传<code>FRHICommandListImmediate</code> 打破异步。</p>
 <figure class="post-figure">
-<img alt="图 13：但是执行如果报错，你又没办法立即创建一个新的GraphBuilder…" loading="lazy" src="assets/blog/rdg_image13.png"/>
+<img alt="图 13：但是执行如果报错，你又没办法立即创建一个新的GraphBuilder…" loading="lazy" src="assets/blog/rdg_image13.png" width="1249" height="165" decoding="async" />
 <figcaption>图 13：但是执行如果报错，你又没办法立即创建一个新的GraphBuilder…</figcaption>
 </figure>
 <h3>使用异步</h3>
 <p>UE提供了<code>FRHIGPUBufferReadback</code>用来实现RDG的回读。</p>
 <figure class="post-figure">
-<img alt="图 14：UE提供了FRHIGPUBufferReadback用来实现RDG的…" loading="lazy" src="assets/blog/rdg_image14.png"/>
+<img alt="图 14：UE提供了FRHIGPUBufferReadback用来实现RDG的…" loading="lazy" src="assets/blog/rdg_image14.png" width="1059" height="628" decoding="async" />
 <figcaption>图 14：UE提供了FRHIGPUBufferReadback用来实现RDG的…</figcaption>
 </figure>
 <h3>使用<code>GraphBuilder</code>.AddPass 增加多个Pass</h3>
 <p>可以使用<code>GraphBuilder</code>.AddPass 增加多个Pass，其实就是UE4的老办法，使用RHICmdList来处理Pass和资源。例如：使用Raster Pass计算完RT，把RT传递给CS从而获取结果。这种需求我们就可以使用这个方法。</p>
 <p>我们只需要在<code>GraphBuilder</code>.AddPass 加入多个Flag。</p>
 <figure class="post-figure">
-<img alt="图 15：我们只需要在GraphBuilder.AddPass 加入多个Fla…" loading="lazy" src="assets/blog/rdg_image15.png"/>
+<img alt="图 15：我们只需要在GraphBuilder.AddPass 加入多个Fla…" loading="lazy" src="assets/blog/rdg_image15.png" width="805" height="111" decoding="async" />
 <figcaption>图 15：我们只需要在GraphBuilder.AddPass 加入多个Fla…</figcaption>
 </figure>
 <p>这样就可以和UE4一样使用RHICmdList来操作Pass和资源。</p>
 <figure class="post-figure">
-<img alt="图 16：这样就可以和UE4一样使用RHICmdList来操作Pass和资源。" loading="lazy" src="assets/blog/rdg_image16.png"/>
+<img alt="图 16：这样就可以和UE4一样使用RHICmdList来操作Pass和资源。" loading="lazy" src="assets/blog/rdg_image16.png" width="1164" height="838" decoding="async" />
 <figcaption>图 16：这样就可以和UE4一样使用RHICmdList来操作Pass和资源。</figcaption>
 </figure>
 </div>
@@ -1876,7 +1876,7 @@
 </div>
 </article>
 <!-- POST 9 -->
-<article class="post-card reveal" data-cat="platform" data-post="9">
+<article class="post-card reveal" data-cat="platform" data-post="9" data-thumb="assets/thumbs/iosplist_image1.jpg">
 <span class="post-tag"><span class="dot"></span>iOS · Plist · 打包</span>
 <h2 class="post-title">iOS Plist 调研</h2>
 <div class="post-meta">
@@ -1891,45 +1891,45 @@
 <h3>plist 的生成流程</h3>
 <p>主要流程集中在<code>UEDeployIOS</code>.cs 的 GeneratePList 函数中。</p>
 <figure class="post-figure">
-<img alt="图 1：主要流程集中在UEDeployIOS.cs 的 GeneratePL…" loading="lazy" src="assets/blog/iosplist_image1.png"/>
+<img alt="图 1：主要流程集中在UEDeployIOS.cs 的 GeneratePL…" loading="lazy" src="assets/blog/iosplist_image1.png" width="1371" height="852" decoding="async" />
 <figcaption>图 1：主要流程集中在UEDeployIOS.cs 的 GeneratePL…</figcaption>
 </figure>
 <h3>修改Plist文件</h3>
 <p>最终进包的plist文件的是这个文件：Info.Template.plist</p>
 <figure class="post-figure">
-<img alt="图 2：最终进包的plist文件的是这个文件：Info.Template.p…" loading="lazy" src="assets/blog/iosplist_image2.png"/>
+<img alt="图 2：最终进包的plist文件的是这个文件：Info.Template.p…" loading="lazy" src="assets/blog/iosplist_image2.png" width="1165" height="725" decoding="async" />
 <figcaption>图 2：最终进包的plist文件的是这个文件：Info.Template.p…</figcaption>
 </figure>
 <p>在XCode上可以从这里看到此文件，注意这里有两个一个是Mac用的，一个是IOS用的。注意区分。</p>
 <figure class="post-figure">
-<img alt="图 3：在XCode上可以从这里看到此文件，注意这里有两个一个是Mac用的，…" loading="lazy" src="assets/blog/iosplist_image3.jpeg"/>
+<img alt="图 3：在XCode上可以从这里看到此文件，注意这里有两个一个是Mac用的，…" loading="lazy" src="assets/blog/iosplist_image3.jpeg" width="1076" height="1136" decoding="async" />
 <figcaption>图 3：在XCode上可以从这里看到此文件，注意这里有两个一个是Mac用的，…</figcaption>
 </figure>
 <p>最终进包的Info.Template.plist根据上面的代码也能看出来是根据这个路径的plist生成的。</p>
 <figure class="post-figure">
-<img alt="图 4：最终进包的Info.Template.plist根据上面的代码也能看…" loading="lazy" src="assets/blog/iosplist_image4.png"/>
+<img alt="图 4：最终进包的Info.Template.plist根据上面的代码也能看…" loading="lazy" src="assets/blog/iosplist_image4.png" width="408" height="18" decoding="async" />
 <figcaption>图 4：最终进包的Info.Template.plist根据上面的代码也能看…</figcaption>
 </figure>
 <p>这个文件的内容是在WritePlistFile方法里完成的。，这里可以根据UE提供的配置动态的更改plist内容。</p>
 <figure class="post-figure">
-<img alt="图 5：这个文件的内容是在WritePlistFile方法里完成的。，这里可…" loading="lazy" src="assets/blog/iosplist_image5.png"/>
+<img alt="图 5：这个文件的内容是在WritePlistFile方法里完成的。，这里可…" loading="lazy" src="assets/blog/iosplist_image5.png" width="1318" height="825" decoding="async" />
 <figcaption>图 5：这个文件的内容是在WritePlistFile方法里完成的。，这里可…</figcaption>
 </figure>
 <p>如果我们想添加自定义的plist内容，我们就需要利用UE的一个可配置参数。</p>
 <p>在 UE 的项目设置中，可以给 plist 添加元素，在 Project Settings-Platform-iOS-Additional Plist data 中可以填入一个字符串，它会被插入到 plist 文件中：</p>
 <figure class="post-figure">
-<img alt="图 6：在 UE 的项目设置中，可以给 plist 添加元素，在 Proje…" loading="lazy" src="assets/blog/iosplist_image6.png"/>
+<img alt="图 6：在 UE 的项目设置中，可以给 plist 添加元素，在 Proje…" loading="lazy" src="assets/blog/iosplist_image6.png" width="1267" height="699" decoding="async" />
 <figcaption>图 6：在 UE 的项目设置中，可以给 plist 添加元素，在 Proje…</figcaption>
 </figure>
 <p>此处的实现是在GeneratePList 里，GeneratePList 参数里有一个<code>UPLScripts</code> 参数。在通过传入进来的 <code>UPLScripts</code> 来构造出 UPL 对象：</p>
 <figure class="post-figure">
-<img alt="图 7：此处的实现是在GeneratePList 里，GeneratePLi…" loading="lazy" src="assets/blog/iosplist_image7.png"/>
+<img alt="图 7：此处的实现是在GeneratePList 里，GeneratePLi…" loading="lazy" src="assets/blog/iosplist_image7.png" width="1339" height="112" decoding="async" />
 <figcaption>图 7：此处的实现是在GeneratePList 里，GeneratePLi…</figcaption>
 </figure>
 <p>在最后调用的 GeneratedIOSList 中，构造出默认的 pliat 内容、从 Additional Plist Data 中读取的内容、以及调用 UPL 来处理 plist 的内容，UPL 的过程是最后处理的。</p>
 <p>而且需要注意的是，在 GeneratedPList 函数中，通过 GeneratedIOSList 获取所有模块中添加的 UPL.xml 文件，然后把这些 xml 文件合并成一个，注意合并的顺序是 AdditionalProperties 的顺序，最后添加的 UPL 会放在最后执行，在一个项目中如果有多个使用 UPL 的操作要注意顺序问题。</p>
 <figure class="post-figure">
-<img alt="图 8：而且需要注意的是，在 GeneratedPList 函数中，通过 G…" loading="lazy" src="assets/blog/iosplist_image8.png"/>
+<img alt="图 8：而且需要注意的是，在 GeneratedPList 函数中，通过 G…" loading="lazy" src="assets/blog/iosplist_image8.png" width="1403" height="636" decoding="async" />
 <figcaption>图 8：而且需要注意的是，在 GeneratedPList 函数中，通过 G…</figcaption>
 </figure>
 </div>
@@ -1939,7 +1939,7 @@
 </div>
 </article>
 <!-- POST 10 -->
-<article class="post-card reveal" data-cat="anim" data-post="10">
+<article class="post-card reveal" data-cat="anim" data-post="10" data-thumb="assets/thumbs/animcalc_image1.jpg">
 <span class="post-tag"><span class="dot"></span>动画 · 并行计算 · 性能</span>
 <h2 class="post-title">UE5 动画并行计算的调研</h2>
 <div class="post-meta">
@@ -1961,38 +1961,38 @@
 <p>根据需要收集分发动画通知</p>
 <p>首先从引擎Tick调到<code>USkeletalMeshComponent</code>::TickComponent</p>
 <figure class="post-figure">
-<img alt="图 1：首先从引擎Tick调到USkeletalMeshComponent:…" loading="lazy" src="assets/blog/animcalc_image1.png"/>
+<img alt="图 1：首先从引擎Tick调到USkeletalMeshComponent:…" loading="lazy" src="assets/blog/animcalc_image1.png" width="1086" height="193" decoding="async" />
 <figcaption>图 1：首先从引擎Tick调到USkeletalMeshComponent:…</figcaption>
 </figure>
 <p><code>USkeletalMeshComponent</code>::TickComponent最重要是调用了父类的TickComponent。</p>
 <figure class="post-figure">
-<img alt="图 2：USkeletalMeshComponent::TickCompon…" loading="lazy" src="assets/blog/animcalc_image2.png"/>
+<img alt="图 2：USkeletalMeshComponent::TickCompon…" loading="lazy" src="assets/blog/animcalc_image2.png" width="487" height="48" decoding="async" />
 <figcaption>图 2：USkeletalMeshComponent::TickCompon…</figcaption>
 </figure>
 <p>这样会走到<code>USkinnedMeshComponent</code>::TickComponent，在这里会调用两个非常重要的方法，TickPos和RefreshBoneTransforms。</p>
 <figure class="post-figure">
-<img alt="图 3：这样会走到USkinnedMeshComponent::TickCo…" loading="lazy" src="assets/blog/animcalc_image3.png"/>
+<img alt="图 3：这样会走到USkinnedMeshComponent::TickCo…" loading="lazy" src="assets/blog/animcalc_image3.png" width="1002" height="786" decoding="async" />
 <figcaption>图 3：这样会走到USkinnedMeshComponent::TickCo…</figcaption>
 </figure>
 <p>TickPos会调用子类的TickPose方法，也就是<code>USkeletalMeshComponent</code>::TickPose。这里会根据URO还是预算系统算出一个DeltalTime来限制帧率。同时，会走进刷新动画蓝图的TickAnimation。</p>
 <figure class="post-figure">
-<img alt="图 4：TickPos会调用子类的TickPose方法，也就是USkelet…" loading="lazy" src="assets/blog/animcalc_image4.png"/>
+<img alt="图 4：TickPos会调用子类的TickPose方法，也就是USkelet…" loading="lazy" src="assets/blog/animcalc_image4.png" width="901" height="727" decoding="async" />
 <figcaption>图 4：TickPos会调用子类的TickPose方法，也就是USkelet…</figcaption>
 </figure>
 <p>再TickAnimation里，会调用TickAnimInstances。从而执行动画蓝图的Tick方法</p>
 <figure class="post-figure">
-<img alt="图 5：再TickAnimation里，会调用TickAnimInstanc…" loading="lazy" src="assets/blog/animcalc_image5.png"/>
+<img alt="图 5：再TickAnimation里，会调用TickAnimInstanc…" loading="lazy" src="assets/blog/animcalc_image5.png" width="899" height="203" decoding="async" />
 <figcaption>图 5：再TickAnimation里，会调用TickAnimInstanc…</figcaption>
 </figure>
 <p>这里UE5新加了一个LinkAnimGraph功能，可以共享动画蓝图。所以，我们还得调用共享蓝图的Tick。</p>
 <p>LinkedAnimInstance是我们通过LinkAnimGraph动画节点链接上去的动画蓝图，可以作为独立的动画功能模块，根据需要使用，可动态插拔，在实际使用中更具灵活性，如下图所示：</p>
 <figure class="post-figure">
-<img alt="图 6：LinkedAnimInstance是我们通过LinkAnimGra…" loading="lazy" src="assets/blog/animcalc_image6.png"/>
+<img alt="图 6：LinkedAnimInstance是我们通过LinkAnimGra…" loading="lazy" src="assets/blog/animcalc_image6.png" width="314" height="204" decoding="async" />
 <figcaption>图 6：LinkedAnimInstance是我们通过LinkAnimGra…</figcaption>
 </figure>
 <p>而AnimScriptInstance其实就是常规的动画蓝图，每个SkeletalMeshComponent都只有一个动画蓝图，所以代码里只存了一个，正常的动画，比如Locomotion、动画分层、混合、Montage插槽都是在这个Instance里完成的，会装载在SkeletalMesh组件的插槽上：</p>
 <figure class="post-figure">
-<img alt="图 7：而AnimScriptInstance其实就是常规的动画蓝图，每个S…" loading="lazy" src="assets/blog/animcalc_image7.png"/>
+<img alt="图 7：而AnimScriptInstance其实就是常规的动画蓝图，每个S…" loading="lazy" src="assets/blog/animcalc_image7.png" width="705" height="163" decoding="async" />
 <figcaption>图 7：而AnimScriptInstance其实就是常规的动画蓝图，每个S…</figcaption>
 </figure>
 <p>具体顺序是：</p>
@@ -2001,12 +2001,12 @@
 <p>调用自己的动画蓝图UpdateAnimation</p>
 <p>调用Mesh的后期动画蓝图UpdateAnimation</p>
 <figure class="post-figure">
-<img alt="图 8：调用Mesh的后期动画蓝图UpdateAnimation" loading="lazy" src="assets/blog/animcalc_image8.png"/>
+<img alt="图 8：调用Mesh的后期动画蓝图UpdateAnimation" loading="lazy" src="assets/blog/animcalc_image8.png" width="989" height="579" decoding="async" />
 <figcaption>图 8：调用Mesh的后期动画蓝图UpdateAnimation</figcaption>
 </figure>
 <p>在UpdateAnimation中，会更新蒙太奇并且调用蓝图和C++Update的回调。这里需要注意C++的Update会提前与蓝图执行。</p>
 <figure class="post-figure">
-<img alt="图 9：在UpdateAnimation中，会更新蒙太奇并且调用蓝图和C++…" loading="lazy" src="assets/blog/animcalc_image9.png"/>
+<img alt="图 9：在UpdateAnimation中，会更新蒙太奇并且调用蓝图和C++…" loading="lazy" src="assets/blog/animcalc_image9.png" width="728" height="772" decoding="async" />
 <figcaption>图 9：在UpdateAnimation中，会更新蒙太奇并且调用蓝图和C++…</figcaption>
 </figure>
 <h3>动画系统的异步机制</h3>
@@ -2014,19 +2014,19 @@
 <p class="note">Plain TextUSkinnedMeshComponent::TickComponent()    USkinnedMeshComponent::RefreshBoneTransforms()        USkinnedMeshComponent::DispatchParallelEvaluationTasks()    USkinnedMeshComponent::DispatchParallelTickPose()        USkinnedMeshComponent::DispatchParallelEvaluationTasks()</p>
 <p>在SkinnedMeshComponent的TickComponent里会执行RefreshBoneTransforms或者DispatchParallelTickPose（根据选择的动画更新模式），这个两个方法都会调用HandleExistingParallelEvaluationTask。HandleExistingParallelEvaluationTask这个里面会处理正在异步更新AnimGraph的Task，等到它完成</p>
 <figure class="post-figure">
-<img alt="图 10：在SkinnedMeshComponent的TickComponen…" loading="lazy" src="assets/blog/animcalc_image10.png"/>
+<img alt="图 10：在SkinnedMeshComponent的TickComponen…" loading="lazy" src="assets/blog/animcalc_image10.png" width="705" height="596" decoding="async" />
 <figcaption>图 10：在SkinnedMeshComponent的TickComponen…</figcaption>
 </figure>
 <p>如果完成那么调用DispatchParallelEvaluationTasks，这里会根据一个TickFunction创建一个Task。</p>
 <h3>这里需要注意</h3>
 <p>接下来会准备正常的处理异步机制，首先判断当前Update能不能真正异步UpdateAnimation，这里还做了一次条件判断。</p>
 <figure class="post-figure">
-<img alt="图 11：接下来会准备正常的处理异步机制，首先判断当前Update能不能真正异…" loading="lazy" src="assets/blog/animcalc_image11.png"/>
+<img alt="图 11：接下来会准备正常的处理异步机制，首先判断当前Update能不能真正异…" loading="lazy" src="assets/blog/animcalc_image11.png" width="1038" height="504" decoding="async" />
 <figcaption>图 11：接下来会准备正常的处理异步机制，首先判断当前Update能不能真正异…</figcaption>
 </figure>
 <p>基本上就是看动画蓝图有没有设置异步，同时,判断当前是不是RootMotion的更新之类的。</p>
 <figure class="post-figure">
-<img alt="图 12：基本上就是看动画蓝图有没有设置异步，同时,判断当前是不是RootMo…" loading="lazy" src="assets/blog/animcalc_image12.png"/>
+<img alt="图 12：基本上就是看动画蓝图有没有设置异步，同时,判断当前是不是RootMo…" loading="lazy" src="assets/blog/animcalc_image12.png" width="998" height="579" decoding="async" />
 <figcaption>图 12：基本上就是看动画蓝图有没有设置异步，同时,判断当前是不是RootMo…</figcaption>
 </figure>
 <p>如果条件都满足，那么会调用ParallelUpdateAnimation。</p>
@@ -2037,19 +2037,19 @@
 <p>目前项目上并没有使用这个两个方法，将复杂的Tick运算放到WorkThread上。</p>
 <p>根据实际数据来看，GameThread上有很多动画蓝图的方法。</p>
 <figure class="post-figure">
-<img alt="图 13：根据实际数据来看，GameThread上有很多动画蓝图的方法。" loading="lazy" src="assets/blog/animcalc_image13.png"/>
+<img alt="图 13：根据实际数据来看，GameThread上有很多动画蓝图的方法。" loading="lazy" src="assets/blog/animcalc_image13.png" width="1364" height="504" decoding="async" />
 <figcaption>图 13：根据实际数据来看，GameThread上有很多动画蓝图的方法。</figcaption>
 </figure>
 <p>同时因为是多线程，为了保证线程安全，这两个方法中要访问和写的变量都必须是线程安全的，要确保在异步执行<code>FAnimInstanceProxy</code>::<code>UpdateAnimation()</code>时，GameThread不会修改这些变量。</p>
 <p>UE提供了PropertyAccess节点，用来在<code>BlueprintThreadSafeUpdateAnimation()</code>函数中使用到的GameThread数据。</p>
 <figure class="post-figure">
-<img alt="图 14：UE提供了PropertyAccess节点，用来在Blueprint…" loading="lazy" src="assets/blog/animcalc_image14.png"/>
+<img alt="图 14：UE提供了PropertyAccess节点，用来在Blueprint…" loading="lazy" src="assets/blog/animcalc_image14.png" width="381" height="422" decoding="async" />
 <figcaption>图 14：UE提供了PropertyAccess节点，用来在Blueprint…</figcaption>
 </figure>
 <p>通过PropertyAccess访问的属性或者方法，都会在GameThread中UpdateAnimation时将这些数据缓存到<code>UAnimInstance</code>中，随后在多线程执行BlueprintThreadSafeUpdateAnimation时，PropertyAccess Node会直接访问这些缓存的值，而不是实际指向的函数或变量，以保证线程安全。</p>
 <p>PropertyAccess使用AnimSubSystem实现了缓存变量和函数返回值。</p>
 <figure class="post-figure">
-<img alt="图 15：PropertyAccess使用AnimSubSystem实现了缓存…" loading="lazy" src="assets/blog/animcalc_image15.png"/>
+<img alt="图 15：PropertyAccess使用AnimSubSystem实现了缓存…" loading="lazy" src="assets/blog/animcalc_image15.png" width="1340" height="220" decoding="async" />
 <figcaption>图 15：PropertyAccess使用AnimSubSystem实现了缓存…</figcaption>
 </figure>
 </div>
@@ -2085,9 +2085,9 @@ public:
     int base1_2;
 };</pre>
 <p>对象大小及偏移:</p>
-<figure class="post-figure"><img alt="图 1：对象大小及偏移:" loading="lazy" src="assets/blog/cpp_image1.png"/><figcaption>图 1：对象大小及偏移:</figcaption></figure>
+<figure class="post-figure"><img alt="图 1：对象大小及偏移:" loading="lazy" src="assets/blog/cpp_image1.png" width="968" height="125" decoding="async" /><figcaption>图 1：对象大小及偏移:</figcaption></figure>
 <p>可知对象布局:</p>
-<figure class="post-figure"><img alt="图 2：可知对象布局:" loading="lazy" src="assets/blog/cpp_image2.png"/><figcaption>图 2：可知对象布局:</figcaption></figure>
+<figure class="post-figure"><img alt="图 2：可知对象布局:" loading="lazy" src="assets/blog/cpp_image2.png" width="100" height="65" decoding="async" /><figcaption>图 2：可知对象布局:</figcaption></figure>
 <p>可以看到, 成员变量是按照定义的顺序来保存的, 最先声明的在最上边, 然后依次保存!</p>
 <p>类对象的大小就是所有成员变量大小之和.</p>
 <h3>没有虚函数的对象</h3>
@@ -2100,7 +2100,7 @@ public:
     void foo(){}
 };</pre>
 <p>结果如下:</p>
-<figure class="post-figure"><img alt="图 3：结果如下:" loading="lazy" src="assets/blog/cpp_image3.png"/><figcaption>图 3：结果如下:</figcaption></figure>
+<figure class="post-figure"><img alt="图 3：结果如下:" loading="lazy" src="assets/blog/cpp_image3.png" width="973" height="119" decoding="async" /><figcaption>图 3：结果如下:</figcaption></figure>
 <p>和前面的结果是一样的? 不需要有什么疑问对吧?</p>
 <p>因为如果一个函数不是虚函数,那么他就不可能会发生动态绑定,也就不会对对象的布局造成任何影响.</p>
 <p>当调用一个非虚函数时, 那么调用的一定就是当前指针类型拥有的那个成员函数. 这种调用机制在编译时期就确定下来了.</p>
@@ -2114,13 +2114,13 @@ public:
     virtual void base1_fun1() {}
 };</pre>
 <p>结果如下:</p>
-<figure class="post-figure"><img alt="图 4：结果如下:" loading="lazy" src="assets/blog/cpp_image4.png"/><figcaption>图 4：结果如下:</figcaption></figure>
+<figure class="post-figure"><img alt="图 4：结果如下:" loading="lazy" src="assets/blog/cpp_image4.png" width="976" height="128" decoding="async" /><figcaption>图 4：结果如下:</figcaption></figure>
 <p>咦? 多了4个字节? 且 base1_1 和 base1_2 的偏移都各自向后多了4个字节!</p>
 <p>说明类对象的最前面被多加了4个字节的"东东", what's it?</p>
 <p>现在, 我们通过VS2013来瞧瞧类Base1的变量b1的内存布局情况:</p>
 <p>(由于我没有写构造函数, 所以变量的数据没有根据, 但虚函数是编译器为我们构造的, 数据正确!)</p>
 <p>(Debug模式下, 未初始化的变量值为0xCCCCCCCC, 即:-858983460)</p>
-<figure class="post-figure"><img alt="图 5：(Debug模式下, 未初始化的变量值为0xCCCCCCCC, 即:-858…" loading="lazy" src="assets/blog/cpp_image5.png"/><figcaption>图 5：(Debug模式下, 未初始化的变量值为0xCCCCCCCC, 即:-858…</figcaption></figure>
+<figure class="post-figure"><img alt="图 5：(Debug模式下, 未初始化的变量值为0xCCCCCCCC, 即:-858…" loading="lazy" src="assets/blog/cpp_image5.png" width="616" height="176" decoding="async" /><figcaption>图 5：(Debug模式下, 未初始化的变量值为0xCCCCCCCC, 即:-858…</figcaption></figure>
 <p>看到没? base1_1前面多了一个变量 __vfptr(常说的虚函数表vtable指针), 其类型为void**, 这说明它是一个void*指针(注意:不是数组).</p>
 <p>再看看[0]元素, 其类型为void*, 其值为 ConsoleApplication2.exe!<code>Base1</code>::base1_fun1(void), 这是什么意思呢? 如果对WinDbg比较熟悉, 那么应该知道这是一种惯用表示手法, 她就是指 <code>Base1</code>::base1_fun1() 函数的地址.</p>
 <p>可得, __vfptr的定义伪代码大概如下:</p>
@@ -2128,13 +2128,13 @@ public:
 const void**  __vfptr = &amp;__fun[0];</pre>
 <p>值得注意的是:</p>
 <ul><li>上面只是一种伪代码方式, 语法不一定能通过</li><li>该类的对象大小为12个字节, 大小及偏移信息如下:</li></ul>
-<figure class="post-figure"><img alt="图 6：值得注意的是:" loading="lazy" src="assets/blog/cpp_image6.png"/><figcaption>图 6：值得注意的是:</figcaption></figure>
+<figure class="post-figure"><img alt="图 6：值得注意的是:" loading="lazy" src="assets/blog/cpp_image6.png" width="934" height="165" decoding="async" /><figcaption>图 6：值得注意的是:</figcaption></figure>
 <p>3.大家有没有留意这个__vfptr? 为什么它被定义成一个指向【指针数组】的指针, 而不是直接定义成一个指针数组呢?</p>
 <p>我为什么要提这样一个问题? 因为如果仅是一个指针的情况, 您就无法轻易地修改那个数组里面的内容, 因为她并不属于类对象的一部分.</p>
 <p>属于类对象的, 仅是一个指向虚函数表的一个指针__vfptr而已, 下一节我们将继续讨论这个问题.</p>
 <p>4.注意到__vfptr前面的const修饰. 她修饰的是那个虚函数表, 而不是__vfptr</p>
 <p>现在的对象布局如下:</p>
-<figure class="post-figure"><img alt="图 7：现在的对象布局如下:" loading="lazy" src="assets/blog/cpp_image7.png"/><figcaption>图 7：现在的对象布局如下:</figcaption></figure>
+<figure class="post-figure"><img alt="图 7：现在的对象布局如下:" loading="lazy" src="assets/blog/cpp_image7.png" width="231" height="87" decoding="async" /><figcaption>图 7：现在的对象布局如下:</figcaption></figure>
 <p>虚函数指针__vfptr位于所有的成员变量之前定义.</p>
 <p>注意到: 我并未在此说明__vfptr的具体指向, 只是说明了现在类对象的布局情况.</p>
 <p>接下来看一个稍微复杂一点的情况, 我将清楚地描述虚函数表的构成.</p>
@@ -2149,23 +2149,23 @@ public:
     virtual void base1_fun2() {}
 };</pre>
 <p>大小以及偏移信息如下:</p>
-<figure class="post-figure"><img alt="图 8：大小以及偏移信息如下:" loading="lazy" src="assets/blog/cpp_image8.png"/><figcaption>图 8：大小以及偏移信息如下:</figcaption></figure>
+<figure class="post-figure"><img alt="图 8：大小以及偏移信息如下:" loading="lazy" src="assets/blog/cpp_image8.png" width="275" height="104" decoding="async" /><figcaption>图 8：大小以及偏移信息如下:</figcaption></figure>
 <p>有情况!? 多了一个虚函数, 类对象大小却依然是12个字节!</p>
 <p>再来看看VS形象的表现:</p>
-<figure class="post-figure"><img alt="图 9：再来看看VS形象的表现:" loading="lazy" src="assets/blog/cpp_image9.png"/><figcaption>图 9：再来看看VS形象的表现:</figcaption></figure>
+<figure class="post-figure"><img alt="图 9：再来看看VS形象的表现:" loading="lazy" src="assets/blog/cpp_image9.png" width="623" height="184" decoding="async" /><figcaption>图 9：再来看看VS形象的表现:</figcaption></figure>
 <p>呀, __vfptr所指向的函数指针数组中出现了第2个元素, 其值为Base1类的第2个虚函数base1_fun2()的函数地址.</p>
 <p>现在, 虚函数指针以及虚函数表的伪定义大概如下:</p>
 <pre class="post-code">void* __fun[] = { &amp;Base1::base1_fun1, &amp;Base1::base1_fun2 };
 const void** __vfptr = &amp;__fun[0];</pre>
 <p>前面已经提到过: __vfptr只是一个指针, 她指向一个数组, 并且: 这个数组没有包含到类定义内部, 那么她们之间是怎样一个关系呢?</p>
 <p>不妨, 我们再定义一个类的变量b2, 现在再来看看__vfptr的指向:</p>
-<figure class="post-figure"><img alt="图 10：不妨, 我们再定义一个类的变量b2, 现在再来看看__vfptr的指向:" loading="lazy" src="assets/blog/cpp_image10.png"/><figcaption>图 10：不妨, 我们再定义一个类的变量b2, 现在再来看看__vfptr的指向:</figcaption></figure>
+<figure class="post-figure"><img alt="图 10：不妨, 我们再定义一个类的变量b2, 现在再来看看__vfptr的指向:" loading="lazy" src="assets/blog/cpp_image10.png" width="546" height="196" decoding="async" /><figcaption>图 10：不妨, 我们再定义一个类的变量b2, 现在再来看看__vfptr的指向:</figcaption></figure>
 <p>通过Watch 1窗口我们看到:</p>
 <ul><li>b1和b2是类的两个变量, 理所当然, 她们的地址是不同的(见 &amp;b1 和 &amp;b2)</li><li>虽然b1和b2是类的两个变量, 但是: 她们的__vfptr的指向却是同一个虚函数表</li></ul>
 <p>由此我们可以总结出:</p>
 <p>同一个类的不同实例共用同一份虚函数表, 她们都通过一个所谓的虚函数表指针__vfptr(定义为void**类型)指向该虚函数表.</p>
 <p>是时候该展示一下类对象的内存布局情况了:</p>
-<figure class="post-figure"><img alt="图 11：是时候该展示一下类对象的内存布局情况了:" loading="lazy" src="assets/blog/cpp_image11.png"/><figcaption>图 11：是时候该展示一下类对象的内存布局情况了:</figcaption></figure>
+<figure class="post-figure"><img alt="图 11：是时候该展示一下类对象的内存布局情况了:" loading="lazy" src="assets/blog/cpp_image11.png" width="550" height="227" decoding="async" /><figcaption>图 11：是时候该展示一下类对象的内存布局情况了:</figcaption></figure>
 <p>不出意外, 很清晰明了地展示出来了吧? :-) hoho~~</p>
 <p>那么问题就来了! 这个虚函数表保存在哪里呢? 其实, 我们无需过分追究她位于哪里, 重点是:</p>
 <ul><li>她是编译器在编译时期为我们创建好的, 只存在一份</li><li>定义类对象时, 编译器自动将类对象的__vfptr指向这个虚函数表</li></ul>
@@ -2187,13 +2187,13 @@ public:
     int derive1_2;
 };</pre>
 <p>我们再来看看现在的内存布局(定义为Derive1 d1):</p>
-<figure class="post-figure"><img alt="图 12：我们再来看看现在的内存布局(定义为Derive1 d1):" loading="lazy" src="assets/blog/cpp_image12.png"/><figcaption>图 12：我们再来看看现在的内存布局(定义为Derive1 d1):</figcaption></figure>
+<figure class="post-figure"><img alt="图 12：我们再来看看现在的内存布局(定义为Derive1 d1):" loading="lazy" src="assets/blog/cpp_image12.png" width="557" height="119" decoding="async" /><figcaption>图 12：我们再来看看现在的内存布局(定义为Derive1 d1):</figcaption></figure>
 <p>没错! 基类在上边, 继承类的成员在下边依次定义! 展开来看看:</p>
-<figure class="post-figure"><img alt="图 13：没错! 基类在上边, 继承类的成员在下边依次定义! 展开来看看:" loading="lazy" src="assets/blog/cpp_image13.png"/><figcaption>图 13：没错! 基类在上边, 继承类的成员在下边依次定义! 展开来看看:</figcaption></figure>
+<figure class="post-figure"><img alt="图 13：没错! 基类在上边, 继承类的成员在下边依次定义! 展开来看看:" loading="lazy" src="assets/blog/cpp_image13.png" width="553" height="214" decoding="async" /><figcaption>图 13：没错! 基类在上边, 继承类的成员在下边依次定义! 展开来看看:</figcaption></figure>
 <p>经展开后来看, 前面部分完全就是Base1的东西: 虚函数表指针+成员变量定义.</p>
 <p>并且, Base1的虚函数表的[0][1]两项还是其本身就拥有的函数: base1_fun1() 和 base1_fun2().</p>
 <p>现在类的布局情况应该是下面这样:</p>
-<figure class="post-figure"><img alt="图 14：现在类的布局情况应该是下面这样:" loading="lazy" src="assets/blog/cpp_image14.png"/><figcaption>图 14：现在类的布局情况应该是下面这样:</figcaption></figure>
+<figure class="post-figure"><img alt="图 14：现在类的布局情况应该是下面这样:" loading="lazy" src="assets/blog/cpp_image14.png" width="595" height="180" decoding="async" /><figcaption>图 14：现在类的布局情况应该是下面这样:</figcaption></figure>
 <h3>本身不存在虚函数(不严谨)但存在基类虚函数覆盖的单继承类的内存布局</h3>
 <p>标题`本身不存在虚函数`的说法有些不严谨, 我的意思是说: 除经过继承而得来的基类虚函数以外, 自身没有再定义其它的虚函数.</p>
 <p>Ok, 既然存在基类虚函数覆盖, 那么来看看接下来的代码会产生何种影响:</p>
@@ -2214,11 +2214,11 @@ public:
     virtual void base1_fun1() {}
 };</pre>
 <p>可以看到, Derive1类 重写了Base1类的base1_fun1()函数, 也就是常说的虚函数覆盖. 现在是怎样布局的呢?</p>
-<figure class="post-figure"><img alt="图 15：可以看到, Derive1类 重写了Base1类的base1_fun1()函…" loading="lazy" src="assets/blog/cpp_image15.png"/><figcaption>图 15：可以看到, Derive1类 重写了Base1类的base1_fun1()函…</figcaption></figure>
+<figure class="post-figure"><img alt="图 15：可以看到, Derive1类 重写了Base1类的base1_fun1()函…" loading="lazy" src="assets/blog/cpp_image15.png" width="727" height="218" decoding="async" /><figcaption>图 15：可以看到, Derive1类 重写了Base1类的base1_fun1()函…</figcaption></figure>
 <p>特别注意我高亮的那一行: 原本是Base1::base1_fun1(), 但由于继承类重写了基类Base1的此方法, 所以现在变成了Derive1::base1_fun1()!</p>
 <p>那么, 无论是通过Derive1的指针还是Base1的指针来调用此方法, 调用的都将是被继承类重写后的那个方法(函数), 多态发生鸟!!!</p>
 <p>那么新的布局图:</p>
-<figure class="post-figure"><img alt="图 16：那么新的布局图:" loading="lazy" src="assets/blog/cpp_image16.png"/><figcaption>图 16：那么新的布局图:</figcaption></figure>
+<figure class="post-figure"><img alt="图 16：那么新的布局图:" loading="lazy" src="assets/blog/cpp_image16.png" width="644" height="188" decoding="async" /><figcaption>图 16：那么新的布局图:</figcaption></figure>
 <h3>定义了基类没有的虚函数的单继承的类对象布局</h3>
 <p>说明一下: 由于前面一种情况只会造成覆盖基类虚函数表的指针, 所以接下来我不再同时讨论虚函数覆盖的情况.</p>
 <p>继续贴代码:</p>
@@ -2238,11 +2238,11 @@ public:
     virtual void derive1_fun1() {}
 };</pre>
 <p>和第5类不同的是多了一个自身定义的虚函数. 和第6类不同的是没有基类虚函数的覆盖.</p>
-<figure class="post-figure"><img alt="图 17：和第5类不同的是多了一个自身定义的虚函数. 和第6类不同的是没有基类虚函数的…" loading="lazy" src="assets/blog/cpp_image17.png"/><figcaption>图 17：和第5类不同的是多了一个自身定义的虚函数. 和第6类不同的是没有基类虚函数的…</figcaption></figure>
+<figure class="post-figure"><img alt="图 17：和第5类不同的是多了一个自身定义的虚函数. 和第6类不同的是没有基类虚函数的…" loading="lazy" src="assets/blog/cpp_image17.png" width="705" height="229" decoding="async" /><figcaption>图 17：和第5类不同的是多了一个自身定义的虚函数. 和第6类不同的是没有基类虚函数的…</figcaption></figure>
 <p>咦, 有没有发现问题? 表面上看来几乎和第5种情况完全一样? 为嘛呢?</p>
 <p>现在继承类明明定义了自身的虚函数, 但不见了??</p>
 <p>那么, 来看看类对象的大小, 以及成员偏移情况吧:</p>
-<figure class="post-figure"><img alt="图 18：那么, 来看看类对象的大小, 以及成员偏移情况吧:" loading="lazy" src="assets/blog/cpp_image18.png"/><figcaption>图 18：那么, 来看看类对象的大小, 以及成员偏移情况吧:</figcaption></figure>
+<figure class="post-figure"><img alt="图 18：那么, 来看看类对象的大小, 以及成员偏移情况吧:" loading="lazy" src="assets/blog/cpp_image18.png" width="329" height="81" decoding="async" /><figcaption>图 18：那么, 来看看类对象的大小, 以及成员偏移情况吧:</figcaption></figure>
 <p>居然没有变化!!! 前面12个字节是Base1的, 有没有觉得很奇怪?</p>
 <p>好吧, 既然表面上没办法了, 我们就只能从汇编入手了, 来看看调用derive1_fun1()时的代码:</p>
 <pre class="post-code">Derive1 d1;
@@ -2264,7 +2264,7 @@ pd1-&gt;derive1_fun1();</pre>
 <p>第7行: 调用虚函数.</p>
 <p>结果:</p>
 <ul><li>现在我们应该知道内幕了! 继承类Derive1的虚函数表被加在基类的后面! 事实的确就是这样!</li><li>由于Base1只知道自己的两个虚函数索引[0][1], 所以就算在后面加上了[2], Base1根本不知情, 不会对她造成任何影响.</li><li>如果基类没有虚函数呢? 这个问题我们留到第9小节再来讨论!</li></ul>
-<figure class="post-figure"><img alt="图 19：结果:" loading="lazy" src="assets/blog/cpp_image19.png"/><figcaption>图 19：结果:</figcaption></figure>
+<figure class="post-figure"><img alt="图 19：结果:" loading="lazy" src="assets/blog/cpp_image19.png" width="676" height="229" decoding="async" /><figcaption>图 19：结果:</figcaption></figure>
 <h3>多继承且存在虚函数覆盖同时又存在自身定义的虚函数的类对象布局</h3>
 <p>真快, 该看看多继承了, 多继承很常见, 特别是接口类中!</p>
 <p>依然写点小类玩玩:</p>
@@ -2299,9 +2299,9 @@ public:
 };</pre>
 <p>代码变得越来越长啦! 为了代码结构清晰, 我尽量简化定义.</p>
 <p>初步了解一下对象大小及偏移信息:</p>
-<figure class="post-figure"><img alt="图 20：初步了解一下对象大小及偏移信息:" loading="lazy" src="assets/blog/cpp_image20.png"/><figcaption>图 20：初步了解一下对象大小及偏移信息:</figcaption></figure>
+<figure class="post-figure"><img alt="图 20：初步了解一下对象大小及偏移信息:" loading="lazy" src="assets/blog/cpp_image20.png" width="331" height="131" decoding="async" /><figcaption>图 20：初步了解一下对象大小及偏移信息:</figcaption></figure>
 <p>貌似, 若有所思? 不管, 来看看VS再想:</p>
-<figure class="post-figure"><img alt="图 21：貌似, 若有所思? 不管, 来看看VS再想:" loading="lazy" src="assets/blog/cpp_image21.png"/><figcaption>图 21：貌似, 若有所思? 不管, 来看看VS再想:</figcaption></figure>
+<figure class="post-figure"><img alt="图 21：貌似, 若有所思? 不管, 来看看VS再想:" loading="lazy" src="assets/blog/cpp_image21.png" width="679" height="337" decoding="async" /><figcaption>图 21：貌似, 若有所思? 不管, 来看看VS再想:</figcaption></figure>
 <p>哇, 不摆了! 一丝不挂啊! :-)</p>
 <p>结论:</p>
 <ul><li>按照基类的声明顺序, 基类的成员依次分布在继承中.</li><li>注意被我高亮的那两行, 已经发生了虚函数覆盖!</li><li>我们自己定义的虚函数呢? 怎么还是看不见?!</li></ul>
@@ -2324,7 +2324,7 @@ pd1-&gt;derive1_fun2();</pre>
 <p>结论:</p>
 <p>Derive1的虚函数表依然是保存到第1个拥有虚函数表的那个基类的后面的.</p>
 <p>看看现在的类对象布局图:</p>
-<figure class="post-figure"><img alt="图 22：看看现在的类对象布局图:" loading="lazy" src="assets/blog/cpp_image22.png"/><figcaption>图 22：看看现在的类对象布局图:</figcaption></figure>
+<figure class="post-figure"><img alt="图 22：看看现在的类对象布局图:" loading="lazy" src="assets/blog/cpp_image22.png" width="578" height="274" decoding="async" /><figcaption>图 22：看看现在的类对象布局图:</figcaption></figure>
 <p>如果第1个基类没有虚函数表呢? 进入第9节!</p>
 <h3>如果第1个直接基类没有虚函数(表)</h3>
 <p>这次的代码应该比上一个要稍微简单一些, 因为把第1个类的虚函数给去掉鸟!</p>
@@ -2353,10 +2353,10 @@ public:
     virtual void derive1_fun2() {}
 };</pre>
 <p>来看看VS的布局:</p>
-<figure class="post-figure"><img alt="图 23：来看看VS的布局:" loading="lazy" src="assets/blog/cpp_image23.png"/><figcaption>图 23：来看看VS的布局:</figcaption></figure>
+<figure class="post-figure"><img alt="图 23：来看看VS的布局:" loading="lazy" src="assets/blog/cpp_image23.png" width="672" height="272" decoding="async" /><figcaption>图 23：来看看VS的布局:</figcaption></figure>
 <p>这次相对前面一次的图来说还要简单啦! Base1已经没有虚函数表了! (真实情况并非完全这样, 请继续往下看!)</p>
 <p>现在的大小及偏移情况: 注意: <code>sizeof</code>(<code>Base1</code>) == 8;</p>
-<figure class="post-figure"><img alt="图 24：现在的大小及偏移情况: 注意: sizeof(Base1) == 8;" loading="lazy" src="assets/blog/cpp_image24.png"/><figcaption>图 24：现在的大小及偏移情况: 注意: sizeof(Base1) == 8;</figcaption></figure>
+<figure class="post-figure"><img alt="图 24：现在的大小及偏移情况: 注意: sizeof(Base1) == 8;" loading="lazy" src="assets/blog/cpp_image24.png" width="346" height="135" decoding="async" /><figcaption>图 24：现在的大小及偏移情况: 注意: sizeof(Base1) == 8;</figcaption></figure>
 <p>重点是看虚函数的位置, 进入函数调用(和前一次是一样的):</p>
 <pre class="post-code">Derive1 d1;
 Derive1* pd1 = &amp;d1;
@@ -2372,7 +2372,7 @@ pd1-&gt;derive1_fun2();</pre>
 <p>这段汇编代码和前面一个完全一样!, 那么问题就来了! <code>Base1</code> 已经没有虚函数表了, 为什么还是把b1的第1个元素当作__vfptr呢?</p>
 <p>不难猜测: 当前的布局已经发生了变化, 有虚函数表的基类放在对象内存前面!? , 不过事实是否属实? 需要仔细斟酌.</p>
 <p>我们可以通过对基类成员变量求偏移来观察:</p>
-<figure class="post-figure"><img alt="图 25：我们可以通过对基类成员变量求偏移来观察:" loading="lazy" src="assets/blog/cpp_image25.png"/><figcaption>图 25：我们可以通过对基类成员变量求偏移来观察:</figcaption></figure>
+<figure class="post-figure"><img alt="图 25：我们可以通过对基类成员变量求偏移来观察:" loading="lazy" src="assets/blog/cpp_image25.png" width="425" height="209" decoding="async" /><figcaption>图 25：我们可以通过对基类成员变量求偏移来观察:</figcaption></figure>
 <p>可以看到:</p>
 <pre class="post-code">&amp;d1==0x~d4
 &amp;d1.Base1::__vfptr==0x~d4
@@ -2382,7 +2382,7 @@ pd1-&gt;derive1_fun2();</pre>
 &amp;d1.base1_2==0x~e4</pre>
 <p>所以不难验证: 我们前面的推断是正确的, 谁有虚函数表, 谁就放在前面!</p>
 <p>现在类的布局情况:</p>
-<figure class="post-figure"><img alt="图 26：现在类的布局情况:" loading="lazy" src="assets/blog/cpp_image26.png"/><figcaption>图 26：现在类的布局情况:</figcaption></figure>
+<figure class="post-figure"><img alt="图 26：现在类的布局情况:" loading="lazy" src="assets/blog/cpp_image26.png" width="617" height="248" decoding="async" /><figcaption>图 26：现在类的布局情况:</figcaption></figure>
 <p>那么, 如果两个基类都没有虚函数表呢?</p>
 <h3>What if 两个基类都没有虚函数表</h3>
 <p>代码如下:</p>
@@ -2409,14 +2409,14 @@ public:
     virtual void derive1_fun2() {}
 };</pre>
 <p>前面吃了个亏, 现在先来看看VS的基本布局:</p>
-<figure class="post-figure"><img alt="图 27：前面吃了个亏, 现在先来看看VS的基本布局:" loading="lazy" src="assets/blog/cpp_image27.png"/><figcaption>图 27：前面吃了个亏, 现在先来看看VS的基本布局:</figcaption></figure>
+<figure class="post-figure"><img alt="图 27：前面吃了个亏, 现在先来看看VS的基本布局:" loading="lazy" src="assets/blog/cpp_image27.png" width="678" height="281" decoding="async" /><figcaption>图 27：前面吃了个亏, 现在先来看看VS的基本布局:</figcaption></figure>
 <p>可以看到, 现在__vfptr已经独立出来了, 不再属于Base1和Base2!</p>
 <p>看看求偏移情况:</p>
-<figure class="post-figure"><img alt="图 28：看看求偏移情况:" loading="lazy" src="assets/blog/cpp_image28.png"/><figcaption>图 28：看看求偏移情况:</figcaption></figure>
+<figure class="post-figure"><img alt="图 28：看看求偏移情况:" loading="lazy" src="assets/blog/cpp_image28.png" width="418" height="209" decoding="async" /><figcaption>图 28：看看求偏移情况:</figcaption></figure>
 <p>Ok, 问题解决! 注意高亮的那两行, &amp;d1==&amp;d1.__vfptr, 说明虚函数始终在最前面!</p>
 <p>不用再废话, 相信大家对这种情况已经有底了.</p>
 <p>对象布局:</p>
-<figure class="post-figure"><img alt="图 29：对象布局:" loading="lazy" src="assets/blog/cpp_image29.png"/><figcaption>图 29：对象布局:</figcaption></figure>
+<figure class="post-figure"><img alt="图 29：对象布局:" loading="lazy" src="assets/blog/cpp_image29.png" width="580" height="229" decoding="async" /><figcaption>图 29：对象布局:</figcaption></figure>
 <h3>如果有三个基类: 虚函数表分别是有, 没有, 有!</h3>
 <p>这种情况其实已经无需再讨论了, 作为一个完结篇....</p>
 <p>上代码:</p>
@@ -2453,7 +2453,7 @@ public:
     virtual void derive1_fun2() {}
 };</pre>
 <p>只需要看看偏移就行了:</p>
-<figure class="post-figure"><img alt="图 30：只需要看看偏移就行了:" loading="lazy" src="assets/blog/cpp_image30.png"/><figcaption>图 30：只需要看看偏移就行了:</figcaption></figure>
+<figure class="post-figure"><img alt="图 30：只需要看看偏移就行了:" loading="lazy" src="assets/blog/cpp_image30.png" width="422" height="194" decoding="async" /><figcaption>图 30：只需要看看偏移就行了:</figcaption></figure>
 <p>只需知道: 谁有虚函数表, 谁就往前靠!</p>
 <h2><span class="sec-num">[3]</span> C++中父子对象指针间的转换与函数调用</h2>
 <p>讲了那么多布局方面的东东, 终于到了尾声, 好累呀!!!</p>
@@ -2469,7 +2469,7 @@ public:
 <ul><li>如果不是虚函数, 直接调用指针对应的基本类的那个函数</li><li>如果是虚函数, 则查找虚函数表, 并进行后续的调用. 虚函数表在定义一个时, 编译器就为我们创建好了的. 所有的, 同一个类, 共用同一份虚函数表.</li></ul>
 <p>什么是多态？</p>
 <p>顾名思义就是同一个事物在不同场景下的多种形态</p>
-<figure class="post-figure"><img alt="图 31：顾名思义就是同一个事物在不同场景下的多种形态" loading="lazy" src="assets/blog/cpp_image31.png"/><figcaption>图 31：顾名思义就是同一个事物在不同场景下的多种形态</figcaption></figure>
+<figure class="post-figure"><img alt="图 31：顾名思义就是同一个事物在不同场景下的多种形态" loading="lazy" src="assets/blog/cpp_image31.png" width="533" height="252" decoding="async" /><figcaption>图 31：顾名思义就是同一个事物在不同场景下的多种形态</figcaption></figure>
 <p>静态多态是编译器在编译期间完成的，编译器会根据实参类型来选择调用合适的函数，如果有合适的函数可以调用就调，没有的话就会发出警告或者报错.</p>
 <h2><span class="sec-num">[4]</span> 动态多态</h2>
 <p>什么是动态多态呢？</p>
@@ -2537,7 +2537,7 @@ w = cos(θ/2)</pre>
 
 <h3>2.4 那它到底怎么适合了？</h3>
 <p>假设一个人物现在朝前：</p>
-<figure class="post-figure"><img alt="角色前向坐标轴" loading="lazy" src="assets/quaternion-diagrams/forward_axis.png"/><figcaption>图：角色当前朝向，前为 Z，右为 X。</figcaption></figure>
+<figure class="post-figure"><img alt="角色前向坐标轴" loading="lazy" src="assets/quaternion-diagrams/forward_axis.png" width="600" height="520" decoding="async" /><figcaption>图：角色当前朝向，前为 Z，右为 X。</figcaption></figure>
 <p>做两个旋转：</p>
 <pre class="post-code">旋转 A：向右转 90°
 旋转 B：再抬头 30°</pre>
@@ -2600,7 +2600,7 @@ FVector NewForward = Rotation.RotateVector(Forward);</pre>
 三维：x² + y² + z² = 1，这不就是单位球么？！
 x² + y² + z² + w² 那岂不是四维球？！</pre>
 <p>这就是很多人说四元数是 4 维的原因。所有合法单位 Quaternion，都在一个“四维单位球面”上。</p>
-<figure class="post-figure"><img alt="球面上的两个 Quaternion A 和 B" loading="lazy" src="assets/quaternion-diagrams/sphere_ab.png"/><figcaption>图：两个单位四元数 A、B 可想象成四维单位球面上的两个点。</figcaption></figure>
+<figure class="post-figure"><img alt="球面上的两个 Quaternion A 和 B" loading="lazy" src="assets/quaternion-diagrams/sphere_ab.png" width="640" height="520" decoding="async" /><figcaption>图：两个单位四元数 A、B 可想象成四维单位球面上的两个点。</figcaption></figure>
 <p>Slerp 做的事情就是：沿着球面，从 A 平滑地走向 B，而不是直接穿球内部。常用代码样子：</p>
 <pre class="post-code">FQuat Result = FQuat::Slerp(A, B, t);</pre>
 
@@ -2610,12 +2610,12 @@ x² + y² + z² + w² 那岂不是四维球？！</pre>
 <h3>3.1.2 之前 q 和 -q 为啥是同一个旋转？？</h3>
 <p>假设四元数 q 其实就是：绕某一根轴旋转某个角度 θ。现在把整个四元数取反（x, y, z, w 全变号）得到 -q，看起来和 q 完全不一样，但神奇的是它俩表示同一个最终 3D 旋转。怎么可能呢？！</p>
 <p>先最简单理解：你可以想象一个圆，一个方向可以顺时针转 60°，也可以逆时针转 300°，最后朝向一样。四元数里也有类似的“两个表示对应同一个旋转”的现象。</p>
-<figure class="post-figure"><img alt="q 与 -q 在四元数球面上相对，映射到同一旋转" loading="lazy" src="assets/quaternion-diagrams/double_cover.png"/><figcaption>图：q 与 -q 在四元数球面上是相反两点，但映射到 3D 旋转是同一个（Double Cover）。</figcaption></figure>
+<figure class="post-figure"><img alt="q 与 -q 在四元数球面上相对，映射到同一旋转" loading="lazy" src="assets/quaternion-diagrams/double_cover.png" width="700" height="500" decoding="async" /><figcaption>图：q 与 -q 在四元数球面上是相反两点，但映射到 3D 旋转是同一个（Double Cover）。</figcaption></figure>
 <p>这叫 <strong>Double Cover（双重覆盖）</strong>。为什么从公式上也成立？还记得旋转 Vector：<code>v′ = q * v * q⁻¹</code>。把 q 全换成 -q：<code>(-q) * v * (-q)⁻¹</code>。因为 <code>(-q)⁻¹ = -q⁻¹</code>，所以 <code>-q * v * -q⁻¹</code> 负号抵消了，又回来 <code>q * v * q⁻¹</code>。结果完全一样。也就是说 q 旋转 Vector 和 -q 旋转 Vector 结果完全相同。</p>
 
 <h3>3.1.3 话说回来，这跟 Slerp 有什么关系？</h3>
 <p>假设 A = 当前旋转，B = 目标旋转。Quaternion 在球面上，B 和 -B 表示现实世界完全一样的旋转，但在 Quaternion 球面里却位于相反位置。问题来了：假设 A 离 -B 很近，但你偏偏让 Slerp 去找 B，那它可能 A 绕球面走非常远才到 B，现实里明明只需转 20°，结果给你绕 340°。</p>
-<figure class="post-figure"><img alt="A 离 -B 近、离 B 远，应选最近表示" loading="lazy" src="assets/quaternion-diagrams/slerp_sphere.png"/><figcaption>图：A 离 -B 更近，应选 -B 作为插值终点走最短路径；红色为错误绕远路。</figcaption></figure>
+<figure class="post-figure"><img alt="A 离 -B 近、离 B 远，应选最近表示" loading="lazy" src="assets/quaternion-diagrams/slerp_sphere.png" width="800" height="520" decoding="async" /><figcaption>图：A 离 -B 更近，应选 -B 作为插值终点走最短路径；红色为错误绕远路。</figcaption></figure>
 <p>所以要选最近的那个表示。既然 B 和 -B 表示现实世界完全一样的旋转，那我们当然选离 A 更近的那个。怎么知道谁更近？用 <code>Dot(A, B)</code> 四元数点积，它和 Vector 点积思想一样：</p>
 <pre class="post-code">Dot > 0（夹角 < 90°）  说明两者在 quaternion 球面上离得近
 Dot < 0（夹角 > 90°）  A 和 B 离得比较远</pre>
@@ -2639,7 +2639,7 @@ Dot < 0（夹角 > 90°）  A 和 B 离得比较远</pre>
 }</pre>
 <p>第一件事经常就是上面的点积处理。这段以前看源码可能感觉莫名其妙：为啥好端端把 Quaternion 乘 -1？现在知道了：<strong>q 和 -q 表示同一个 Rotation，选离 A 最近的那个表示，避免 Slerp 绕远路</strong>。</p>
 <p>第二件事：真正的 Slerp 才开始。假设四元数球面上 A 和 B 之间夹角叫 Ω，Slerp 会让结果 t=0 在 A，t=1 在 B，沿圆弧均匀运动。所以它叫球面线性插值。</p>
-<figure class="post-figure"><img alt="Lerp 直线穿球内部 vs Slerp 沿球面圆弧" loading="lazy" src="assets/quaternion-diagrams/lerp_vs_slerp.png"/><figcaption>图：Lerp 直接两点连直线穿过球内部（长度可能不再是 1），Slerp 沿球面圆弧走，更符合 Rotation 空间。</figcaption></figure>
+<figure class="post-figure"><img alt="Lerp 直线穿球内部 vs Slerp 沿球面圆弧" loading="lazy" src="assets/quaternion-diagrams/lerp_vs_slerp.png" width="900" height="420" decoding="async" /><figcaption>图：Lerp 直接两点连直线穿过球内部（长度可能不再是 1），Slerp 沿球面圆弧走，更符合 Rotation 空间。</figcaption></figure>
 <p>这里有个容易混淆的地方：Slerp 和 Lerp 区别可以直接想成——Lerp 直接两点连直线，会穿过球内部，结果长度可能不再是 1（<code>|q| != 1</code>），所以通常还要 <code>Normalize()</code>，这就得到 Nlerp = Normalized Lerp。Slerp 则是沿球面圆弧走，更符合 Rotation 空间。</p>
 <p>那是不是 Slerp 永远比 Nlerp 好？这种问题一般都是：不是。哈哈哈哈。为啥？其实很简单：Slerp 比 Nlerp 更贵，多了一些运算。仅此而已。</p>
 </div>

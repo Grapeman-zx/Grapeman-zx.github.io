@@ -10,7 +10,11 @@ star-avatar-transparent-preview.png
 # 备份与临时产物
 blog.html.bak
 *.bak
+*.bak2
 *.b64
+
+# 缩略图生成器的中间产物（可由 make_thumbs.py 重新生成）
+thumbs_manifest.json
 
 # 知乎抓取残留
 zhihu_raw.html
