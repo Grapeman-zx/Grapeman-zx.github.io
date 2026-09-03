@@ -590,6 +590,35 @@
       .home-header p { color: #9a9a9a; font-size: 15px; margin-top: 8px; }
       .home-count { font-size: 13px; color: #888; white-space: nowrap; }
 
+      .home-search {
+        position: relative;
+        display: flex; align-items: center; gap: 10px;
+        margin-bottom: 28px;
+      }
+      .home-search svg {
+        position: absolute; left: 14px; width: 16px; height: 16px;
+        color: #6a6a6a; pointer-events: none;
+      }
+      .home-search input {
+        width: 100%; max-width: 480px; padding: 10px 14px 10px 40px;
+        background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-soft);
+        border-radius: 10px; color: #fff; font-size: 14px;
+        font-family: var(--sans-font);
+        transition: border-color 0.25s ease, background 0.25s ease;
+      }
+      .home-search input::placeholder { color: #6a6a6a; }
+      .home-search input:focus {
+        outline: none; border-color: rgba(138, 180, 255, 0.5);
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .home-search input::-webkit-search-cancel-button {
+        -webkit-appearance: none; appearance: none;
+        height: 14px; width: 14px; background: #6a6a6a;
+        -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M6 6l12 12M18 6L6 18' stroke='black' stroke-width='2' stroke-linecap='round'/></svg>") center/contain no-repeat;
+                mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M6 6l12 12M18 6L6 18' stroke='black' stroke-width='2' stroke-linecap='round'/></svg>") center/contain no-repeat;
+        cursor: pointer;
+      }
+
       .home-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -2628,6 +2657,10 @@ Dot < 0（夹角 > 90°）  A 和 B 离得比较远</pre>
 </div>
 <div class="home-count" id="homeCount"></div>
 </div>
+<div class="home-search">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+<input type="search" id="homeSearch" placeholder="搜索标题、摘要或分类…" autocomplete="off"/>
+</div>
 <div class="home-grid" id="homeGrid"></div>
 </section>
 
@@ -2864,6 +2897,36 @@ Dot < 0（夹角 > 90°）  A 和 B 离得比较远</pre>
             article.addEventListener("click", function () { openReader(card.dataset.post); });
             homeGrid.appendChild(article);
           });
+
+          // 实时搜索/筛选：按标题 + 摘要 + 标签 + 分类名匹配
+          function filterHomeCards(q) {
+            q = (q || "").trim().toLowerCase();
+            var shown = 0;
+            var nodes = homeGrid.querySelectorAll(".home-card");
+            nodes.forEach(function (n) {
+              var id = n.dataset.post;
+              var card = cards.find(function (c) { return c.dataset.post === id; });
+              if (!card) return;
+              if (!q) { n.style.display = ""; shown++; return; }
+              var cat = card.getAttribute("data-cat") || "";
+              var hay = [
+                card.querySelector(".post-title") ? card.querySelector(".post-title").textContent : "",
+                card.querySelector(".post-excerpt") ? card.querySelector(".post-excerpt").textContent : "",
+                card.querySelector(".post-tag") ? card.querySelector(".post-tag").textContent : "",
+                catLabels[cat] || cat
+              ].join(" ").toLowerCase();
+              var show = hay.indexOf(q) !== -1;
+              n.style.display = show ? "" : "none";
+              if (show) shown++;
+            });
+            if (homeCount) {
+              homeCount.textContent = q ? ("匹配 " + shown + " / " + cards.length + " 篇") : (cards.length + " 篇笔记");
+            }
+          }
+          var homeSearch = document.getElementById("homeSearch");
+          if (homeSearch) {
+            homeSearch.addEventListener("input", function () { filterHomeCards(this.value); });
+          }
         }
 
         function openReader(id) {
